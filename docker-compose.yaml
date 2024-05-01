@@ -1,0 +1,28 @@
+services:
+  traefik:
+    image: traefik:v2.5
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.consulcatalog=true"
+      - "--providers.consulcatalog.prefix=traefik"
+      - "--providers.consulcatalog.endpoint.address=consul:8500"
+      - "--serversTransport.insecureSkipVerify=true"
+      - "--entryPoints.web.address=:80"
+      - "--log.level=DEBUG"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  consul:
+    image: hashicorp/consul:1.18
+    container_name: consul
+    labels:
+      - "traefik.enable=true"
+      - "traefik.consulcatalog.connect=true"
+    command: agent -server -bootstrap -ui -client=0.0.0.0
+    ports:
+      - "8500:8500"
