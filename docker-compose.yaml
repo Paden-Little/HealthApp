@@ -26,3 +26,10 @@ services:
     command: agent -server -bootstrap -ui -client=0.0.0.0
     ports:
       - "8500:8500"
+
+  record:
+    build: ./services/record
+    container_name: record
+    # change in the future when we actually implement traefik and consul
+    ports:
+      - "3000:3000"
