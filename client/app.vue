@@ -8,9 +8,6 @@ async function getServerData() {
 </script>
 
 <template>
-  <button @click="getServerData()">GET http://localhost:3000</button>
-  <li v-for="response in responses">
-    {{ response }}
-  </li>
+  <Nav />
   <NuxtPage />
 </template>
