@@ -12,4 +12,5 @@ async function getServerData() {
   <li v-for="response in responses">
     {{ response }}
   </li>
+  <NuxtPage />
 </template>
