@@ -20,4 +20,3 @@
 		</ul>
 	</nav>
 </template>
-<style scoped></style>

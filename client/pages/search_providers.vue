@@ -2,4 +2,3 @@
 <template>
   <h1>Search Providers</h1>
 </template>
-<style scoped></style>
