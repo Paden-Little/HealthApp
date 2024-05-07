@@ -12,10 +12,19 @@
 				<nuxt-link to="/appointment">Appointment</nuxt-link>
 			</li>
 			<li>
-				<nuxt-link to="/provider_portal">Provider Portal</nuxt-link>
+				<nuxt-link to="/patient_login">Patient Login</nuxt-link>
 			</li>
 			<li>
 				<nuxt-link to="/patient_portal">Patient Portal</nuxt-link>
+			</li>
+			<li>
+				<nuxt-link to="/provider_login">Provider Login</nuxt-link>
+			</li>
+			<li>
+				<nuxt-link to="/provider_portal">Provider Portal</nuxt-link>
+			</li>
+			<li>
+				<nuxt-link to="/services">Services</nuxt-link>
 			</li>
 		</ul>
 	</nav>
