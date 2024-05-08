@@ -1,7 +1,7 @@
 <template>
-  <nav class="flex px-20 py-5 shadow-md">
+  <nav class="flex px-20 py-3">
     <div class="flex-1 flex items-center m-auto">
-      <p>Could you imagine if healthcare was affordable?</p>
+      <p>HealthApp</p>
     </div>
     <div class="flex items-center">
       <NuxtLink
@@ -29,9 +29,9 @@
       >
     </div>
     <div class="flex-1 flex justify-end items-center m-auto">
-      <p class="mr-4 text-gray-600">Login</p>
+      <p class="mr-8 text-gray-600">Login</p>
       <button @click="$router.push('/')" class="cta-button">
-        Schedule An Appointment
+        Book an Appointment
       </button>
     </div>
   </nav>
@@ -43,6 +43,6 @@
 }
 
 .active-link {
-  @apply text-blue-700;
+  @apply text-[#816EDA];
 }
 </style>

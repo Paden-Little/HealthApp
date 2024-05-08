@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 .cta-button {
-  @apply bg-blue-700 text-white text-sm hover:bg-blue-900 transition-all rounded-lg font-medium
-  p-3;
+  @apply bg-[#8E92D1] shadow-lg rounded-lg px-5 py-3 text-white font-medium;
+  backdrop-filter: blur(10px);
+}
+
+.glass-button {
+  @apply bg-[#ffffff30] shadow-lg rounded-lg px-5 py-3 text-white font-bold;
+  backdrop-filter: blur(10px);
+}
+
+:root {
+  @apply bg-slate-100;
 }
