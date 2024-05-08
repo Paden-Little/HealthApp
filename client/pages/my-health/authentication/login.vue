@@ -1,3 +1,3 @@
 <template>
-  <h1>{{ $route.path }}</h1>
+  <p>Patient Login</p>
 </template>
