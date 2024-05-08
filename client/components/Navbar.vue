@@ -27,7 +27,7 @@
     </div>
     <div class="flex-1 flex justify-end items-center m-auto">
       <button
-        @click=""
+        @click="$router.push('/')"
         class="bg-blue-700 text-white text-sm hover:bg-blue-900 transition-all p-3 rounded-lg font-medium"
       >
         Schedule An Appointment
