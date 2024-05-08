@@ -1,13 +1,5 @@
-<script setup lang="ts">
-const responses = reactive<string[]>([]);
-
-async function getServerData() {
-  const resp = await $fetch<string>('/api/record');
-  responses.push(resp)
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <Nav />
   <NuxtPage />
 </template>
