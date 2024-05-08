@@ -10,7 +10,10 @@
         >Home</NuxtLink
       >
       <NuxtLink
-        :class="['nav-link', { 'active-link': $route.path === '/find-a-doctor' }]"
+        :class="[
+          'nav-link',
+          { 'active-link': $route.path === '/find-a-doctor' },
+        ]"
         to="/find-a-doctor"
         >Find a Doctor</NuxtLink
       >
@@ -26,10 +29,8 @@
       >
     </div>
     <div class="flex-1 flex justify-end items-center m-auto">
-      <button
-        @click="$router.push('/')"
-        class="bg-blue-700 text-white text-sm hover:bg-blue-900 transition-all p-3 rounded-lg font-medium"
-      >
+      <p class="mr-4 text-gray-600">Login</p>
+      <button @click="$router.push('/')" class="cta-button">
         Schedule An Appointment
       </button>
     </div>
@@ -38,10 +39,10 @@
 
 <style scoped>
 .nav-link {
-  @apply mx-4 text-gray-500 hover:text-blue-700 transition-all font-medium;
+  @apply mx-4 text-gray-600 hover:text-blue-700 transition-all font-medium;
 }
 
 .active-link {
-  @apply text-blue-700; /* Adjust the color as needed */
+  @apply text-blue-700;
 }
 </style>

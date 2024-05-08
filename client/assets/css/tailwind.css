@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cta-button {
+  @apply bg-blue-700 text-white text-sm hover:bg-blue-900 transition-all rounded-lg font-medium
+  p-3;
+}
