@@ -3,16 +3,16 @@
   <nav class="w-screen">
     <ul class="flex">
       <li>
-        <nuxt-link to="/">Home</nuxt-link>
+        <NuxtLink to="/">Home</NuxtLink>
       </li>
       <li>
-        <nuxt-link to="/search_providers">Find A Provider</nuxt-link>
+        <NuxtLink to="/find-a-provider">Find A Provider</NuxtLink>
       </li>
       <li>
-        <nuxt-link to="/appointment">Services</nuxt-link>
+        <NuxtLink to="/appointment">Services</NuxtLink>
       </li>
       <li>
-        <nuxt-link to="/my-health">My Health</nuxt-link>
+        <NuxtLink to="/my-health">My Health</NuxtLink>
       </li>
     </ul>
   </nav>
