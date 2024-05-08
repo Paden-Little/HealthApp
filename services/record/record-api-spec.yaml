@@ -1,0 +1,780 @@
+openapi: 3.0.0
+info:
+  title: Medical Record API
+  version: 1.0.0
+  description: API for managing medical records
+
+paths:
+  /health:
+    get:
+      summary: Check the health of the API
+      operationId: checkHealth
+      responses:
+        '200':
+          description: OK
+  /record/patient:
+    post:
+      summary: Create a new patient record
+      operationId: createPatientRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecordPatient'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordPatient'
+
+  /record/patient/{patientId}:
+    get:
+      summary: Get a patient record by ID
+      operationId: getPatientRecord
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordPatient'
+        '404':
+          description: Not Found
+    patch:
+      summary: Update a patient record
+      operationId: updatePatientRecord
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordPatient'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordPatient'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a patient record
+      operationId: deletePatientRecord
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /record/provider:
+    post:
+      summary: Create a new provider record
+      operationId: createProviderRecord  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecordProvider'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordProvider'
+
+  /record/provider/{providerId}:
+    get:
+      summary: Get a provider record by ID
+      operationId: getProviderRecord
+      parameters:
+        - name: providerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordProvider'
+        '404':
+          description: Not Found
+    patch:
+      summary: Update a provider record
+      operationId: updateProviderRecord  
+      parameters:
+        - name: providerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordProvider'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordProvider'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a provider record
+      operationId: deleteProviderRecord
+      parameters:
+        - name: providerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /record/encounter:
+    post:
+      summary: Create a new encounter record
+      operationId: createEncounterRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecordEncounter'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordEncounter'
+
+  /record/encounter/{encounterId}:
+    get:
+      summary: Get an encounter record by ID
+      operationId: getEncounterRecord
+      parameters:
+        - name: encounterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordEncounter'
+        '404':
+          description: Not Found
+    patch:
+      summary: Update an encounter record
+      operationId: updateEncounterRecord
+      parameters:
+        - name: encounterId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordEncounter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordEncounter'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete an encounter record
+      operationId: deleteEncounterRecord  
+      parameters:
+        - name: encounterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /record/immunization:
+    post:
+      summary: Create a new immunization record
+      operationId: createImmunizationRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecordImmunization'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordImmunization'
+
+  /record/immunization/{immunizationId}:
+    get:
+      summary: Get an immunization record by ID
+      operationId: getImmunizationRecord
+      parameters:
+        - name: immunizationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordImmunization'
+        '404':
+          description: Not Found
+    patch:
+      summary: Update an immunization record
+      operationId: updateImmunizationRecord
+      parameters:
+        - name: immunizationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordImmunization'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordImmunization'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete an immunization record
+      operationId: deleteImmunizationRecord
+      parameters:
+        - name: immunizationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /record/medication:
+    post:
+      summary: Create a new medication record
+      operationId: createMedicationRecord  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecordMedication'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordMedication'
+
+  /record/medication/{medicationId}:
+    get:
+      summary: Get a medication record by ID
+      operationId: getMedicationRecord
+      parameters:
+        - name: medicationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordMedication'
+        '404':
+          description: Not Found
+    patch:
+      summary: Update a medication record
+      operationId: updateMedicationRecord
+      parameters:
+        - name: medicationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordMedication'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordMedication'
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete a medication record
+      operationId: deleteMedicationRecord
+      parameters:
+        - name: medicationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /record/condition:
+    post:
+      summary: Create a new condition record
+      operationId: createConditionRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRecordCondition'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCondition'
+
+  /record/condition/{conditionId}:
+    get:
+      summary: Get a condition record by ID
+      operationId: getConditionRecord
+      parameters:
+        - name: conditionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCondition'
+        '404':
+          description: Not Found
+    patch:
+      summary: Update a condition record
+      operationId: updateConditionRecord  
+      parameters:
+        - name: conditionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordCondition'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordCondition'
+        '404': 
+          description: Not Found
+    delete:
+      summary: Delete a condition record
+      operationId: deleteConditionRecord
+      parameters:
+        - name: conditionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+components:
+  schemas:
+    Gender:
+      type: string
+      enum: [male, female]
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+
+    # Potentially add race & ethnicity, but seemed overkill
+    UpdateRecordPatient:
+      description: Fields to update for a patient record
+      type: object
+      properties:
+        first:
+          description: Patient's first name
+          type: string
+        middle:
+          description: Patient's middle name
+          type: string
+        last:
+          description: Patient's last name
+          type: string
+        birthdate:
+          description: Patient's date of birth
+          type: string
+          format: date
+        gender:
+          $ref: '#/components/schemas/Gender'
+        address:
+          description: Patient's address
+          $ref: '#/components/schemas/Address'
+    NewRecordPatient:
+      description: New patient record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordPatient'
+        - type: object
+          required:
+            - first
+            - last
+            - birthdate
+            - gender
+    RecordPatient:
+      description: Patient record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordPatient'
+        - type: object
+          properties:
+            id:
+              description: Unique identifier for the patient record
+              type: string
+            created_at:
+              description: Date and time the record was created
+              type: string
+              format: date-time
+            updated_at:
+              description: Date and time the record was last updated
+              type: string
+              format: date-time
+          required:
+            - id
+
+    # Could potentially add organization
+    UpdateRecordProvider:
+      description: Fields to update for a provider record
+      type: object
+      properties:
+        name:
+          description: Provider's name
+          type: string
+        speciality:
+          description: Provider's speciality
+          type: string
+        gender:
+          $ref: '#/components/schemas/Gender'
+        address:
+          description: Provider's address
+          $ref: '#/components/schemas/Address'
+    NewRecordProvider:
+      description: New provider record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordProvider'
+        - type: object
+          required:
+            - name
+            - speciality
+    RecordProvider:
+      description: Provider record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordProvider'
+        - type: object
+          properties:
+            id:
+              description: Unique identifier for the provider record
+              type: string
+            created_at:
+              description: Date and time the record was created
+              type: string
+              format: date-time
+            updated_at:
+              description: Date and time the record was last updated
+              type: string
+              format: date-time
+          required:
+            - id
+
+    UpdateRecordEncounter:
+      description: Fields to update for an encounter record
+      type: object
+      properties:
+        patient_id:
+          description: Unique identifier for the patient who had the encounter
+          type: string
+        provider_id:
+          description: Unique identifier for the provider who had the encounter
+          type: string
+        reason:
+          description: Reason for the encounter
+          type: string
+        description:
+          description: Description of the encounter, if necessary
+          type: string
+    NewRecordEncounter:
+      description: New encounter record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordEncounter'
+        - type: object
+          required:
+            - patient_id
+            - provider_id
+            - reason
+    RecordEncounter:
+      description: Encounter record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordEncounter'
+        - type: object
+          properties:
+            id:
+              description: Unique identifier for the encounter record
+              type: string
+            created_at:
+              description: Date and time the record was created
+              type: string
+              format: date-time
+            updated_at:
+              description: Date and time the record was last updated
+              type: string
+              format: date-time
+          required:
+            - id
+    
+    UpdateRecordImmunization:
+      description: Fields to update for an immunization record
+      type: object
+      properties:
+        patient_id:
+          description: Unique identifier for the patient who received the immunization
+          type: string
+        provider_id:
+          description: Unique identifier for the provider who administered the immunization
+          type: string
+        vaccine_name:
+          description: Name of the vaccine
+          type: string
+        vaccine_date:
+          description: Date the vaccine was administered
+          type: string
+          format: date
+        vaccine_expiration:
+          description: Date the vaccine expires
+          type: string
+          format: date
+    NewRecordImmunization:
+      description: New immunization record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordImmunization'
+        - type: object
+          required:
+            - patient_id
+            - provider_id
+            - vaccine_name
+            - vaccine_date
+    RecordImmunization:
+      description: Immunization record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordImmunization'
+        - type: object
+          properties:
+            id:
+              description: Unique identifier for the immunization record
+              type: string
+            created_at:
+              description: Date and time the record was created
+              type: string
+              format: date-time
+            updated_at:
+              description: Date and time the record was last updated
+              type: string
+              format: date-time
+          required:
+            - id
+
+    UpdateRecordMedication:
+      description: Fields to update for a medication record
+      type: object
+      properties:
+        patient_id:
+          description: Unique identifier for the patient who received the medication
+          type: string
+        provider_id:
+          description: Unique identifier for the provider who prescribed the medication
+          type: string
+        encounter_id:
+          description: Unique identifier for the encounter where the medication was prescribed
+          type: string
+        start:
+          description: Date the medication was started
+          type: string
+          format: date
+        end:
+          description: Date the medication stopped
+          type: string
+          format: date
+        name:
+          description: Name of the medication
+          type: string
+        dose:
+          description: Dosage of the medication
+          type: string
+    NewRecordMedication:
+      description: New medication record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordMedication'
+        - type: object
+          required:
+            - patient_id
+            - provider_id
+            - start
+            - end
+            - name
+            - dose
+    RecordMedication:
+      description: Medication record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordMedication'
+        - type: object
+          properties:
+            id:
+              description: Unique identifier for the medication record
+              type: string
+            created_at:
+              description: Date and time the record was created
+              type: string
+              format: date-time
+            updated_at:
+              description: Date and time the record was last updated
+              type: string
+              format: date-time
+          required:
+            - id
+
+    UpdateRecordCondition:
+      description: Fields to update for a condition record
+      type: object
+      properties:
+        patient_id:
+          description: Unique identifier for the patient who has the condition
+          type: string
+        provider_id:
+          description: Unique identifier for the provider who diagnosed the condition
+          type: string
+        name:
+          description: Name of the condition
+          type: string
+        description:
+          description: Description of the condition
+          type: string
+        start:
+          description: Date the condition was diagnosed
+          type: string
+          format: date
+        end:
+          description: Date the condition was resolved
+          type: string
+          format: date
+    NewRecordCondition:
+      description: New condition record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordCondition'
+        - type: object
+          required:
+            - patient_id
+            - provider_id
+            - name
+            - start
+    RecordCondition:
+      description: Condition record
+      allOf:
+        - $ref: '#/components/schemas/UpdateRecordCondition'
+        - type: object
+          properties:
+            id:
+              description: Unique identifier for the condition record
+              type: string
+            created_at:
+              description: Date and time the record was created
+              type: string
+              format: date-time
+            updated_at:
+              description: Date and time the record was last updated
+              type: string
+              format: date-time
+          required:
+            - id

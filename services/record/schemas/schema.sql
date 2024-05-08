@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS `patient` (
     `city` VARCHAR(255) NOT NULL,
     `state` VARCHAR(255) NOT NULL,
     `zip` VARCHAR(10) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -35,6 +37,8 @@ CREATE TABLE IF NOT EXISTS `provider` (
     `city` VARCHAR(255) NOT NULL,
     `state` VARCHAR(2) NOT NULL,
     `zip` VARCHAR(10) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 
@@ -53,6 +57,8 @@ CREATE TABLE IF NOT EXISTS `encounter` (
     `type` ENUM('emergency', 'ambulatory', 'wellness', 'urgentcare', 'inpatient') NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `reason` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`),
     FOREIGN KEY (`provider_id`) REFERENCES `provider`(`id`)
@@ -65,8 +71,9 @@ CREATE TABLE IF NOT EXISTS `immunization` (
     `patient_id` VARCHAR(36) NOT NULL,
     `provider_id` VARCHAR(36) NOT NULL,
     `vaccine` VARCHAR(255) NOT NULL,
-    `lot` VARCHAR(255) NOT NULL,
     `expiration` DATE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`),
     FOREIGN KEY (`provider_id`) REFERENCES `provider`(`id`)
@@ -79,10 +86,11 @@ CREATE TABLE IF NOT EXISTS `medication` (
     `end` DATE NOT NULL,
     `patient_id` VARCHAR(36) NOT NULL,
     `provider_id` VARCHAR(36) NOT NULL,
-    `encounter_id` VARCHAR(36) NOT NULL,
+    `encounter_id` VARCHAR(36),
     `name` VARCHAR(255) NOT NULL,
     `dose` VARCHAR(255) NOT NULL,
-    `frequency` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`),
     FOREIGN KEY (`provider_id`) REFERENCES `provider`(`id`),
@@ -99,7 +107,9 @@ CREATE TABLE IF NOT EXISTS `condition` (
     `patient_id` VARCHAR(36) NOT NULL,
     `provider_id` VARCHAR(36) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255),
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`),
     FOREIGN KEY (`provider_id`) REFERENCES `provider`(`id`)
