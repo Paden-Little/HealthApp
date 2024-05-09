@@ -19,7 +19,7 @@
         <button class="glass-button">Find a Doctor</button>
       </div>
       <div class="lg:col-span-5 lg:mt-0 lg:flex">
-        <img src="/img/tricycle.png" />
+        <img src="/img/doctor.png" alt="image broke" />
       </div>
     </div>
   </section>
