@@ -18,4 +18,5 @@
 
 :root {
   @apply bg-slate-100;
+  height: 100vh;
 }
