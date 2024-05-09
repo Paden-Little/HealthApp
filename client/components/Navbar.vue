@@ -29,7 +29,11 @@
       >
     </div>
     <div class="flex-1 flex justify-end items-center m-auto">
-      <p class="mr-8 text-gray-600">Login</p>
+      <NuxtLink
+        :class="['nav-link', { 'active-link': $route.path === '/about' }]"
+        to="/my-health/authentication/login"
+        >Login</NuxtLink
+      >
       <button @click="$router.push('/')" class="cta-button">
         Book an Appointment
       </button>
