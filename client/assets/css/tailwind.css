@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 .cta-button {
-  @apply bg-[#8E92D1] shadow-lg rounded-lg px-5 py-3 text-white font-medium;
+  @apply bg-[#344983] rounded-lg px-5 py-3 text-white font-medium shadow-lg;
   backdrop-filter: blur(10px);
 }
 
 .glass-button {
-  @apply bg-[#ffffff30] shadow-lg rounded-lg px-5 py-3 text-white font-bold;
-  backdrop-filter: blur(10px);
+  @apply text-white font-medium px-5 py-3 ms-4 shadow-lg;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 :root {

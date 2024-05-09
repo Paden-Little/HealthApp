@@ -39,10 +39,10 @@
 
 <style scoped>
 .nav-link {
-  @apply mx-4 text-gray-600 hover:text-blue-700 transition-all font-medium;
+  @apply mx-4 text-gray-600 hover:text-[#26396B] transition-all font-medium;
 }
 
 .active-link {
-  @apply text-[#816EDA];
+  @apply text-[#344983];
 }
 </style>
