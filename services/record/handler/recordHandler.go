@@ -2,10 +2,39 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
-type RecordHandler struct{}
+type RecordHandler struct{
+	db Database
+}
 
-func NewRecordHandler() *RecordHandler {
-	return &RecordHandler{}
+type Database interface {
+	// CreateConditionRecord()
+	// DeleteConditionRecord()
+	// GetConditionRecord()
+	// UpdateConditionRecord()
+	// CreateEncounterRecord()
+	// DeleteEncounterRecord()
+	// GetEncounterRecord()
+	// UpdateEncounterRecord()
+	// CreateImmunizationRecord()
+	// DeleteImmunizationRecord()
+	// GetImmunizationRecord()
+	// UpdateImmunizationRecord()
+	// CreateMedicationRecord()
+	// DeleteMedicationRecord()
+	// GetMedicationRecord()
+	// UpdateMedicationRecord()
+	// CreatePatientRecord()
+	// DeletePatientRecord()
+	// GetPatientRecord()
+	// UpdatePatientRecord()
+	// CreateProviderRecord()
+	// DeleteProviderRecord()
+	// GetProviderRecord()
+	// UpdateProviderRecord()
+}
+
+func NewRecordHandler(db Database) *RecordHandler {
+	return &RecordHandler{db: db}
 }
 
 func (h *RecordHandler) CheckHealth(c *gin.Context) {
