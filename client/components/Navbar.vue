@@ -1,6 +1,6 @@
 <template>
   <nav class="flex px-20 py-3">
-    <div class="flex-1 flex items-center m-auto">
+    <div class="m-auto flex flex-1 items-center">
       <p>HealthApp</p>
     </div>
     <div class="flex items-center">
@@ -28,9 +28,9 @@
         >About Us</NuxtLink
       >
     </div>
-    <div class="flex-1 flex justify-end items-center m-auto">
+    <div class="flex flex-1 items-center justify-end">
       <NuxtLink
-        :class="['nav-link', { 'active-link': $route.path === '/about' }]"
+        class="mr-8 font-semibold text-black"
         to="/my-health/authentication/login"
         >Login</NuxtLink
       >
@@ -43,10 +43,10 @@
 
 <style scoped>
 .nav-link {
-  @apply mx-4 text-gray-600 hover:text-[#0352CD] transition-all font-medium;
+  @apply mx-4 font-semibold text-black transition-all hover:text-[#0352CD];
 }
 
 .active-link {
-  @apply text-[#0352CD];
+  @apply text-[#344983];
 }
 </style>
