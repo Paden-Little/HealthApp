@@ -8,7 +8,7 @@ onMounted(() => {
 
 <template>
   <header>
-    <nav class="px-4 py-2.5 lg:px-6 bg-[#00000068]">
+    <nav class="bg-[#00000068] px-4 py-2.5 lg:px-6">
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
@@ -27,7 +27,7 @@ onMounted(() => {
           >
           <a
             href="#"
-            class="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 mr-2 rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-4 lg:px-5 lg:py-2.5"
+            class="mr-2 rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 lg:px-5 lg:py-2.5"
             >Book an Appointment</a
           >
           <button
@@ -77,7 +77,10 @@ onMounted(() => {
               >
             </li>
             <li class="flex items-center">
-              <NuxtLink to="/find-a-doctor" class="text-white" aria-current="page"
+              <NuxtLink
+                to="/find-a-doctor"
+                class="text-white"
+                aria-current="page"
                 >Find a Doctor</NuxtLink
               >
             </li>
@@ -100,9 +103,9 @@ onMounted(() => {
 
 <style scoped>
 .navlink {
-  @apply block rounded-md px-3 text-white bg-blue-700 lg:py-1 hover:bg-blue-800 transition-all;
+  @apply block rounded-md bg-blue-700 px-3 text-white transition-all hover:bg-blue-800 lg:py-1;
 }
 .active {
-  @apply bg-[#243566] lg:text-primary-700 block rounded py-2 pl-3 pr-4 text-white lg:bg-transparent lg:p-0;
+  @apply block rounded bg-[#243566] py-2 pl-3 pr-4 text-white lg:bg-transparent lg:p-0 lg:text-primary-700;
 }
 </style>
