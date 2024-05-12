@@ -1,10 +1,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ["@nuxtjs/tailwindcss"],
   tailwindcss: {
-    exposeConfig: true,
-    viewer: true,
-    // and more...
+    cssPath: "~/assets/css/tailwind.css",
   },
   devServer: {
     port: 3001,

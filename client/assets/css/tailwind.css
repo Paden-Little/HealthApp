@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 .cta-button {
-  @apply bg-[#344983] rounded-lg px-5 py-3 text-white font-medium shadow-lg;
+  @apply rounded-lg bg-[#344983] px-5 py-3 font-medium text-white shadow-lg;
   backdrop-filter: blur(10px);
 }
 
 .glass-button {
-  @apply text-white font-medium px-5 py-3 ms-4 shadow-lg;
+  @apply ms-4 px-5 py-3 font-medium text-white shadow-lg;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
