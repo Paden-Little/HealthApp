@@ -36,7 +36,7 @@ definePageMeta({
         </a>
       </div>
       <div class="hidden lg:col-span-5 lg:mt-0 lg:flex">
-        <img src="/img/tricyclen.png" alt="mockup" />
+        <img src="/img/doctor.png" alt="mockup" />
       </div>
     </div>
   </section>
