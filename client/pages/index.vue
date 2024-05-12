@@ -36,7 +36,7 @@ definePageMeta({
         </a>
       </div>
       <div class="hidden lg:col-span-5 lg:mt-0 lg:flex">
-        <img src="/img/doctor.png" alt="mockup" />
+        <img src="/img/tricyclen.png" alt="mockup" />
       </div>
     </div>
   </section>
@@ -112,6 +112,13 @@ definePageMeta({
             href="http://www.wildlifeforyou.com/"
             class="mr-4 hover:underline md:mr-6"
             >WFY</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://media.discordapp.net/attachments/1097926007035535381/1239095446379696138/image.png?ex=6641ad0f&is=66405b8f&hm=bbed2a63b69df7c5dc43083b1d7b7f1b10cf6188bd23f24018d2b129a127b9a3&=&format=webp&quality=lossless&width=785&height=982"
+            class="mr-4 hover:underline md:mr-6"
+            >Residents</a
           >
         </li>
       </ul>
