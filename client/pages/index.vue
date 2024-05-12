@@ -6,7 +6,7 @@ definePageMeta({
 
 <template>
   <section class="bg-[url(/img/hero.png)] bg-cover">
-    <HomeNavbar />
+    <Navbar bgColor="#00000055" textColor="text-white"/>
     <div
       class="mx-auto grid max-w-screen-xl px-4 pt-8 lg:grid-cols-12 lg:gap-8 lg:pt-16 xl:gap-0"
     >
