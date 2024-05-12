@@ -8,21 +8,21 @@ onMounted(() => {
 
 <template>
   <header>
-    <nav class="px-4 bg-white py-2.5 lg:px-6">
+    <nav class="px-4 py-2.5 lg:px-6 bg-[#00000068]">
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
         <a class="flex items-center">
           <img class="mr-3 h-6 sm:h-9" />
           <span
-            class="self-center whitespace-nowrap text-xl font-semibold text-black"
+            class="self-center whitespace-nowrap text-xl font-semibold text-white"
             >HealthApp</span
           >
         </a>
         <div class="flex items-center lg:order-2">
           <a
             href="#"
-            class="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-black hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 lg:px-5 lg:py-2.5"
+            class="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 lg:px-5 lg:py-2.5"
             >Log in</a
           >
           <a
@@ -76,18 +76,18 @@ onMounted(() => {
                 >Home</NuxtLink
               >
             </li>
-            <li>
-              <NuxtLink to="/find-a-doctor" class="navlink" aria-current="page"
+            <li class="flex items-center">
+              <NuxtLink to="/find-a-doctor" class="text-white" aria-current="page"
                 >Find a Doctor</NuxtLink
               >
             </li>
-            <li>
-              <NuxtLink to="/services" class="navlink" aria-current="page"
+            <li class="flex items-center">
+              <NuxtLink to="/services" class="text-white" aria-current="page"
                 >Services</NuxtLink
               >
             </li>
-            <li>
-              <NuxtLink to="/about" class="navlink" aria-current="page"
+            <li class="flex items-center">
+              <NuxtLink to="/about" class="text-white" aria-current="page"
                 >About</NuxtLink
               >
             </li>
@@ -100,9 +100,9 @@ onMounted(() => {
 
 <style scoped>
 .navlink {
-  @apply block rounded py-2 pl-3 pr-4 text-black lg:bg-transparent lg:p-0;
+  @apply block rounded-md px-3 text-white bg-blue-700 lg:py-1 hover:bg-blue-800 transition-all;
 }
-.activelink {
+.active {
   @apply bg-[#243566] lg:text-primary-700 block rounded py-2 pl-3 pr-4 text-white lg:bg-transparent lg:p-0;
 }
 </style>

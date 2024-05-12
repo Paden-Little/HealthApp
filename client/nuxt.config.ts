@@ -1,8 +1,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss"],
-  app: {
-    pageTransition: { name: "page", mode: "out-in" },
+  tailwindcss: {
+    cssPath: "~/assets/css/tailwind.css",
   },
   devServer: {
     port: 3001,
