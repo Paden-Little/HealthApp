@@ -5,8 +5,8 @@ definePageMeta({
 </script>
 
 <template>
-  <section class="rounded-b-[40px] bg-[url(/img/hero.png)] bg-cover">
-    <AltNavbar />
+  <section class="bg-[url(/img/hero.png)] bg-cover">
+    <HomeNavbar />
     <div
       class="mx-auto grid max-w-screen-xl px-4 pt-8 lg:grid-cols-12 lg:gap-8 lg:pt-16 xl:gap-0"
     >
@@ -64,20 +64,18 @@ definePageMeta({
           <h3 class="mb-2 text-xl font-bold dark:text-white">Pediatrics</h3>
           <img src="/img/pediatric.jpg" class="h-38 bg-contain" />
           <p class="p-4 text-gray-500">
-            Staying well means caring for your health every day. Our primary
-            care providers help you and your family set healthy habits, stay on
-            top of routine screenings, and prevent and manage disease. They also
-            treat most diseases except for very rare or unusual ones.
+            We provide a long list of pediatric services, in collaboration with
+            Primary Children's Hospital, to care for your child from infancy to
+            adulthood.
           </p>
         </div>
         <div class="rounded-md bg-white p-4 drop-shadow-2xl">
           <h3 class="mb-2 text-xl font-bold dark:text-white">Heart Health</h3>
           <img src="/img/hearthealth.jpg" />
           <p class="p-4 text-gray-500">
-            Staying well means caring for your health every day. Our primary
-            care providers help you and your family set healthy habits, stay on
-            top of routine screenings, and prevent and manage disease. They also
-            treat most diseases except for very rare or unusual ones.
+            Centered at the Cardiovascular Center at University of Utah
+            Hospital, our heart and vascular services include heart care, heart
+            surgery, and treatment for all types of heart disease.
           </p>
         </div>
       </div>
@@ -87,36 +85,33 @@ definePageMeta({
     <div class="mx-auto max-w-screen-xl text-center">
       <a
         href="#"
-        class="flex items-center justify-center text-2xl font-semibold text-gray-900 dark:text-white"
+        class="flex items-center justify-center text-2xl font-semibold text-gray-900"
       >
         HealthApp
       </a>
       <p class="my-6 text-gray-500 dark:text-gray-400">
         Built by a group of nerds for a projects class over the span of 5 weeks.
       </p>
-      <ul
-        class="mb-6 flex flex-wrap items-center justify-center text-gray-900 dark:text-white"
-      >
+      <ul class="mb-6 flex flex-wrap items-center justify-center text-gray-900">
         <li>
           <a href="#" class="mr-4 hover:underline md:mr-6">About</a>
         </li>
         <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Premium</a>
-        </li>
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Campaigns</a>
-        </li>
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Blog</a>
-        </li>
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">Affiliate Program</a>
-        </li>
-        <li>
-          <a href="#" class="mr-4 hover:underline md:mr-6">FAQs</a>
-        </li>
-        <li>
           <a href="#" class="mr-4 hover:underline md:mr-6">Contact</a>
+        </li>
+        <li>
+          <a
+            href="https://robertshirts.com"
+            class="mr-4 hover:underline md:mr-6"
+            >Robbie Shirts</a
+          >
+        </li>
+        <li>
+          <a
+            href="http://www.wildlifeforyou.com/"
+            class="mr-4 hover:underline md:mr-6"
+            >WFY</a
+          >
         </li>
       </ul>
       <span class="text-sm text-gray-500 sm:text-center">© 2024-2024 </span>

@@ -13,10 +13,10 @@ onMounted(() => {
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
         <a class="flex items-center">
-          <img class="mr-3 h-6 sm:h-9" />
+          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
           <span
             class="self-center whitespace-nowrap text-xl font-semibold text-white"
-            >HealthApp</span
+            >HealthMark</span
           >
         </a>
         <div class="flex items-center lg:order-2">
