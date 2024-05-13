@@ -8,7 +8,7 @@ onMounted(() => {
 
 <template>
   <header>
-    <nav class="px-4 bg-white py-2.5 lg:px-6">
+    <nav class="bg-white px-4 py-2.5 lg:px-6">
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
@@ -16,7 +16,7 @@ onMounted(() => {
           <img class="mr-3 h-6 sm:h-9" />
           <span
             class="self-center whitespace-nowrap text-xl font-semibold text-black"
-            >HealthApp</span
+            >HealthMark</span
           >
         </a>
         <div class="flex items-center lg:order-2">
@@ -27,7 +27,7 @@ onMounted(() => {
           >
           <a
             href="#"
-            class="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 mr-2 rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-4 lg:px-5 lg:py-2.5"
+            class="mr-2 rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 lg:px-5 lg:py-2.5"
             >Book an Appointment</a
           >
           <button
@@ -103,6 +103,6 @@ onMounted(() => {
   @apply block rounded py-2 pl-3 pr-4 text-black lg:bg-transparent lg:p-0;
 }
 .activelink {
-  @apply bg-[#243566] lg:text-primary-700 block rounded py-2 pl-3 pr-4 text-white lg:bg-transparent lg:p-0;
+  @apply block rounded bg-[#243566] py-2 pl-3 pr-4 text-white lg:bg-transparent lg:p-0 lg:text-primary-700;
 }
 </style>
