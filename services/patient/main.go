@@ -1,25 +1,22 @@
-package main
+package patient
 
 import (
-	"github.com/services/record/gen"
-	"github.com/services/record/handler"
-	"github.com/services/record/database"
-
 	"github.com/gin-gonic/gin"
 	middleware "github.com/oapi-codegen/gin-middleware"
+	"github.com/services/patient/database"
+
+	"github.com/services/patient/gen"
+	"github.com/services/patient/handler"
 )
 
 func main() {
-	// Creeate database
-	db, err := database.NewRecordDatabase()
-	if err != nil {
-		panic(err)
-	}
+	// Create database
+	db, err := database.NewProviderDatabase()
 
 	// Create handler
-	handler := handler.NewRecordHandler(db)
+	handlers := handler.NewPatientHandler(db)
 
-	// Load oapi spec (swagger)
+	// Load open api spec (swagger)
 	swagger, err := gen.GetSwagger()
 	if err != nil {
 		panic(err)
@@ -28,7 +25,7 @@ func main() {
 	// Create router
 	router := gin.Default()
 	router.Use(middleware.OapiRequestValidator(swagger))
-	gen.RegisterHandlers(router, handler)
+	gen.RegisterHandlers(router, handlers)
 
 	// Start server
 	router.Run(":3000")

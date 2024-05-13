@@ -17,6 +17,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create database: %v", err)
 	}
+	defer db.Close()
 
 	// Create handler
 	handlers := handler.NewProviderHandler(db)
