@@ -53,17 +53,7 @@ definePageMeta({
               Sign in
             </button>
             <p
-              class="flex justify-around text-sm font-light text-gray-500"
-            >
-              Don’t have an account yet?
-              <NuxtLink
-                to="/my-health/authentication/register"
-                class="font-medium text-primary-600 hover:underline"
-                >Create Account</NuxtLink
-              >
-            </p>
-            <p
-              class="flex justify-around text-sm font-light text-gray-500"
+              class="text-sm font-light text-gray-500"
             >
               Providers, sign in here
               <NuxtLink
