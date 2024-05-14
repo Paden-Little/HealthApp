@@ -1,4 +1,4 @@
-package patient
+package main
 
 import (
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,10 @@ import (
 
 func main() {
 	// Create database
-	db, err := database.NewProviderDatabase()
+	db, err := database.NewPatientDatabase()
+	if err != nil {
+		panic(err)
+	}
 
 	// Create handler
 	handlers := handler.NewPatientHandler(db)

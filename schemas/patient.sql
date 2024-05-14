@@ -25,20 +25,20 @@ CREATE TABLE IF NOT EXISTS `patient`.`allergy` (
     `patient_id` CHAR(36) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255),
-    FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`),
+    FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`) ON DELETE CASCADE,
     PRIMARY KEY (`patient_id`, `name`)
 );
 
 CREATE TABLE IF NOT EXISTS `patient`.`prescription` (
-    `provider_id` CHAR(36) NOT NULL,
+    `provider_id` CHAR(36),
     `patient_id` CHAR(36) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `dosage` VARCHAR(255) NOT NULL,
     `frequency` VARCHAR(255) NOT NULL,
     `start` DATE NOT NULL,
     `end` DATE,
-    FOREIGN KEY (`patient_id`) REFERENCES `patient`.`patient`(`id`),
-    FOREIGN KEY (`provider_id`) REFERENCES `provider`.`provider`(`id`),
+    FOREIGN KEY (`patient_id`) REFERENCES `patient`.`patient`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`provider_id`) REFERENCES `provider`.`provider`(`id`) ON DELETE SET NULL,
     -- start is included  in the primary key to allow multiple prescriptions with the same name at different dates
-    PRIMARY KEY (`provider_id`, `patient_id`, `name`, `start`)
+    PRIMARY KEY (`patient_id`, `name`, `start`)
 );

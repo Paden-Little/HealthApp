@@ -100,7 +100,6 @@ components:
                 $ref: '#/components/schemas/Gender'
               birth:
                 type: string
-                format: date
                 example: 1990-01-01
               allergies:
                 type: array
@@ -126,7 +125,6 @@ components:
       properties:
         id:
           type: string
-
         firstname:
           type: string
           description: First and middle names of the patient
@@ -135,10 +133,8 @@ components:
           description: Last name of the patient
         email:
           type: string
-          format: email
         phone:
           type: string
-          format: phone
         language:
           type: string
           description: Preferred language of the patient
@@ -146,7 +142,6 @@ components:
           $ref: '#/components/schemas/Gender'
         birth:
           type: string
-          format: date
           example: 1990-01-01
         allergies:
           type: array
@@ -173,11 +168,17 @@ components:
           description: Description of the allergy
           type: string
       required:
-        - allergyName
+        - name
 
     Prescription:
       type: object
       properties:
+        providerId:
+          description: ID of the provider who prescribed the medication
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+          x-oapi-codegen-extra-tags:
+            db: provider_id
         name:
           description: Name of the medication
           type: string
@@ -190,11 +191,11 @@ components:
         start:
           description: Date the prescription was started
           type: string
-          format: date
+          example: 2020-01-01
         end:
           description: Date the prescription was ended
           type: string
-          format: date
+          example: 2020-01-01
       required:
         - name
         - dosage
