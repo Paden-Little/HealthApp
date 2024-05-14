@@ -15,7 +15,7 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
+    restart: unless-stopped
 
   consul:
     image: hashicorp/consul:1.18
@@ -27,9 +27,25 @@ services:
     ports:
       - "8500:8500"
 
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: record
+    ports:
+      - "3306:3306"
+
   record:
     build: ./services/record
     container_name: record
     # change in the future when we actually implement traefik and consul
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root
+    restart: unless-stopped
+    depends_on:
+      - mysql
     ports:
       - "3000:3000"
