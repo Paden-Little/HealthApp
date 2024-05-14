@@ -2,6 +2,12 @@ CREATE DATABASE IF NOT EXISTS `provider` DEFAULT CHARACTER SET utf8;
 CREATE DATABASE IF NOT EXISTS `patient` DEFAULT CHARACTER SET utf8;
 USE `patient`;
 
+CREATE TABLE IF NOT EXISTS `provider`.`language` (
+   `id` INT AUTO_INCREMENT,
+   `language` CHAR(50) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE IF NOT EXISTS `patient`.`patient` (
     `id` CHAR(36) NOT NULL,
     `firstname` VARCHAR(255) NOT NULL,
@@ -13,12 +19,6 @@ CREATE TABLE IF NOT EXISTS `patient`.`patient` (
     `gender` ENUM('male', 'female') NOT NULL,
     FOREIGN KEY (`language`) REFERENCES `provider`.`language`(`id`),
     PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS `provider`.`language` (
-    `id` INT AUTO_INCREMENT,
-    `language` CHAR(50) NOT NULL,
-    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `patient`.`allergy` (

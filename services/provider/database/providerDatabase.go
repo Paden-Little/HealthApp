@@ -28,6 +28,7 @@ func NewProviderDatabase() (*ProviderDatabase, error) {
 		getEnv("DB_PORT", "3306"),
 		getEnv("DB_NAME", "provider"),
 	)
+	fmt.Println("Connecting to database with DSN:", dsn)
 	db, err := sqlx.Connect("mysql", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
@@ -54,7 +55,7 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 
 	// Insert provider
 	id := uuid.New().String()
-	query := "INSERT INTO provider (id, name, suffix, bio, email, phone) VALUES (?, ?, ?, ?, ?, ?)"
+	query := `INSERT INTO provider (id, name, suffix, bio, email, phone) VALUES (?, ?, ?, ?, ?, ?)`
 	_, err = tx.Exec(query, id, provider.Name, provider.Suffix, provider.Bio, provider.Email, provider.Phone)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create provider: %w", err)
@@ -193,7 +194,7 @@ func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Pr
 		return nil, fmt.Errorf("failed to get providers: %w", err)
 	}
 
-	for i, _ := range providers {
+	for i := range providers {
 		// Get services and languages
 		var services []string
 		query = `SELECT s.service FROM provider_service ps

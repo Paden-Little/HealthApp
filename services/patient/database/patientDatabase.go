@@ -17,9 +17,9 @@ type PatientDatabase struct {
 	db *sqlx.DB
 }
 
-// NewPatientDatabase creates a new ProviderDatabase
+// NewPatientDatabase creates a new PatientDatabase
 func NewPatientDatabase() (*PatientDatabase, error) {
-	// Connect to the database
+	// Connect to MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		getEnv("DB_USER", "root"),
 		getEnv("DB_PASSWORD", "root"),
@@ -27,7 +27,8 @@ func NewPatientDatabase() (*PatientDatabase, error) {
 		getEnv("DB_PORT", "3306"),
 		getEnv("DB_NAME", "patient"),
 	)
-	db, err := sqlx.Connect("mysql", dsn+"?parseTime=true")
+	fmt.Println("Connecting to database with DSN:", dsn)
+	db, err := sqlx.Connect("mysql", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
@@ -85,8 +86,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 
 	// Insert patient
 	id := uuid.New().String()
-	query = `INSERT INTO patient.patient (id, firstname, lastname, email, phone, language, birth, gender) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	query = `INSERT INTO patient.patient (id, firstname, lastname, email, phone, language, birth, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 	_, err = tx.Exec(query, id, patient.Firstname, patient.Lastname, patient.Email, patient.Phone, languageId, patient.Birth, patient.Gender)
 	if err != nil {
 		return nil, fmt.Errorf("failed to insert patient: %w", err)
