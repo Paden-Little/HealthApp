@@ -1,0 +1,203 @@
+openapi: 3.0.0
+
+info:
+  title: Patient API
+  version: 1.0.0
+  description: This is a simple API for managing patients
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: CheckHealth
+      responses:
+        '200':
+          description: OK
+  /patient:
+    get:
+      summary: Get all patients
+      operationId: GetPatients
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'
+    post:
+      summary: Create a patient
+      operationId: CreatePatient
+      requestBody:
+        $ref: '#/components/requestBodies/NewPatient'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+  /patient/{id}:
+    get:
+      summary: Get a patient by ID
+      operationId: GetPatient
+      parameters:
+      - name: id
+        in: path
+        description: Patient ID
+        required: true
+        schema:
+          type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        '404':
+          description: Patient not found
+    delete:
+      summary: Delete a patient by ID
+      operationId: DeletePatient
+      parameters:
+      - name: id
+        in: path
+        description: Patient ID
+        required: true
+        schema:
+          type: string
+
+      responses:
+        '204':
+          description: No Content
+
+components:
+  requestBodies:
+    NewPatient:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstname:
+                type: string
+                description: First and middle names of the patient
+              lastname:
+                type: string
+                description: Last name of the patient
+              email:
+                type: string
+              phone:
+                type: string
+              language:
+                type: string
+                description: Preferred language of the patient
+              gender:
+                $ref: '#/components/schemas/Gender'
+              birth:
+                type: string
+                example: 1990-01-01
+              allergies:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Allergy'
+              prescriptions:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prescription'
+            required:
+              - firstname
+              - lastname
+              - gender
+              - birth
+  schemas:
+    Gender:
+      type: string
+      enum:
+        - male
+        - female
+    Patient:
+      type: object
+      properties:
+        id:
+          type: string
+        firstname:
+          type: string
+          description: First and middle names of the patient
+        lastname:
+          type: string
+          description: Last name of the patient
+        email:
+          type: string
+        phone:
+          type: string
+        language:
+          type: string
+          description: Preferred language of the patient
+        gender:
+          $ref: '#/components/schemas/Gender'
+        birth:
+          type: string
+          example: 1990-01-01
+        allergies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Allergy'
+        prescriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prescription'
+      required:
+        - id
+        - firstname
+        - lastname
+        - gender
+        - birth
+
+    Allergy:
+      type: object
+      properties:
+        name:
+          description: Name of the allergy
+          type: string
+        description:
+          description: Description of the allergy
+          type: string
+      required:
+        - name
+
+    Prescription:
+      type: object
+      properties:
+        providerId:
+          description: ID of the provider who prescribed the medication
+          type: string
+          example: 00000000-0000-0000-0000-000000000000
+          x-oapi-codegen-extra-tags:
+            db: provider_id
+        name:
+          description: Name of the medication
+          type: string
+        dosage:
+          description: Dosage of the medication
+          type: string
+        frequency:
+          description: Frequency of the medication
+          type: string
+        start:
+          description: Date the prescription was started
+          type: string
+          example: 2020-01-01
+        end:
+          description: Date the prescription was ended
+          type: string
+          example: 2020-01-01
+      required:
+        - name
+        - dosage
+        - frequency
+        - start
