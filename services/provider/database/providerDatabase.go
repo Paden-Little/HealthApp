@@ -28,6 +28,7 @@ func NewProviderDatabase() (*ProviderDatabase, error) {
 		getEnv("DB_PORT", "3306"),
 		getEnv("DB_NAME", "provider"),
 	)
+	fmt.Println("Connecting to database with DSN:", dsn)
 	db, err := sqlx.Connect("mysql", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
@@ -54,7 +55,7 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 
 	// Insert provider
 	id := uuid.New().String()
-	query := "INSERT INTO provider (id, name, suffix, bio, email, phone) VALUES (?, ?, ?, ?, ?, ?)"
+	query := `INSERT INTO provider (id, name, suffix, bio, email, phone) VALUES (?, ?, ?, ?, ?, ?)`
 	_, err = tx.Exec(query, id, provider.Name, provider.Suffix, provider.Bio, provider.Email, provider.Phone)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create provider: %w", err)
@@ -179,21 +180,30 @@ func (d *ProviderDatabase) GetProvider(id string) (*gen.Provider, error) {
 func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Provider, error) {
 	// Get providers
 	var providers []gen.Provider
-	query := `SELECT p.* FROM provider.provider p 
+	var query string
+	var queryParams []interface{}
+	// If no service is provided, alter query to only filter by name
+	if params.Service == nil || len(*params.Service) == 0 {
+		query = `SELECT * FROM provider WHERE name LIKE ?`
+		queryParams = append(queryParams, fmt.Sprintf("%%%s%%", paramAsString(params.Name)))
+	} else {
+		query = `SELECT p.* FROM provider.provider p
 		JOIN provider.provider_service ps 
 			ON p.id = ps.provider_id 
 		JOIN provider.service s 
 			ON ps.service_id = s.id 
 		WHERE s.service LIKE ? AND p.name LIKE ?`
-	serviceParam := fmt.Sprintf("%%%s%%", paramAsString(params.Service))
-	nameParam := fmt.Sprintf("%%%s%%", paramAsString(params.Name))
+		queryParams = append(queryParams, fmt.Sprintf("%%%s%%", paramAsString(params.Service)))
+	}
 
-	err := d.db.Select(&providers, query, serviceParam, nameParam)
+	// Execute query
+	err := d.db.Select(&providers, query, queryParams...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get providers: %w", err)
 	}
 
-	for i, _ := range providers {
+	// Get services and languages for each provider
+	for i := range providers {
 		// Get services and languages
 		var services []string
 		query = `SELECT s.service FROM provider_service ps

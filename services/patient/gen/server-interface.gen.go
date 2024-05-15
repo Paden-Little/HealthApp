@@ -16,7 +16,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gin-gonic/gin"
 	"github.com/oapi-codegen/runtime"
-	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 // Defines values for Gender.
@@ -31,7 +30,7 @@ type Allergy struct {
 	Description *string `json:"description,omitempty"`
 
 	// Name Name of the allergy
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 }
 
 // Gender defines model for Gender.
@@ -39,9 +38,9 @@ type Gender string
 
 // Patient defines model for Patient.
 type Patient struct {
-	Allergies *[]Allergy           `json:"allergies,omitempty"`
-	Birth     openapi_types.Date   `json:"birth"`
-	Email     *openapi_types.Email `json:"email,omitempty"`
+	Allergies *[]Allergy `json:"allergies,omitempty"`
+	Birth     string     `json:"birth"`
+	Email     *string    `json:"email,omitempty"`
 
 	// Firstname First and middle names of the patient
 	Firstname string `json:"firstname"`
@@ -63,7 +62,7 @@ type Prescription struct {
 	Dosage string `json:"dosage"`
 
 	// End Date the prescription was ended
-	End *openapi_types.Date `json:"end,omitempty"`
+	End *string `json:"end,omitempty"`
 
 	// Frequency Frequency of the medication
 	Frequency string `json:"frequency"`
@@ -71,44 +70,47 @@ type Prescription struct {
 	// Name Name of the medication
 	Name string `json:"name"`
 
+	// ProviderId ID of the provider who prescribed the medication
+	ProviderId *string `db:"provider_id" json:"providerId,omitempty"`
+
 	// Start Date the prescription was started
-	Start openapi_types.Date `json:"start"`
+	Start string `json:"start"`
 }
 
 // NewPatient defines model for NewPatient.
 type NewPatient struct {
-	Allergies *[]Allergy          `json:"allergies,omitempty"`
-	Birth     *openapi_types.Date `json:"birth,omitempty"`
-	Email     *string             `json:"email,omitempty"`
+	Allergies *[]Allergy `json:"allergies,omitempty"`
+	Birth     string     `json:"birth"`
+	Email     *string    `json:"email,omitempty"`
 
 	// Firstname First and middle names of the patient
-	Firstname *string `json:"firstname,omitempty"`
-	Gender    *Gender `json:"gender,omitempty"`
+	Firstname string `json:"firstname"`
+	Gender    Gender `json:"gender"`
 
 	// Language Preferred language of the patient
 	Language *string `json:"language,omitempty"`
 
 	// Lastname Last name of the patient
-	Lastname      *string         `json:"lastname,omitempty"`
+	Lastname      string          `json:"lastname"`
 	Phone         *string         `json:"phone,omitempty"`
 	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
 }
 
 // CreatePatientJSONBody defines parameters for CreatePatient.
 type CreatePatientJSONBody struct {
-	Allergies *[]Allergy          `json:"allergies,omitempty"`
-	Birth     *openapi_types.Date `json:"birth,omitempty"`
-	Email     *string             `json:"email,omitempty"`
+	Allergies *[]Allergy `json:"allergies,omitempty"`
+	Birth     string     `json:"birth"`
+	Email     *string    `json:"email,omitempty"`
 
 	// Firstname First and middle names of the patient
-	Firstname *string `json:"firstname,omitempty"`
-	Gender    *Gender `json:"gender,omitempty"`
+	Firstname string `json:"firstname"`
+	Gender    Gender `json:"gender"`
 
 	// Language Preferred language of the patient
 	Language *string `json:"language,omitempty"`
 
 	// Lastname Last name of the patient
-	Lastname      *string         `json:"lastname,omitempty"`
+	Lastname      string          `json:"lastname"`
 	Phone         *string         `json:"phone,omitempty"`
 	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
 }
@@ -268,20 +270,21 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

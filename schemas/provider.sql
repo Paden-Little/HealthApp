@@ -39,3 +39,6 @@ CREATE TABLE IF NOT EXISTS `provider`.`provider_language` (
     FOREIGN KEY (`language_id`) REFERENCES  `language`(`id`),
     PRIMARY KEY (`provider_id`, `language_id`)
 );
+
+INSERT INTO `provider`.`provider` (`id`, `name`, `suffix`, `bio`, `email`, `phone`) VALUES
+('00000000-0000-0000-0000-000000000000', 'Dr. John', 'MD', 'Dr. John is a great doctor', 'drjohn@gmail.com', '8011234567');

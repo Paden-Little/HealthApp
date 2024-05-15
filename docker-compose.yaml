@@ -16,6 +16,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+    networks:
+      - healthnet
 
   consul:
     image: hashicorp/consul:1.18
@@ -26,6 +28,8 @@ services:
     command: agent -server -bootstrap -ui -client=0.0.0.0
     ports:
       - "8500:8500"
+    networks:
+      - healthnet
 
   mysql:
     image: mysql:8
@@ -35,17 +39,33 @@ services:
       MYSQL_DATABASE: record
     ports:
       - "3306:3306"
+    networks:
+      - healthnet
 
-  record:
-    build: ./services/record
-    container_name: record
-    # change in the future when we actually implement traefik and consul
+  provider:
+    build: ./services/provider
+    image: provider-image
     environment:
       DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: root
-    restart: unless-stopped
-    depends_on:
-      - mysql
+      CONSUL_ADDRESS: consul:8500
     ports:
-      - "3000:3000"
+      - "3001:3000"
+    restart: unless-stopped
+    networks:
+      - healthnet
+
+  patient:
+    build: ./services/patient
+    image: patient-image
+    environment:
+      DB_HOST: mysql
+      CONSUL_ADDRESS: consul:8500
+    ports:
+      - "3002:3000"
+    restart: unless-stopped
+    networks:
+      - healthnet
+
+networks:
+  healthnet:
+    driver: bridge
