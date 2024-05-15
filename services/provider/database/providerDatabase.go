@@ -180,20 +180,29 @@ func (d *ProviderDatabase) GetProvider(id string) (*gen.Provider, error) {
 func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Provider, error) {
 	// Get providers
 	var providers []gen.Provider
-	query := `SELECT p.* FROM provider.provider p 
+	var query string
+	var queryParams []interface{}
+	// If no service is provided, alter query to only filter by name
+	if params.Service == nil || len(*params.Service) == 0 {
+		query = `SELECT * FROM provider WHERE name LIKE ?`
+		queryParams = append(queryParams, fmt.Sprintf("%%%s%%", paramAsString(params.Name)))
+	} else {
+		query = `SELECT p.* FROM provider.provider p
 		JOIN provider.provider_service ps 
 			ON p.id = ps.provider_id 
 		JOIN provider.service s 
 			ON ps.service_id = s.id 
 		WHERE s.service LIKE ? AND p.name LIKE ?`
-	serviceParam := fmt.Sprintf("%%%s%%", paramAsString(params.Service))
-	nameParam := fmt.Sprintf("%%%s%%", paramAsString(params.Name))
+		queryParams = append(queryParams, fmt.Sprintf("%%%s%%", paramAsString(params.Service)))
+	}
 
-	err := d.db.Select(&providers, query, serviceParam, nameParam)
+	// Execute query
+	err := d.db.Select(&providers, query, queryParams...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get providers: %w", err)
 	}
 
+	// Get services and languages for each provider
 	for i := range providers {
 		// Get services and languages
 		var services []string

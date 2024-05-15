@@ -47,6 +47,7 @@ services:
     image: provider-image
     environment:
       DB_HOST: mysql
+      CONSUL_ADDRESS: consul:8500
     ports:
       - "3001:3000"
     restart: unless-stopped
@@ -58,6 +59,7 @@ services:
     image: patient-image
     environment:
       DB_HOST: mysql
+      CONSUL_ADDRESS: consul:8500
     ports:
       - "3002:3000"
     restart: unless-stopped
