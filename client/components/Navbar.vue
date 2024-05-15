@@ -29,10 +29,10 @@ onMounted(() => {
             class="mr-2 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 lg:px-5 lg:py-2.5"
             >Log in</a
           >
-          <a
-            href="#"
+          <NuxtLink
+            to="/book-an-appointment"
             class="mr-2 rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 lg:px-5 lg:py-2.5"
-            >Book an Appointment</a
+            >Book an Appointment</NuxtLink
           >
           <button
             data-collapse-toggle="mobile-menu-2"
