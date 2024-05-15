@@ -39,6 +39,9 @@ services:
       MYSQL_DATABASE: record
     ports:
       - "3306:3306"
+    # Pass init script to create database and tables
+    volumes:
+      - ./schemas/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - healthnet
 
