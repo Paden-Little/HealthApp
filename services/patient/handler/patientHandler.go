@@ -10,6 +10,7 @@ type PatientHandler struct {
 	db PatientDatabase
 }
 
+// PatientDatabase defines the database operations required for the Patient service
 type PatientDatabase interface {
 	Close() error
 	CreatePatient(patient *gen.NewPatient) (*gen.Patient, error)
@@ -18,19 +19,19 @@ type PatientDatabase interface {
 	GetPatients() ([]*gen.Patient, error)
 }
 
-// NewPatientHandler creates a new PatientHandler
+// NewPatientHandler creates a new PatientHandler. It requires a PatientDatabase
 func NewPatientHandler(db PatientDatabase) *PatientHandler {
 	return &PatientHandler{
 		db: db,
 	}
 }
 
-// CheckHealth checks the health of the service
+// CheckHealth returns a 200 status, indicating the service is healthy
 func (h *PatientHandler) CheckHealth(c *gin.Context) {
 	c.Status(200)
 }
 
-// GetPatient gets a patient by id
+// GetPatient calls PatientDatabase.GetPatient() and returns the result. It expects an id parameter
 func (h *PatientHandler) GetPatient(c *gin.Context, id string) {
 	patient, err := h.db.GetPatient(id)
 	if err != nil {
@@ -41,7 +42,7 @@ func (h *PatientHandler) GetPatient(c *gin.Context, id string) {
 	c.JSON(200, patient)
 }
 
-// GetPatients gets a list of patients
+// GetPatients calls PatientDatabase.GetPatients() and returns the result. It expects no parameters
 func (h *PatientHandler) GetPatients(c *gin.Context) {
 	patients, err := h.db.GetPatients()
 	if err != nil {
@@ -51,7 +52,7 @@ func (h *PatientHandler) GetPatients(c *gin.Context) {
 	c.JSON(200, patients)
 }
 
-// CreatePatient creates a new patient
+// CreatePatient calls PatientDatabase.CreatePatient() and returns the result. It expects a gen.NewPatient in the request body
 func (h *PatientHandler) CreatePatient(c *gin.Context) {
 	var newPatient gen.NewPatient
 	if err := c.BindJSON(&newPatient); err != nil {
@@ -67,7 +68,7 @@ func (h *PatientHandler) CreatePatient(c *gin.Context) {
 	c.JSON(201, patient)
 }
 
-// DeletePatient deletes a patient
+// DeletePatient calls PatientDatabase.DeletePatient() and returns a 204 status. It expects an id parameter
 func (h *PatientHandler) DeletePatient(c *gin.Context, id string) {
 	err := h.db.DeletePatient(id)
 	if err != nil {

@@ -18,7 +18,7 @@ type ProviderDatabase struct {
 	db *sqlx.DB
 }
 
-// NewProviderDatabase NewRecordDatabase creates a new RecordDatabase
+// NewProviderDatabase connects to the database using environment variables, and returns a ProviderDatabase.
 func NewProviderDatabase() (*ProviderDatabase, error) {
 	// Connect to the database
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
@@ -42,10 +42,12 @@ func NewProviderDatabase() (*ProviderDatabase, error) {
 	return &ProviderDatabase{db: db}, nil
 }
 
+// Close closes the database connection.
 func (d *ProviderDatabase) Close() error {
 	return d.db.Close()
 }
 
+// CreateProvider starts a transaction with the database, inserts a new provider, languages, and services, and commits the transaction. It returns a gen.Provider.
 func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provider, error) {
 	// Start transaction
 	tx, err := d.db.Beginx()
@@ -141,6 +143,7 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 	}, nil
 }
 
+// GetProvider retrieves provider info, services, and languages from the database and returns a gen.Provider.
 func (d *ProviderDatabase) GetProvider(id string) (*gen.Provider, error) {
 	// Get provider
 	var provider gen.Provider
@@ -177,6 +180,8 @@ func (d *ProviderDatabase) GetProvider(id string) (*gen.Provider, error) {
 	return &provider, nil
 }
 
+// GetProviders retrieves providers from the database and returns a slice of gen.Provider.
+// Filters by service and name if provided.
 func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Provider, error) {
 	// Get providers
 	var providers []gen.Provider
@@ -235,6 +240,7 @@ func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Pr
 	return providers, nil
 }
 
+// DeleteProvider deletes a provider from the database. It returns an error if the operation fails.
 func (d *ProviderDatabase) DeleteProvider(id string) error {
 	// Delete provider
 	query := `DELETE FROM provider WHERE id = ?`

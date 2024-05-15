@@ -12,12 +12,12 @@ import (
 	"github.com/services/patient/gen"
 )
 
-// PatientDatabase defines the database for the Provider service
+// PatientDatabase implements the database operations required for the Patient service
 type PatientDatabase struct {
 	db *sqlx.DB
 }
 
-// NewPatientDatabase creates a new PatientDatabase
+// NewPatientDatabase connects to the database using environment variables, and returns a PatientDatabase.
 func NewPatientDatabase() (*PatientDatabase, error) {
 	// Connect to MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
@@ -41,16 +41,14 @@ func NewPatientDatabase() (*PatientDatabase, error) {
 	return &PatientDatabase{db: db}, nil
 }
 
-// Close closes the database connection
+// Close closes the database connection.
 func (d *PatientDatabase) Close() error {
 	return d.db.Close()
 }
 
-// CreatePatient creates a new patient
+// CreatePatient starts a transaction with the database, inserts a new patient, allergies, and prescriptions, and commits the transaction.
+// If the language does not already exist, a new one is created. It returns a gen.Patient.
 func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, error) {
-	if d.db == nil {
-		return nil, errors.New("database is nil")
-	}
 	// Start transaction
 	tx, err := d.db.Beginx()
 	if err != nil {
@@ -74,17 +72,18 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 			if err != nil {
 				return nil, fmt.Errorf("failed to insert language: %w", err)
 			}
+			// mfw I have to convert int64 to int (╯°□°)╯︵ ┻━┻
 			languageId64, err := res.LastInsertId()
-			languageId = int(languageId64)
 			if err != nil {
 				return nil, fmt.Errorf("failed to get language ID: %w", err)
 			}
+			languageId = int(languageId64)
 		} else {
 			return nil, fmt.Errorf("failed to get language: %w", err)
 		}
 	}
 
-	// Insert patient
+	// Insert into patient table
 	id := uuid.New().String()
 	query = `INSERT INTO patient.patient (id, firstname, lastname, email, phone, language, birth, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 	_, err = tx.Exec(query, id, patient.Firstname, patient.Lastname, patient.Email, patient.Phone, languageId, patient.Birth, patient.Gender)
@@ -97,7 +96,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 	if allergies == nil {
 		allergies = []gen.Allergy{}
 	}
-	// Insert allergies
+	// Insert allergies into allergy table
 	for _, allergy := range allergies {
 		query = `INSERT INTO patient.allergy(patient_id, name, description) VALUES (?, ?, ?)`
 		_, err = tx.Exec(query, id, allergy.Name, allergy.Description)
@@ -108,7 +107,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 	if prescriptions == nil {
 		prescriptions = []gen.Prescription{}
 	}
-	// Insert prescriptions
+	// Insert prescriptions into prescription table
 	for _, prescription := range prescriptions {
 		query = `INSERT INTO patient.prescription(provider_id, patient_id, name, dosage, frequency, start, end) VALUES (?, ?, ?, ?, ?, ?, ?)`
 		_, err = tx.Exec(query, prescription.ProviderId, id, prescription.Name, prescription.Dosage, prescription.Frequency, prescription.Start, prescription.End)
@@ -136,7 +135,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 	}, nil
 }
 
-// GetPatient gets a patient by id
+// GetPatient retrieves patient data, allergies, and prescriptions from the database. It returns a gen.Patient.
 func (d *PatientDatabase) GetPatient(id string) (*gen.Patient, error) {
 	// Get patient
 	var patient gen.Patient
@@ -170,7 +169,7 @@ func (d *PatientDatabase) GetPatient(id string) (*gen.Patient, error) {
 	return &patient, nil
 }
 
-// GetPatients gets a list of patients
+// GetPatients retrieves all patients, allergies, and prescriptions from the database. It returns a slice of gen.Patient.
 func (d *PatientDatabase) GetPatients() ([]*gen.Patient, error) {
 	var patients []*gen.Patient
 	query := `SELECT p.id, p.firstname, p.lastname, p.email, p.phone, l.language, p.gender, p.birth
@@ -203,7 +202,7 @@ func (d *PatientDatabase) GetPatients() ([]*gen.Patient, error) {
 	return patients, nil
 }
 
-// DeletePatient deletes a patient
+// DeletePatient deletes a patient from the database. It returns an error if the operation fails.
 func (d *PatientDatabase) DeletePatient(id string) error {
 	// Delete patient
 	query := `DELETE FROM patient.patient WHERE id = ?`
@@ -222,6 +221,7 @@ func getEnv(key, fallback string) string {
 	return fallback
 }
 
+// derefString dereferences a string pointer, returning an empty string if the pointer is nil
 func derefString(s *string) string {
 	if s == nil {
 		return ""
