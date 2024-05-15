@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: Provider API
+  version: 1.0.0
+  description: API for managing provider information
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: CheckHealth
+      responses:
+        '200':
+          description: OK
+  /provider:
+    get:
+      summary: Get all providers
+      operationId: GetProviders
+      parameters:
+        - name: name
+          in: query
+          description: Filter providers by name
+          required: false
+          schema:
+            type: string
+        - name: service
+          in: query
+          description: Filter providers by service
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Provider'
+    post:
+      summary: Create a provider
+      operationId: CreateProvider
+      requestBody:
+        $ref: '#/components/requestBodies/NewProvider'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+  /provider/{id}:
+    get:
+      summary: Get a provider by ID
+      operationId: GetProvider
+      parameters:
+        - name: id
+          in: path
+          description: Provider ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+    delete:
+      summary: Delete a provider by ID
+      operationId: DeleteProvider
+      parameters:
+        - name: id
+          in: path
+          description: Provider ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+
+components:
+  requestBodies:
+    NewProvider:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              suffix:
+                example: MD, PhD, etc
+                type: string
+              services:
+                type: array
+                items:
+                  type: string
+              languages:
+                type: array
+                items:
+                  type: string
+              bio:
+                type: string
+              phone:
+                type: string
+              email:
+                type: string
+            required:
+              - name
+              - suffix
+              - services
+              - languages
+              - bio
+              - phone
+              - email
+  schemas:
+    Language:
+      type: string
+      x-oapi-codegen-extra-tags:
+        db: language
+    Service:
+      type: string
+      x-oapi-codegen-extra-tags:
+        db: service
+    Provider:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        suffix:
+          example: MD, PhD, etc
+          type: string
+        services:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        bio:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+      required:
+        - id
+        - name
+        - suffix
+        - services
+        - languages
+        - bio
+        - phone
+        - email
