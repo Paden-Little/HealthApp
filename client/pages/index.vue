@@ -11,7 +11,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="bg-slate-600 bg-cover">
+  <section class="bg-slate-800 bg-cover">
     <Navbar bgColor="" textColor="text-white" />
     <div
       class="mx-auto grid max-w-screen-xl px-4 pb-8 pt-8 lg:grid-cols-12 lg:gap-8 lg:pb-0 lg:pt-16 xl:gap-0"
@@ -38,13 +38,13 @@ onMounted(() => {
           <div class="flex">
             <label
               for="search-dropdown"
-              class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="sr-only mb-2 text-sm font-medium text-gray-900"
               >Your Email</label
             >
             <button
               id="dropdown-button"
               data-dropdown-toggle="dropdown"
-              class="z-10 inline-flex flex-shrink-0 items-center rounded-s-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              class="z-10 inline-flex flex-shrink-0 items-center rounded-s-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-100"
               type="button"
             >
               All Specialties
@@ -66,22 +66,22 @@ onMounted(() => {
             </button>
             <div
               id="dropdown"
-              class="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+              class="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow"
             >
               <ul
-                class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                class="py-2 text-sm text-gray-700"
                 aria-labelledby="dropdown-button"
               >
                 <li>
                   <button
                     type="button"
-                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100"
                   ></button>
                 </li>
                 <li>
                   <button
                     type="button"
-                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100"
                   >
                     Templates
                   </button>
@@ -89,7 +89,7 @@ onMounted(() => {
                 <li>
                   <button
                     type="button"
-                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100"
                   >
                     Design
                   </button>
@@ -97,7 +97,7 @@ onMounted(() => {
                 <li>
                   <button
                     type="button"
-                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100"
                   >
                     Logos
                   </button>
@@ -108,13 +108,13 @@ onMounted(() => {
               <input
                 type="search"
                 id="search-dropdown"
-                class="z-20 block w-full rounded-e-lg border border-s-2 border-gray-300 border-s-gray-50 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:border-s-gray-700 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500"
+                class="z-20 block w-full rounded-e-lg border border-s-2 border-gray-300 border-s-gray-50 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Search Mockups, Logos, Design Templates..."
                 required
               />
               <button
                 type="submit"
-                class="absolute end-0 top-0 h-full rounded-e-lg border border-blue-700 bg-blue-700 p-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="absolute end-0 top-0 h-full rounded-e-lg border border-blue-700 bg-blue-700 p-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
               >
                 <svg
                   class="h-4 w-4"
@@ -190,7 +190,7 @@ onMounted(() => {
         href="#"
         class="flex items-center justify-center text-2xl font-semibold text-gray-900"
       >
-        HealthApp
+        HealthMark
       </a>
       <p class="my-6 text-gray-500">
         Built by a group of nerds for a projects class over the span of 5 weeks.
