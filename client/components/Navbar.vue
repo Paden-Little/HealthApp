@@ -17,12 +17,12 @@ onMounted(() => {
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
-        <a class="flex items-center">
+        <NuxtLink to="/" class="flex items-center">
           <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
           <span class="self-center whitespace-nowrap text-xl font-semibold"
             >HealthMark</span
           >
-        </a>
+        </NuxtLink>
         <div class="flex items-center lg:order-2">
           <a
             href="#"
@@ -77,23 +77,17 @@ onMounted(() => {
           >
             <li>
               <NuxtLink
-                to="/"
-                :class="{ activelink: $route.path === '/' }"
+                to="/find-a-provider"
+                class="navlink"
+                :class="{ activelink: $route.path === '/find-a-provider' }"
                 aria-current="page"
-                >Home</NuxtLink
-              >
-            </li>
-            <li>
-              <NuxtLink
-                to="/find-a-doctor"
-                :class="{ activelink: $route.path === '/find-a-doctor' }"
-                aria-current="page"
-                >Find a Doctor</NuxtLink
+                >Find a Provider</NuxtLink
               >
             </li>
             <li>
               <NuxtLink
                 to="/services"
+                class="navlink"
                 :class="{ activelink: $route.path === '/services' }"
                 aria-current="page"
                 >Services</NuxtLink
@@ -102,6 +96,7 @@ onMounted(() => {
             <li>
               <NuxtLink
                 to="/about"
+                class="navlink"
                 :class="{ activelink: $route.path === '/about' }"
                 aria-current="page"
                 >About</NuxtLink
@@ -116,9 +111,9 @@ onMounted(() => {
 
 <style scoped>
 .navlink {
-  @apply block rounded px-2 py-1;
+  @apply transition-all hover:text-primary-700;
 }
 .activelink {
-  @apply navlink bg-primary-700 text-white;
+  @apply text-primary-700;
 }
 </style>
