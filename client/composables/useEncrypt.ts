@@ -10,5 +10,5 @@ export function useEncrypt() {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  return {hashPassword, comparePasswords};
+  return { hashPassword, comparePasswords };
 }
