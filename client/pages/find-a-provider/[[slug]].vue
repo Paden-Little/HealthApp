@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const { data } = await useFetch('/api/provider');
+</script>
+
 <template>
-  <p>Find a Provider</p>
+  <p>providers: {{ data }}</p>
 </template>
