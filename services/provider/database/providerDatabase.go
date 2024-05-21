@@ -47,6 +47,30 @@ func (d *ProviderDatabase) Close() error {
 	return d.db.Close()
 }
 
+// GetPassword retrieves a provider's password from the database and returns it.
+func (d *ProviderDatabase) GetPassword(email string) (string, error) {
+	var password string
+	query := "SELECT password FROM provider WHERE email = ?"
+	err := d.db.Get(&password, query, email)
+	if err != nil {
+		return "", fmt.Errorf("failed to get password: %w", err)
+	}
+
+	return password, nil
+}
+
+// GetProviderID retrieves a provider's ID from the database and returns it.
+func (d *ProviderDatabase) GetProviderID(email string) (string, error) {
+	var id string
+	query := "SELECT id FROM provider WHERE email = ?"
+	err := d.db.Get(&id, query, email)
+	if err != nil {
+		return "", fmt.Errorf("failed to get provider ID: %w", err)
+	}
+
+	return id, nil
+}
+
 // CreateProvider starts a transaction with the database, inserts a new provider, languages, and services, and commits the transaction. It returns a gen.Provider.
 func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provider, error) {
 	// Start transaction
@@ -57,8 +81,8 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 
 	// Insert provider
 	id := uuid.New().String()
-	query := `INSERT INTO provider (id, name, suffix, bio, email, phone) VALUES (?, ?, ?, ?, ?, ?)`
-	_, err = tx.Exec(query, id, provider.Name, provider.Suffix, provider.Bio, provider.Email, provider.Phone)
+	query := `INSERT INTO provider (id, name, suffix, bio, email, phone, password) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err = tx.Exec(query, id, provider.Name, provider.Suffix, provider.Bio, provider.Email, provider.Phone, provider.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create provider: %w", err)
 	}

@@ -12,6 +12,22 @@ paths:
       responses:
         '200':
           description: OK
+  /provider/login:
+    post:
+        summary: Login as a provider
+        operationId: ProviderLogin
+        requestBody:
+            $ref: '#/components/requestBodies/ProviderLogin'
+        responses:
+            '200':
+              description: OK
+              content:
+                application/json:
+                  schema:
+                      type: object
+                      properties:
+                        token:
+                            type: string
   /provider:
     get:
       summary: Get all providers
@@ -90,35 +106,19 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
-              suffix:
-                example: MD, PhD, etc
-                type: string
-              services:
-                type: array
-                items:
-                  type: string
-              languages:
-                type: array
-                items:
-                  type: string
-              bio:
-                type: string
-              phone:
-                type: string
-              email:
-                type: string
-            required:
-              - name
-              - suffix
-              - services
-              - languages
-              - bio
-              - phone
-              - email
+            $ref: '#/components/schemas/NewProvider'
+    ProviderLogin:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderLogin'
+    UpdateProvider:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProviderUpdate'
   schemas:
     Language:
       type: string
@@ -128,6 +128,16 @@ components:
       type: string
       x-oapi-codegen-extra-tags:
         db: service
+    ProviderLogin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
     Provider:
       type: object
       properties:
@@ -152,6 +162,11 @@ components:
           type: string
         email:
           type: string
+        password:
+          description: This field is never returned in a response.
+          type: string
+          x-go-json-ignore: true
+          x-go-type-skip-optional-pointer: true
       required:
         - id
         - name
@@ -161,3 +176,60 @@ components:
         - bio
         - phone
         - email
+    NewProvider:
+      type: object
+      properties:
+        name:
+          type: string
+        suffix:
+          example: MD, PhD, etc
+          type: string
+        services:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        bio:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - suffix
+        - services
+        - languages
+        - bio
+        - phone
+        - email
+        - password
+    ProviderUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        suffix:
+          example: MD, PhD, etc
+          type: string
+        services:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        bio:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
