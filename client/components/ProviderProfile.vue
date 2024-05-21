@@ -21,14 +21,12 @@ defineProps({
 
 function formattedServices(services: Array<string>): string {
   if (services.length > 1) {
-    // Join all elements with a comma except the last one
     return (
       services.slice(0, -1).join(', ') +
       ', and ' +
       services[services.length - 1]
     );
   } else {
-    // Return the single element directly if there's only one
     return services[0];
   }
 }
@@ -39,25 +37,31 @@ function formatPhoneNumber(phoneNumber: string): string {
 </script>
 
 <template>
-  <a
-    href="#"
-    class="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow hover:bg-gray-100 md:max-w-xl md:flex-row"
+  <div
+    class="items-center rounded-lg bg-gray-50 shadow dark:border-gray-700 dark:bg-gray-800 sm:flex"
   >
-    <img
-      class="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-      src="/img/fiend.png"
-      alt=""
-    />
-    <div class="flex flex-col justify-between p-4 leading-normal">
-      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-        {{ provider.name }}
-      </h5>
-      <div class="flex space-x-2">
-        <p>{{ formattedServices(services) }}</p>
-      </div>
-      <p>{{ formatPhoneNumber(provider.phone) }}</p>
+    <a href="#">
+      <img
+        class="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
+        src="/img/skillissue.jpg"
+        :alt="provider.name"
+      />
+    </a>
+    <div class="p-5">
+      <h3
+        class="text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        <a href="#">{{ provider.name }}</a>
+      </h3>
+      <span class="text-gray-500"
+        >{{ formattedServices(provider.services) }}
+      </span>
+      <p class="mb-4 mt-3 font-light text-gray-500">
+        Am I just unwell these days? I'm not myself And it feels like I'll never
+        change Too late for me Nothing's healing the hurt, only worsens the pain
+      </p>
     </div>
-  </a>
+  </div>
 </template>
 
 <style scoped>
