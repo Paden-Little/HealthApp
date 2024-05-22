@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `provider`.`provider` (
     `email` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(15),
     `password` VARCHAR(255) NOT NULL,
+    `image` VARCHAR(255),
     UNIQUE (`email`),
     PRIMARY KEY (id)
 );

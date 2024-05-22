@@ -184,6 +184,9 @@ components:
           type: string
           x-go-json-ignore: true
           x-go-type-skip-optional-pointer: true
+        image:
+          description: URL to the provider's profile image
+          type: string
       required:
         - id
         - name
@@ -217,6 +220,9 @@ components:
           type: string
         password:
           type: string
+        image:
+          description: URL to the provider's profile image
+          type: string
       required:
         - name
         - suffix
@@ -249,4 +255,7 @@ components:
         email:
           type: string
         password:
+          type: string
+        image:
+          description: URL to the provider's profile image
           type: string

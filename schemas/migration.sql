@@ -9,6 +9,7 @@ ADD UNIQUE (`email`);
 SET @dbname = 'patient';
 SET @tablename = 'patient';
 SET @columnname = 'password';
+SET @columndefinition = 'VARCHAR(255) NOT NULL';
 SET @preparedStatement = (SELECT IF(
      (
          SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
@@ -18,13 +19,17 @@ SET @preparedStatement = (SELECT IF(
            AND (column_name = @columnname)
      ) > 0,
      'SELECT 1',
-     CONCAT('ALTER TABLE ', @tablename, ' ADD ', @columnname, ' VARCHAR(255) NOT NULL;')
+     CONCAT('ALTER TABLE ', @dbname, '.',  @tablename, ' ADD ', @columnname, ' ', @columndefinition, ';')
 ));
 PREPARE alterIfNotExists FROM @preparedStatement;
 EXECUTE alterIfNotExists;
 -- Do the same for the other db
-set @dbname = 'provider';
+SET @dbname = 'provider';
 SET @tablename = 'provider';
+EXECUTE alterIfNotExists;
+-- Then add the image field
+SET @columnname = 'image';
+SET @columndefinition = 'VARCHAR(255)';
 EXECUTE alterIfNotExists;
 DEALLOCATE PREPARE alterIfNotExists;
 
@@ -47,3 +52,5 @@ MODIFY bio TEXT NOT NULL;
 ALTER TABLE `provider`.`provider`
 MODIFY email VARCHAR(255) NOT NULL;
 
+-- Add image field
+ALTER TABLE `provider`.`provider`

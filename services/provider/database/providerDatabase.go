@@ -315,6 +315,10 @@ func (d *ProviderDatabase) UpdateProvider(id string, provider *gen.ProviderUpdat
 		query += `password = ?, `
 		params = append(params, *provider.Password)
 	}
+	if provider.Image != nil {
+		query += `image = ?, `
+		params = append(params, *provider.Image)
+	}
 	query = query[:len(query)-2] // Remove trailing comma and space
 
 	// Add WHERE clause

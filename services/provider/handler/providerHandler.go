@@ -21,7 +21,7 @@ type ProviderDatabase interface {
 	GetProviders(params gen.GetProvidersParams) ([]gen.Provider, error)
 	CreateProvider(provider *gen.NewProvider) (*gen.Provider, error)
 	DeleteProvider(id string) error
-	UpdateProvider(id string, provider *gen.ProviderUpdate) error
+	UpdateProvider(id string, provider *gen.ProviderUpdate) (*gen.Provider, error)
 }
 
 // NewProviderHandler creates a new ProviderHandler. It requires a ProviderDatabase
@@ -138,28 +138,28 @@ func (h *ProviderHandler) UpdateProvider(c *gin.Context, id string) {
 	security.AuthMiddleware(c)
 
 	// Retrieve provider update
-	var provider gen.ProviderUpdate
-	if err := c.BindJSON(&provider); err != nil {
+	var providerUpdate gen.ProviderUpdate
+	if err := c.BindJSON(&providerUpdate); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Hash password
-	if provider.Password != nil {
-		hashedPass, err := security.HashPassword(*provider.Password)
+	if providerUpdate.Password != nil {
+		hashedPass, err := security.HashPassword(*providerUpdate.Password)
 		if err != nil {
 			c.JSON(500, gin.H{"error": err.Error()})
 			return
 		}
-		provider.Password = &hashedPass
+		providerUpdate.Password = &hashedPass
 	}
 
 	// Update Provider
-	err := h.db.UpdateProvider(id, &provider)
+	provider, err := h.db.UpdateProvider(id, &providerUpdate)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(404, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.Status(http.StatusNoContent)
+	c.JSON(http.StatusOK, provider)
 }

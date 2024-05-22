@@ -20,8 +20,11 @@ import (
 
 // NewProvider defines model for NewProvider.
 type NewProvider struct {
-	Bio       string   `json:"bio"`
-	Email     string   `json:"email"`
+	Bio   string `json:"bio"`
+	Email string `json:"email"`
+
+	// Image URL to the provider's profile image
+	Image     *string  `json:"image,omitempty"`
 	Languages []string `json:"languages"`
 	Name      string   `json:"name"`
 	Password  string   `json:"password"`
@@ -32,9 +35,12 @@ type NewProvider struct {
 
 // Provider defines model for Provider.
 type Provider struct {
-	Bio       string   `json:"bio"`
-	Email     string   `json:"email"`
-	Id        string   `json:"id"`
+	Bio   string `json:"bio"`
+	Email string `json:"email"`
+	Id    string `json:"id"`
+
+	// Image URL to the provider's profile image
+	Image     *string  `json:"image,omitempty"`
 	Languages []string `json:"languages"`
 	Name      string   `json:"name"`
 
@@ -53,8 +59,11 @@ type ProviderLogin struct {
 
 // ProviderUpdate defines model for ProviderUpdate.
 type ProviderUpdate struct {
-	Bio       *string   `json:"bio,omitempty"`
-	Email     *string   `json:"email,omitempty"`
+	Bio   *string `json:"bio,omitempty"`
+	Email *string `json:"email,omitempty"`
+
+	// Image URL to the provider's profile image
+	Image     *string   `json:"image,omitempty"`
 	Languages *[]string `json:"languages,omitempty"`
 	Name      *string   `json:"name,omitempty"`
 	Password  *string   `json:"password,omitempty"`
@@ -302,20 +311,21 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"zBAAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
