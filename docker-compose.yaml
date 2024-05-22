@@ -31,6 +31,7 @@ services:
     networks:
       - healthnet
 
+
   mysql:
     image: mysql:8
     container_name: mysql
@@ -65,6 +66,18 @@ services:
       CONSUL_ADDRESS: consul:8500
     ports:
       - "3002:3000"
+    restart: unless-stopped
+    networks:
+      - healthnet
+
+  appointment:
+    build: ./services/appointment/src
+    image: appointment-image
+    environment:
+      DB_HOST: mysql
+      CONSUL_ADDRESS: consul:8500
+    ports:
+      - "3003:3000"
     restart: unless-stopped
     networks:
       - healthnet

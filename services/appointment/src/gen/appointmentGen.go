@@ -57,6 +57,9 @@ type ServerInterface interface {
 	// Update an appointment by ID
 	// (PATCH /appointment/{appointmentId})
 	PatchAppointmentAppointmentId(c *gin.Context, appointmentId string)
+	// Health check
+	// (GET /health)
+	CheckHealth(c *gin.Context)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -153,6 +156,19 @@ func (siw *ServerInterfaceWrapper) PatchAppointmentAppointmentId(c *gin.Context)
 	siw.Handler.PatchAppointmentAppointmentId(c, appointmentId)
 }
 
+// CheckHealth operation middleware
+func (siw *ServerInterfaceWrapper) CheckHealth(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.CheckHealth(c)
+}
+
 // GinServerOptions provides options for the Gin server.
 type GinServerOptions struct {
 	BaseURL      string
@@ -184,4 +200,5 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 	router.DELETE(options.BaseURL+"/appointment/:appointmentId", wrapper.DeleteAppointmentAppointmentId)
 	router.GET(options.BaseURL+"/appointment/:appointmentId", wrapper.GetAppointmentAppointmentId)
 	router.PATCH(options.BaseURL+"/appointment/:appointmentId", wrapper.PatchAppointmentAppointmentId)
+	router.GET(options.BaseURL+"/health", wrapper.CheckHealth)
 }

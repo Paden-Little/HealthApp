@@ -13,7 +13,7 @@ type AppointmentDatabase struct {
 }
 
 // NewPatientDatabase connects to the database using environment variables, and returns a PatientDatabase.
-func NewPatientDatabase() (*AppointmentDatabase, error) {
+func NewAppointmentDatabase() (*AppointmentDatabase, error) {
 	// Connect to MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		getEnv("DB_USER", "root"),

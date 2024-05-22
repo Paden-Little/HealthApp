@@ -1,3 +1,4 @@
+-- -- -- Provider Schema -- -- --
 CREATE DATABASE IF NOT EXISTS `provider` DEFAULT CHARACTER SET utf8;
 USE `provider`;
 
@@ -95,3 +96,16 @@ INSERT INTO `patient`.`allergy` (`patient_id`, `name`, `description`) VALUES ('1
 INSERT INTO `patient`.`prescription` (`provider_id`, `patient_id`, `name`, `dosage`, `frequency`, `start`, `end`) VALUES
     ('00000000-0000-0000-0000-000000000000', '11111111-1111-1111-1111-111111111111', 'Amoxicillin', '500mg', 'Twice daily', '2023-01-01', '2023-01-14'),
     ('00000000-0000-0000-0000-000000000000', '11111111-1111-1111-1111-111111111111', 'Ibuprofen', '200mg', 'As needed', '2023-02-01', NULL);
+
+-- -- -- Appointment Schema -- -- --
+CREATE DATABASE IF NOT EXISTS `appointment` DEFAULT CHARACTER SET utf8;
+USE `appointment`;
+
+CREATE TABLE IF NOT EXISTS `appointment`.`appointment`(
+    `id` CHAR(36) NOT NULL,
+    `date_time` DATETIME NOT NULL,
+    `provider` CHAR(36) NOT NULL,
+    `patient` CHAR(36) NOT NULL,
+    FOREIGN KEY (`provider`) REFERENCES `provider`.`provider`(`id`),
+    FOREIGN KEY (`patient`) REFERENCES `patient`.`patient`(`id`)
+)

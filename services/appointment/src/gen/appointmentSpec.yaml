@@ -3,6 +3,13 @@ info:
   title: Doctor Appointment API
   version: 1.0.0
 paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: CheckHealth
+      responses:
+        '200':
+          description: OK
   /appointment:
     post:
       summary: Create a new appointment
