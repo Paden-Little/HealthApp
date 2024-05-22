@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Doctor Appointment API
+  version: 1.0.0
+paths:
+  /appointment:
+    post:
+      summary: Create a new appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Appointment'
+      responses:
+        '200':
+          description: Appointment successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResponse'
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+  /appointment/{appointmentId}:
+    get:
+      summary: Get a specific appointment
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Appointment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+    patch:
+      summary: Update an appointment by ID
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Appointment'
+      responses:
+        '200':
+          description: Successfully updated object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+    delete:
+      summary: Delete a specific appointment
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully updated object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    example: "Successfully removed the appointment"
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+components:
+  schemas:
+    Appointment:
+      type: object
+      properties:
+        patientName:
+          type: string
+        doctorName:
+          type: string
+        appointmentDate:
+          type: string
+          format: date-time
+        reason:
+          type: string
+    AppointmentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+    NotFoundResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+          example: "Could not find object with ID UUID"
+    BadRequestResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Could not proccess field INCCORECT FIELD"
