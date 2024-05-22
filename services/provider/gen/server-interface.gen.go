@@ -51,6 +51,21 @@ type ProviderLogin struct {
 	Password string `json:"password"`
 }
 
+// ProviderUpdate defines model for ProviderUpdate.
+type ProviderUpdate struct {
+	Bio       *string   `json:"bio,omitempty"`
+	Email     *string   `json:"email,omitempty"`
+	Languages *[]string `json:"languages,omitempty"`
+	Name      *string   `json:"name,omitempty"`
+	Password  *string   `json:"password,omitempty"`
+	Phone     *string   `json:"phone,omitempty"`
+	Services  *[]string `json:"services,omitempty"`
+	Suffix    *string   `json:"suffix,omitempty"`
+}
+
+// UpdateProvider defines model for UpdateProvider.
+type UpdateProvider = ProviderUpdate
+
 // GetProvidersParams defines parameters for GetProviders.
 type GetProvidersParams struct {
 	// Name Filter providers by name
@@ -65,6 +80,9 @@ type CreateProviderJSONRequestBody = NewProvider
 
 // ProviderLoginJSONRequestBody defines body for ProviderLogin for application/json ContentType.
 type ProviderLoginJSONRequestBody = ProviderLogin
+
+// UpdateProviderJSONRequestBody defines body for UpdateProvider for application/json ContentType.
+type UpdateProviderJSONRequestBody = ProviderUpdate
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -86,6 +104,9 @@ type ServerInterface interface {
 	// Get a provider by ID
 	// (GET /provider/{id})
 	GetProvider(c *gin.Context, id string)
+	// Update a provider by ID
+	// (PATCH /provider/{id})
+	UpdateProvider(c *gin.Context, id string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -218,6 +239,30 @@ func (siw *ServerInterfaceWrapper) GetProvider(c *gin.Context) {
 	siw.Handler.GetProvider(c, id)
 }
 
+// UpdateProvider operation middleware
+func (siw *ServerInterfaceWrapper) UpdateProvider(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", c.Param("id"), &id, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.UpdateProvider(c, id)
+}
+
 // GinServerOptions provides options for the Gin server.
 type GinServerOptions struct {
 	BaseURL      string
@@ -251,24 +296,26 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 	router.POST(options.BaseURL+"/provider/login", wrapper.ProviderLogin)
 	router.DELETE(options.BaseURL+"/provider/:id", wrapper.DeleteProvider)
 	router.GET(options.BaseURL+"/provider/:id", wrapper.GetProvider)
+	router.PATCH(options.BaseURL+"/provider/:id", wrapper.UpdateProvider)
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

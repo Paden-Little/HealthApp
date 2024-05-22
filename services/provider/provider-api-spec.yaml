@@ -97,8 +97,21 @@ paths:
       responses:
         '204':
           description: No Content
-
-
+    patch:
+        summary: Update a provider by ID
+        operationId: UpdateProvider
+        parameters:
+          - name: id
+            in: path
+            description: Provider ID
+            required: true
+            schema:
+              type: string
+        requestBody:
+            $ref: '#/components/requestBodies/UpdateProvider'
+        responses:
+          '204':
+            description: No Content
 components:
   requestBodies:
     NewProvider:

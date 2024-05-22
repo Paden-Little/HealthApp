@@ -21,6 +21,7 @@ type ProviderDatabase interface {
 	GetProviders(params gen.GetProvidersParams) ([]gen.Provider, error)
 	CreateProvider(provider *gen.NewProvider) (*gen.Provider, error)
 	DeleteProvider(id string) error
+	UpdateProvider(id string, provider *gen.ProviderUpdate) error
 }
 
 // NewProviderHandler creates a new ProviderHandler. It requires a ProviderDatabase
@@ -120,11 +121,10 @@ func (h *ProviderHandler) CreateProvider(c *gin.Context) {
 
 // DeleteProvider calls ProviderDatabase.DeleteProvider() and returns the result. It expects an id parameter
 func (h *ProviderHandler) DeleteProvider(c *gin.Context, id string) {
-	security.AuthMiddleware()(c)
-	if c.IsAborted() {
-		return
-	}
+	// Check JWT
+	security.AuthMiddleware(c)
 
+	// Delete provider
 	err := h.db.DeleteProvider(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -133,4 +133,33 @@ func (h *ProviderHandler) DeleteProvider(c *gin.Context, id string) {
 	c.Status(http.StatusNoContent)
 }
 
-// TODO: write UpdateProvider in open api yaml and in the handler/db
+func (h *ProviderHandler) UpdateProvider(c *gin.Context, id string) {
+	// Check JWT
+	security.AuthMiddleware(c)
+
+	// Retrieve provider update
+	var provider gen.ProviderUpdate
+	if err := c.BindJSON(&provider); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Hash password
+	if provider.Password != nil {
+		hashedPass, err := security.HashPassword(*provider.Password)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		provider.Password = &hashedPass
+	}
+
+	// Update Provider
+	err := h.db.UpdateProvider(id, &provider)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
+}

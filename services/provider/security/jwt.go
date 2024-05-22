@@ -35,36 +35,34 @@ func GenerateJWT(providerID string) (string, error) {
 }
 
 // AuthMiddleware is a middleware that checks the JWT token in the Authorization header
-func AuthMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
-		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "missing Authorization header"})
-			c.Abort()
-			return
-		}
-
-		claims := &Claims{}
-		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte(jwtSecret), nil
-		})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid token"})
-			c.Abort()
-			return
-		}
-		if !token.Valid || claims.ProviderID == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
-			c.Abort()
-			return
-		}
-
-		if claims.ProviderID != c.Param("provider_id") {
-			c.JSON(http.StatusForbidden, gin.H{"error": "You do not have permission to access this resource"})
-			c.Abort()
-			return
-		}
-
-		c.Next()
+func AuthMiddleware(c *gin.Context) {
+	tokenString := c.GetHeader("Authorization")
+	if tokenString == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "missing Authorization header"})
+		c.Abort()
+		return
 	}
+
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid token"})
+		c.Abort()
+		return
+	}
+	if !token.Valid || claims.ProviderID == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+		c.Abort()
+		return
+	}
+
+	if claims.ProviderID != c.Param("id") {
+		c.JSON(http.StatusForbidden, gin.H{"error": "You do not have permission to access this resource"})
+		c.Abort()
+		return
+	}
+
+	c.Next()
 }
