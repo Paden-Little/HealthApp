@@ -12,15 +12,15 @@ import (
 const jwtSecret = "supertopsecrethealthmark"
 
 type Claims struct {
-	ProviderID string `json:"provider_id"`
+	PatientID string `json:"provider_id"`
 	jwt.StandardClaims
 }
 
 // GenerateJWT generates a JWT token for a given provider ID
-func GenerateJWT(providerID string) (string, error) {
+func GenerateJWT(patientID string) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		ProviderID: providerID,
+		PatientID: patientID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -52,13 +52,13 @@ func AuthMiddleware(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	if !token.Valid || claims.ProviderID == "" {
+	if !token.Valid || claims.PatientID == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
 		c.Abort()
 		return
 	}
 
-	if claims.ProviderID != c.Param("id") {
+	if claims.PatientID != c.Param("id") {
 		c.JSON(http.StatusForbidden, gin.H{"error": "You do not have permission to access this resource"})
 		c.Abort()
 		return

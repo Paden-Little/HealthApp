@@ -6,11 +6,27 @@ ALTER TABLE `patient`.`patient`
 ADD UNIQUE (`email`);
 
 -- Add password field
-ALTER TABLE `provider`.`provider`
-ADD COLUMN `password` VARCHAR(255) NOT NULL DEFAULT '';
-
-ALTER TABLE `patient`.`patient`
-ADD COLUMN `password` VARCHAR(255) NOT NULL DEFAULT '';
+SET @dbname = 'patient';
+SET @tablename = 'patient';
+SET @columnname = 'password';
+SET @preparedStatement = (SELECT IF(
+     (
+         SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE
+             (table_name = @tablename)
+           AND (table_schema = @dbname)
+           AND (column_name = @columnname)
+     ) > 0,
+     'SELECT 1',
+     CONCAT('ALTER TABLE ', @tablename, ' ADD ', @columnname, ' VARCHAR(255) NOT NULL;')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+-- Do the same for the other db
+set @dbname = 'provider';
+SET @tablename = 'provider';
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
 -- Make fields not null
 ALTER TABLE `patient`.`patient`

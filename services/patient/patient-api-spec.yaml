@@ -13,6 +13,22 @@ paths:
       responses:
         '200':
           description: OK
+  /patient/login:
+    post:
+      summary: Login as a patient
+      operationId: PatientLogin
+      requestBody:
+        $ref: '#/components/requestBodies/PatientLogin'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
   /patient:
     get:
       summary: Get all patients
@@ -43,13 +59,12 @@ paths:
       summary: Get a patient by ID
       operationId: GetPatient
       parameters:
-      - name: id
-        in: path
-        description: Patient ID
-        required: true
-        schema:
-          type: string
-
+        - name: id
+          in: path
+          description: Patient ID
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -63,63 +78,71 @@ paths:
       summary: Delete a patient by ID
       operationId: DeletePatient
       parameters:
-      - name: id
-        in: path
-        description: Patient ID
-        required: true
-        schema:
-          type: string
-
+        - name: id
+          in: path
+          description: Patient ID
+          required: true
+          schema:
+            type: string
       responses:
         '204':
           description: No Content
+    patch:
+      summary: Update a patient by ID
+      operationId: UpdatePatient
+      parameters:
+        - name: id
+          in: path
+          description: Patient ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePatient'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
 
 components:
   requestBodies:
-    NewPatient:
+    PatientLogin:
       required: true
       content:
         application/json:
           schema:
             type: object
             properties:
-              firstname:
-                type: string
-                description: First and middle names of the patient
-              lastname:
-                type: string
-                description: Last name of the patient
               email:
                 type: string
-              phone:
+              password:
                 type: string
-              language:
-                type: string
-                description: Preferred language of the patient
-              gender:
-                $ref: '#/components/schemas/Gender'
-              birth:
-                type: string
-                example: 1990-01-01
-              allergies:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Allergy'
-              prescriptions:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Prescription'
             required:
-              - firstname
-              - lastname
-              - gender
-              - birth
+              - email
+              - password
+    NewPatient:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewPatient'
+    UpdatePatient:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PatientUpdate'
+
   schemas:
     Gender:
       type: string
       enum:
         - male
         - female
+
     Patient:
       type: object
       properties:
@@ -151,12 +174,86 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Prescription'
+        password:
+          description: This field is never returned in a response.
+          type: string
+          x-go-json-ignore: true
+          x-go-type-skip-optional-pointer: true
       required:
         - id
         - firstname
         - lastname
+        - email
+        - phone
         - gender
         - birth
+    NewPatient:
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: First and middle names of the patient
+        lastname:
+          type: string
+          description: Last name of the patient
+        email:
+          type: string
+        phone:
+          type: string
+        language:
+          type: string
+          description: Preferred language of the patient
+        gender:
+          $ref: '#/components/schemas/Gender'
+        birth:
+          type: string
+          example: 1990-01-01
+        allergies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Allergy'
+        prescriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prescription'
+        password:
+          type: string
+      required:
+        - firstname
+        - lastname
+        - email
+        - gender
+        - birth
+        - password
+    PatientUpdate:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        language:
+          type: string
+        gender:
+          $ref: '#/components/schemas/Gender'
+        birth:
+          type: string
+          example: 1990-01-01
+        allergies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Allergy'
+        password:
+          type: string
+        prescriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prescription'
+
 
     Allergy:
       type: object
@@ -201,3 +298,4 @@ components:
         - dosage
         - frequency
         - start
+
