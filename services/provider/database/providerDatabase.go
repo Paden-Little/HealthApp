@@ -88,6 +88,15 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 		return nil, fmt.Errorf("failed to create provider: %w", err)
 	}
 
+	// Insert image if provided
+	if provider.Image != nil {
+		query = `UPDATE provider SET image = ? WHERE id = ?`
+		_, err = tx.Exec(query, provider.Image, id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to update provider image: %w", err)
+		}
+	}
+
 	// Insert languages
 	for _, language := range provider.Languages {
 		// First try to get the language ID
