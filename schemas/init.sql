@@ -1,13 +1,18 @@
+-- This should NEVER be used on a prod database
+-- It is meant to set up a fresh MySQL server for the patient and provider APIs
 CREATE DATABASE IF NOT EXISTS `provider` DEFAULT CHARACTER SET utf8;
 USE `provider`;
 
 CREATE TABLE IF NOT EXISTS `provider`.`provider` (
     `id` CHAR(36) NOT NULL,
-    `name` VARCHAR(255),
-    `suffix` VARCHAR(255),
-    `bio` TEXT,
-    `email` VARCHAR(255),
+    `name` VARCHAR(255) NOT NULL,
+    `suffix` VARCHAR(255) NOT NULL,
+    `bio` TEXT NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(15),
+    `password` VARCHAR(255) NOT NULL,
+    `image` VARCHAR(255),
+    UNIQUE (`email`),
     PRIMARY KEY (id)
 );
 
@@ -58,12 +63,14 @@ CREATE TABLE IF NOT EXISTS `patient`.`patient` (
     `id` CHAR(36) NOT NULL,
     `firstname` VARCHAR(255) NOT NULL,
     `lastname` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255),
+    `email` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(15),
-    `language` INT,
+    `language` INT NOT NULL,
     `birth` DATE NOT NULL,
     `gender` ENUM('male', 'female') NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     FOREIGN KEY (`language`) REFERENCES `provider`.`language`(`id`),
+    UNIQUE (`email`),
     PRIMARY KEY (id)
 );
 
