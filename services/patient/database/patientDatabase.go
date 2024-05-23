@@ -7,9 +7,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"os"
-
 	"github.com/services/patient/gen"
+	"os"
 )
 
 // PatientDatabase implements the database operations required for the Patient service
@@ -54,6 +53,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 	if err != nil {
 		return nil, fmt.Errorf("failed to start transaction: %w", err)
 	}
+	defer tx.Rollback()
 
 	// Check for language
 	if derefString(patient.Language) == "" {
@@ -85,8 +85,8 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 
 	// Insert into patient table
 	id := uuid.New().String()
-	query = `INSERT INTO patient.patient (id, firstname, lastname, email, phone, language, birth, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err = tx.Exec(query, id, patient.Firstname, patient.Lastname, patient.Email, patient.Phone, languageId, patient.Birth, patient.Gender)
+	query = `INSERT INTO patient.patient (id, firstname, lastname, email, phone, language, birth, gender, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err = tx.Exec(query, id, patient.Firstname, patient.Lastname, patient.Email, patient.Phone, languageId, patient.Birth, patient.Gender, patient.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to insert patient: %w", err)
 	}
@@ -126,7 +126,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 		Firstname:     patient.Firstname,
 		Lastname:      patient.Lastname,
 		Email:         patient.Email,
-		Phone:         patient.Phone,
+		Phone:         derefString(patient.Phone),
 		Language:      patient.Language,
 		Gender:        patient.Gender,
 		Birth:         patient.Birth,
@@ -139,7 +139,7 @@ func (d *PatientDatabase) CreatePatient(patient *gen.NewPatient) (*gen.Patient, 
 func (d *PatientDatabase) GetPatient(id string) (*gen.Patient, error) {
 	// Get patient
 	var patient gen.Patient
-	query := `SELECT p.id, p.firstname, p.lastname, p.email, p.phone, l.language
+	query := `SELECT p.id, p.firstname, p.lastname, p.email, p.phone, l.language, p.birth, p.gender
 		FROM patient.patient p
 		JOIN provider.language l ON p.language = l.id
 		WHERE p.id = ?`
@@ -211,6 +211,147 @@ func (d *PatientDatabase) DeletePatient(id string) error {
 	}
 
 	return nil
+}
+
+// UpdatePatient updates a patient in the database. It returns a gen.PatientUpdate
+func (d *PatientDatabase) UpdatePatient(id string, patient *gen.PatientUpdate) (*gen.Patient, error) {
+	// Start transaction
+	tx, err := d.db.Beginx()
+	if err != nil {
+		return nil, fmt.Errorf("failed to start transaction: %w", err)
+	}
+	defer tx.Rollback()
+
+	// Build query
+	query := `UPDATE patient.patient SET `
+	var params []any
+
+	if patient.Firstname != nil {
+		query += `firstname = ?, `
+		params = append(params, *patient.Firstname)
+	}
+	if patient.Lastname != nil {
+		query += `lastname = ?, `
+		params = append(params, *patient.Lastname)
+	}
+	if patient.Email != nil {
+		query += `email = ?, `
+		params = append(params, *patient.Email)
+	}
+	if patient.Phone != nil {
+		query += `phone = ?, `
+		params = append(params, *patient.Phone)
+	}
+	if patient.Gender != nil {
+		query += `gender = ?, `
+		params = append(params, *patient.Gender)
+	}
+	if patient.Birth != nil {
+		query += `birth = ?, `
+		params = append(params, *patient.Birth)
+	}
+	query = query[:len(query)-2] // Remove trailing comma and space
+
+	// Add WHERE clause
+	query += ` WHERE id = ?`
+	params = append(params, id)
+
+	// Execute query
+	_, err = tx.Exec(query, params...)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update patient: %w", err)
+	}
+
+	// Handle language
+	if patient.Language != nil {
+		// Try to get languageId
+		var languageId int
+		query = `SELECT l.id FROM provider.language l WHERE l.language = ?`
+		if err := tx.Get(&languageId, query, *patient.Language); err != nil {
+			// If we can't find the language, insert it
+			if errors.Is(err, sql.ErrNoRows) {
+				query = `INSERT INTO provider.language (language) VALUES (?)`
+				res, err := tx.Exec(query, *patient.Language)
+				if err != nil {
+					return nil, fmt.Errorf("failed to insert language: %w", err)
+				}
+				// mfw I have to convert int64 to int (╯°□°)╯︵ ┻━┻
+				languageId64, err := res.LastInsertId()
+				if err != nil {
+					return nil, fmt.Errorf("failed to get language ID: %w", err)
+				}
+				languageId = int(languageId64)
+			} else {
+				return nil, fmt.Errorf("failed to get language: %w", err)
+			}
+		}
+		query = `UPDATE patient.patient SET language = ? WHERE id = ?`
+		_, err = tx.Exec(query, languageId, id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to update patient language: %w", err)
+		}
+	}
+
+	// Handle allergies
+	if patient.Allergies != nil {
+		query = `DELETE FROM patient.allergy WHERE patient_id = ?`
+		_, err = tx.Exec(query, id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to delete patient allergies: %w", err)
+		}
+
+		for _, allergy := range *patient.Allergies {
+			query = `INSERT INTO patient.allergy (patient_id, name, description) VALUES (?, ?, ?)`
+			_, err = tx.Exec(query, id, allergy.Name, allergy.Description)
+			if err != nil {
+				return nil, fmt.Errorf("failed to insert patient allergy: %w", err)
+			}
+		}
+	}
+
+	// Handle prescriptions
+	if patient.Prescriptions != nil {
+		query = `DELETE FROM patient.prescription WHERE patient_id = ?`
+		_, err = tx.Exec(query, id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to delete patient prescriptions: %w", err)
+		}
+
+		for _, prescription := range *patient.Prescriptions {
+			query = `INSERT INTO patient.prescription (provider_id, patient_id, name, dosage, frequency, start, end) VALUES (?, ?, ?, ?, ?, ?, ?)`
+			_, err = tx.Exec(query, prescription.ProviderId, id, prescription.Name, prescription.Dosage, prescription.Frequency, prescription.Start, prescription.End)
+			if err != nil {
+				return nil, fmt.Errorf("failed to insert patient prescription: %w", err)
+			}
+		}
+	}
+
+	// Commit transaction
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return d.GetPatient(id)
+}
+
+// GetPatientPassword retrieves the password of a patient by their ID.
+func (d *PatientDatabase) GetPatientPassword(id string) (string, error) {
+	var password string
+	query := `SELECT p.password FROM patient.patient p WHERE p.id = ?`
+	if err := d.db.Get(&password, query, id); err != nil {
+		return "", fmt.Errorf("failed to get patient password: %w", err)
+	}
+	return password, nil
+}
+
+// GetPatientID retrieves the ID of a patient by their email.
+func (d *PatientDatabase) GetPatientID(email string) (string, error) {
+	var id string
+	query := `SELECT p.id FROM patient.patient p WHERE p.email = ?`
+	if err := d.db.Get(&id, query, email); err != nil {
+		return "", fmt.Errorf("failed to get patient ID: %w", err)
+	}
+	return id, nil
 }
 
 // getEnv gets an environment variable or returns a default value
