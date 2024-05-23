@@ -117,14 +117,17 @@ components:
     Appointment:
       type: object
       properties:
-        patientName:
+        id:
           type: string
-        doctorName:
+        patient:
           type: string
-        appointmentDate:
+        provider:
           type: string
-          format: date-time
-        reason:
+        date_time:
+          type: string
+        service:
+          type: integer
+        description:
           type: string
     AppointmentResponse:
       type: object

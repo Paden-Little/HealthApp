@@ -6,7 +6,6 @@ package appointment
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/oapi-codegen/runtime"
@@ -14,10 +13,12 @@ import (
 
 // Appointment defines model for Appointment.
 type Appointment struct {
-	AppointmentDate *time.Time `json:"appointmentDate,omitempty"`
-	DoctorName      *string    `json:"doctorName,omitempty"`
-	PatientName     *string    `json:"patientName,omitempty"`
-	Reason          *string    `json:"reason,omitempty"`
+	DateTime    *string `json:"date_time,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Id          *string `json:"id,omitempty"`
+	Patient     *string `json:"patient,omitempty"`
+	Provider    *string `json:"provider,omitempty"`
+	Service     *int    `json:"service,omitempty"`
 }
 
 // AppointmentResponse defines model for AppointmentResponse.
