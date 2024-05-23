@@ -36,11 +36,31 @@ type Allergy struct {
 // Gender defines model for Gender.
 type Gender string
 
+// NewPatient defines model for NewPatient.
+type NewPatient struct {
+	Allergies *[]Allergy `json:"allergies,omitempty"`
+	Birth     string     `json:"birth"`
+	Email     string     `json:"email"`
+
+	// Firstname First and middle names of the patient
+	Firstname string `json:"firstname"`
+	Gender    Gender `json:"gender"`
+
+	// Language Preferred language of the patient
+	Language *string `json:"language,omitempty"`
+
+	// Lastname Last name of the patient
+	Lastname      string          `json:"lastname"`
+	Password      string          `json:"password"`
+	Phone         *string         `json:"phone,omitempty"`
+	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
+}
+
 // Patient defines model for Patient.
 type Patient struct {
 	Allergies *[]Allergy `json:"allergies,omitempty"`
 	Birth     string     `json:"birth"`
-	Email     *string    `json:"email,omitempty"`
+	Email     string     `json:"email"`
 
 	// Firstname First and middle names of the patient
 	Firstname string `json:"firstname"`
@@ -51,7 +71,24 @@ type Patient struct {
 	Language *string `json:"language,omitempty"`
 
 	// Lastname Last name of the patient
-	Lastname      string          `json:"lastname"`
+	Lastname string `json:"lastname"`
+
+	// Password This field is never returned in a response.
+	Password      string          `json:"-"`
+	Phone         string          `json:"phone"`
+	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
+}
+
+// PatientUpdate defines model for PatientUpdate.
+type PatientUpdate struct {
+	Allergies     *[]Allergy      `json:"allergies,omitempty"`
+	Birth         *string         `json:"birth,omitempty"`
+	Email         *string         `json:"email,omitempty"`
+	Firstname     *string         `json:"firstname,omitempty"`
+	Gender        *Gender         `json:"gender,omitempty"`
+	Language      *string         `json:"language,omitempty"`
+	Lastname      *string         `json:"lastname,omitempty"`
+	Password      *string         `json:"password,omitempty"`
 	Phone         *string         `json:"phone,omitempty"`
 	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
 }
@@ -77,46 +114,29 @@ type Prescription struct {
 	Start string `json:"start"`
 }
 
-// NewPatient defines model for NewPatient.
-type NewPatient struct {
-	Allergies *[]Allergy `json:"allergies,omitempty"`
-	Birth     string     `json:"birth"`
-	Email     *string    `json:"email,omitempty"`
-
-	// Firstname First and middle names of the patient
-	Firstname string `json:"firstname"`
-	Gender    Gender `json:"gender"`
-
-	// Language Preferred language of the patient
-	Language *string `json:"language,omitempty"`
-
-	// Lastname Last name of the patient
-	Lastname      string          `json:"lastname"`
-	Phone         *string         `json:"phone,omitempty"`
-	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
+// PatientLogin defines model for PatientLogin.
+type PatientLogin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-// CreatePatientJSONBody defines parameters for CreatePatient.
-type CreatePatientJSONBody struct {
-	Allergies *[]Allergy `json:"allergies,omitempty"`
-	Birth     string     `json:"birth"`
-	Email     *string    `json:"email,omitempty"`
+// UpdatePatient defines model for UpdatePatient.
+type UpdatePatient = PatientUpdate
 
-	// Firstname First and middle names of the patient
-	Firstname string `json:"firstname"`
-	Gender    Gender `json:"gender"`
-
-	// Language Preferred language of the patient
-	Language *string `json:"language,omitempty"`
-
-	// Lastname Last name of the patient
-	Lastname      string          `json:"lastname"`
-	Phone         *string         `json:"phone,omitempty"`
-	Prescriptions *[]Prescription `json:"prescriptions,omitempty"`
+// PatientLoginJSONBody defines parameters for PatientLogin.
+type PatientLoginJSONBody struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 // CreatePatientJSONRequestBody defines body for CreatePatient for application/json ContentType.
-type CreatePatientJSONRequestBody CreatePatientJSONBody
+type CreatePatientJSONRequestBody = NewPatient
+
+// PatientLoginJSONRequestBody defines body for PatientLogin for application/json ContentType.
+type PatientLoginJSONRequestBody PatientLoginJSONBody
+
+// UpdatePatientJSONRequestBody defines body for UpdatePatient for application/json ContentType.
+type UpdatePatientJSONRequestBody = PatientUpdate
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -129,12 +149,18 @@ type ServerInterface interface {
 	// Create a patient
 	// (POST /patient)
 	CreatePatient(c *gin.Context)
+	// Login as a patient
+	// (POST /patient/login)
+	PatientLogin(c *gin.Context)
 	// Delete a patient by ID
 	// (DELETE /patient/{id})
 	DeletePatient(c *gin.Context, id string)
 	// Get a patient by ID
 	// (GET /patient/{id})
 	GetPatient(c *gin.Context, id string)
+	// Update a patient by ID
+	// (PATCH /patient/{id})
+	UpdatePatient(c *gin.Context, id string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -185,6 +211,19 @@ func (siw *ServerInterfaceWrapper) CreatePatient(c *gin.Context) {
 	siw.Handler.CreatePatient(c)
 }
 
+// PatientLogin operation middleware
+func (siw *ServerInterfaceWrapper) PatientLogin(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.PatientLogin(c)
+}
+
 // DeletePatient operation middleware
 func (siw *ServerInterfaceWrapper) DeletePatient(c *gin.Context) {
 
@@ -233,6 +272,30 @@ func (siw *ServerInterfaceWrapper) GetPatient(c *gin.Context) {
 	siw.Handler.GetPatient(c, id)
 }
 
+// UpdatePatient operation middleware
+func (siw *ServerInterfaceWrapper) UpdatePatient(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "id" -------------
+	var id string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", c.Param("id"), &id, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.UpdatePatient(c, id)
+}
+
 // GinServerOptions provides options for the Gin server.
 type GinServerOptions struct {
 	BaseURL      string
@@ -263,28 +326,33 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 	router.GET(options.BaseURL+"/health", wrapper.CheckHealth)
 	router.GET(options.BaseURL+"/patient", wrapper.GetPatients)
 	router.POST(options.BaseURL+"/patient", wrapper.CreatePatient)
+	router.POST(options.BaseURL+"/patient/login", wrapper.PatientLogin)
 	router.DELETE(options.BaseURL+"/patient/:id", wrapper.DeletePatient)
 	router.GET(options.BaseURL+"/patient/:id", wrapper.GetPatient)
+	router.PATCH(options.BaseURL+"/patient/:id", wrapper.UpdatePatient)
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
