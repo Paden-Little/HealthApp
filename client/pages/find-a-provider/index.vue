@@ -3,7 +3,7 @@ const { data } = await useFetch('/api/provider');
 </script>
 
 <template>
-  <section>
+  <section class="bg-slate-200">
     <div class="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
       <div class="mx-auto max-w-screen-sm text-center">
         <h2 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900">

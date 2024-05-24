@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.cta-button {
-  @apply rounded-lg bg-[#344983] px-5 py-3 font-medium text-white shadow-lg;
-  backdrop-filter: blur(10px);
-}
-
-.glass-button {
-  @apply ms-4 px-5 py-3 font-medium text-white shadow-lg;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
 :root {
-  @apply bg-gray-200;
+  @apply bg-white;
 }

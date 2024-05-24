@@ -31,7 +31,7 @@ onMounted(() => {
           >
           <NuxtLink
             to="/book-an-appointment"
-            class="mr-2 rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 lg:px-5 lg:py-2.5"
+            class="rounded-lg bg-blue-800 px-5 py-2.5 text-sm font-medium tracking-tight text-white shadow-lg transition-all hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200"
             >Book an Appointment</NuxtLink
           >
           <button
@@ -111,9 +111,9 @@ onMounted(() => {
 
 <style scoped>
 .navlink {
-  @apply transition-all hover:text-primary-700;
+  @apply font-bold tracking-tight transition-all hover:text-blue-800 text-gray-600;
 }
 .activelink {
-  @apply text-primary-700;
+  @apply text-blue-800;
 }
 </style>
