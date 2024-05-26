@@ -1,25 +1,9 @@
 <script setup lang="ts">
-type Provider = {
-  id: string;
-  name: string;
-  suffix: string;
-  email: string;
-  phone: string;
-  bio: string;
-  languages: Array<string>;
-  services: Array<string>;
-};
-
-const services = ['dermatology', 'general care', 'your mother'];
-
-defineProps({
-  provider: {
-    type: Object as () => Provider,
-    required: true,
-  },
+const props = defineProps({
+  provider: Object,
 });
 
-function formattedServices(services: Array<string>): string {
+function formatServices(services: string[]): string {
   if (services.length > 1) {
     return (
       services.slice(0, -1).join(', ') +
@@ -31,44 +15,37 @@ function formattedServices(services: Array<string>): string {
   }
 }
 
-function formatPhoneNumber(phoneNumber: string): string {
-  return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
-}
+const formattedPhoneNumber = props.provider!.phone.replace(
+  /(\d{3})(\d{3})(\d{4})/,
+  '$1-$2-$3',
+);
 </script>
 
 <template>
-  <div
-    class="items-center rounded-lg bg-gray-50 shadow dark:border-gray-700 dark:bg-gray-800 sm:flex"
-  >
-    <a href="#">
+  <div class="flex border-b-[1px] border-gray-300 pb-6 pt-3">
+    <div>
       <img
-        class="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
+        class="w-28 rounded-full"
         src="/img/skillissue.jpg"
-        :alt="provider.name"
+        alt="yeah it brokey"
       />
-    </a>
-    <div class="p-5">
-      <h3
-        class="text-xl font-bold tracking-tight text-gray-900 dark:text-white"
-      >
-        <a href="#">{{ provider.name }}</a>
-      </h3>
-      <span class="text-gray-500"
-        >{{ formattedServices(provider.services) }}
-      </span>
-      <p class="mb-4 mt-3 font-light text-gray-500">
-        Am I just unwell these days? I'm not myself And it feels like I'll never
-        change Too late for me Nothing's healing the hurt, only worsens the pain
+    </div>
+    <div class="ms-4 w-80">
+      <div class="flex justify-between">
+        <p class="text-lg font-semibold">
+          {{ provider!.name }}, {{ provider!.suffix }}
+        </p>
+        <div class="flex items-center justify-center text-sm">
+          <Icon name="material-symbols:phone-enabled" />
+          <p class="ms-2">{{ formattedPhoneNumber }}</p>
+        </div>
+      </div>
+      <p class="text-md font-semibold text-gray-800">
+        {{ formatServices(provider!.services) }}
       </p>
+      <div class="mt-2">
+        <p class="text-sm text-gray-600">{{ provider!.bio }}</p>
+      </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Custom CSS for truncating the overflow */
-.truncate-last-item::after {
-  content: '';
-  display: inline-block;
-  width: 100%;
-}
-</style>
