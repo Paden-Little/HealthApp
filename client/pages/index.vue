@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
 
-definePageMeta({
-  layout: false,
-});
-
 onMounted(() => {
   initFlowbite();
 });
@@ -12,7 +8,6 @@ onMounted(() => {
 
 <template>
   <section class="bg-gradient-to-r from-blue-950 to-blue-400 text-white">
-    <Navbar bgColor="#ffffff" textColor="text-black" />
     <div
       class="mx-auto grid max-w-screen-xl px-4 pb-8 pt-8 lg:grid-cols-12 lg:gap-8 lg:pb-0 lg:pt-16 xl:gap-0"
     >
@@ -40,7 +35,7 @@ onMounted(() => {
   </section>
   <section class="bg-white">
     <div class="mx-auto max-w-screen-xl px-4 py-8 sm:py-16 lg:px-6">
-      <div class="mb-8 max-w-screen-md lg:mb-16">
+      <div class="mb-8 w-full border-b-[1px] border-gray-800 pb-8 lg:mb-16">
         <h2 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900">
           Explore Our Services
         </h2>

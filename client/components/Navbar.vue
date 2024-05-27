@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
 
-defineProps({
-  bgColor: String,
-  textColor: String,
-});
-
 onMounted(() => {
   initFlowbite();
 });
 </script>
 
 <template>
-  <header :class="textColor">
-    <nav class="px-4 py-2.5 lg:px-6" :style="{ backgroundColor: bgColor }">
+  <header>
+    <nav class="px-4 py-2.5 shadow lg:px-6">
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
@@ -24,14 +19,8 @@ onMounted(() => {
           >
         </NuxtLink>
         <div class="flex items-center lg:order-2">
-          <a
-            href="#"
-            class="mr-2 rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 lg:px-5 lg:py-2.5"
-            >Log in</a
-          >
-          <NuxtLink
-            to="/book-an-appointment"
-            class="rounded-lg bg-blue-800 px-5 py-2.5 text-sm font-medium tracking-tight text-white shadow-lg transition-all hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200"
+          <a href="#" class="secondary-btn">Log in</a>
+          <NuxtLink to="/find-a-provider" class="cta-btn"
             >Book an Appointment</NuxtLink
           >
           <button
@@ -111,7 +100,7 @@ onMounted(() => {
 
 <style scoped>
 .navlink {
-  @apply font-bold tracking-tight transition-all hover:text-blue-800 text-gray-600;
+  @apply font-bold tracking-tight text-gray-600 transition-all hover:text-blue-800;
 }
 .activelink {
   @apply text-blue-800;

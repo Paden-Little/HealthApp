@@ -1,12 +1,21 @@
 <script setup lang="ts">
 const { data } = await useFetch<any[]>('/api/provider');
+
+const searchQuery = ref('');
+
+// Filtered list of providers
+const filteredProviders = computed(() => {
+  return data.value!.filter(provider =>
+    provider.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
+  );
+});
 </script>
 
 <template>
   <section class="bg-slate-200">
     <div class="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
       <div class="mx-auto max-w-screen-sm text-center">
-        <h2 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900">
+        <h2 class="mb-4 text-4xl font-bold tracking-tight text-gray-900">
           Find a Provider
         </h2>
         <form class="mx-auto max-w-md">
@@ -27,6 +36,7 @@ const { data } = await useFetch<any[]>('/api/provider');
               class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="Filter by providers name"
               required
+              v-model="searchQuery"
             />
           </div>
         </form>
@@ -34,13 +44,21 @@ const { data } = await useFetch<any[]>('/api/provider');
     </div>
   </section>
   <section class="bg-white">
-    <div class="mx-auto flex max-w-screen-xl flex-col">
+    <div class="mx-auto flex max-w-screen-xl flex-col items-center">
       <p
-        class="mt-4 border-b-[1px] border-gray-400 pb-2 text-center text-xl font-semibold tracking-tight text-gray-900"
+        class="mt-4 w-full border-b-[1px] border-gray-400 pb-2 text-xl tracking-tight text-gray-900"
       >
-        Resulting Providers
+        {{ filteredProviders.length }} Resulting Providers
       </p>
-      <ProviderProfile v-for="provider in data" :provider="provider" />
+      <div v-if="filteredProviders.length != 0" class="w-full">
+        <ProviderProfile
+          v-for="provider in filteredProviders"
+          :provider="provider"
+        />
+      </div>
+      <div v-else class="flex h-48 items-center">
+        <p class="text-4xl tracking-tighter">No doctors found</p>
+      </div>
     </div>
   </section>
 </template>

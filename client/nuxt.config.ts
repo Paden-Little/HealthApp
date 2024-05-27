@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     cssPath: '~/assets/css/tailwind.css',
   },
   devServer: {
-    // Stop port forwarding the docker containers to 3000
+    // STOP FUCKING PORT FORWARDING TO 3000 PLEASE I NEED IT FOR FRONTEND
     port: 1337,
   },
   // Hey Ethan jsyk removing this will break the entire app
