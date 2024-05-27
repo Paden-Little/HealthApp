@@ -6,7 +6,8 @@ USE `provider`;
 
 CREATE TABLE IF NOT EXISTS `provider`.`provider` (
     `id` CHAR(36) NOT NULL,
-    `name` VARCHAR(255) NOT NULL,
+    `firstname` VARCHAR(255) NOT NULL,
+    `lastname` VARCHAR(255) NOT NULL,
     `suffix` VARCHAR(255) NOT NULL,
     `bio` TEXT NOT NULL,
     `email` VARCHAR(255) NOT NULL,
@@ -45,8 +46,8 @@ CREATE TABLE IF NOT EXISTS `provider`.`provider_language` (
     PRIMARY KEY (`provider_id`, `language_id`)
 );
 
-INSERT INTO `provider`.`provider` (`id`, `name`, `suffix`, `bio`, `email`, `phone`, `password`) VALUES
-    ('00000000-0000-0000-0000-000000000000', 'Dr. John', 'MD', 'Dr. John is a great doctor', 'drjohn@gmail.com', '8011234567', 'unhashed');
+INSERT INTO `provider`.`provider` (`id`, `firstname`, `lastname`, `suffix`, `bio`, `email`, `phone`) VALUES
+    ('00000000-0000-0000-0000-000000000000', 'John', 'Doe', 'MD', 'John Doe, MD. is a great doctor', 'drjohn@gmail.com', '8011234567');
 
 INSERT INTO `provider`.`service` (`service`) VALUES ('Johnology');
 

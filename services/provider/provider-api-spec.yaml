@@ -160,8 +160,12 @@ components:
       properties:
         id:
           type: string
-        name:
+        firstname:
           type: string
+          description: first and middle names of the provider
+        lastname:
+          type: string
+          description: last name of the provider
         suffix:
           example: MD, PhD, etc
           type: string
@@ -189,7 +193,8 @@ components:
           type: string
       required:
         - id
-        - name
+        - firstname
+        - lastname
         - suffix
         - services
         - languages
@@ -199,8 +204,12 @@ components:
     NewProvider:
       type: object
       properties:
-        name:
+        firstname:
           type: string
+          description: first and middle names of the provider
+        lastname:
+          type: string
+          description: last name of the provider
         suffix:
           example: MD, PhD, etc
           type: string
@@ -224,7 +233,8 @@ components:
           description: URL to the provider's profile image
           type: string
       required:
-        - name
+        - firstname
+        - lastname
         - suffix
         - services
         - languages
@@ -235,8 +245,12 @@ components:
     ProviderUpdate:
       type: object
       properties:
-        name:
+        firstname:
           type: string
+          description: first and middle names of the provider
+        lastname:
+          type: string
+          description: last name of the provider
         suffix:
           example: MD, PhD, etc
           type: string
