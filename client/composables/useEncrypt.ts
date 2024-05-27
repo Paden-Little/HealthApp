@@ -6,9 +6,5 @@ export function useEncrypt() {
     return await bcrypt.hash(password, salt);
   }
 
-  const comparePasswords = async (password: string, hashedPassword: string) => {
-    return await bcrypt.compare(password, hashedPassword);
-  }
-
-  return { hashPassword, comparePasswords };
+  return { hashPassword };
 }
