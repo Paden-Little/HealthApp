@@ -47,6 +47,48 @@ func (d *ProviderDatabase) Close() error {
 	return d.db.Close()
 }
 
+// GetProviderByFirstnameAndLastname retrieves a provider from the database by firstname and lastname and returns a gen.Provider.
+// It returns an error if the operation fails, or if the provider does not exist.
+func (d *ProviderDatabase) GetProviderByFirstnameAndLastname(firstname, lastname string) (*gen.Provider, error) {
+	// Add SQL wildcards to firstname and lastname to search for partial matches
+	firstname = fmt.Sprintf("%%%s%%", firstname)
+	lastname = fmt.Sprintf("%%%s%%", lastname)
+
+	// Get provider
+	var provider gen.Provider
+	query := "SELECT * FROM provider WHERE firstname = ? AND lastname = ?"
+	err := d.db.Get(&provider, query, firstname, lastname)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get provider: %w", err)
+	}
+
+	// Get services and languages
+	var services []string
+	query = `SELECT s.service FROM provider_service ps
+		JOIN service s ON ps.service_id = s.id
+		WHERE ps.provider_id = ?`
+	err = d.db.Select(&services, query, provider.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get provider services: %w", err)
+	}
+
+	var languages []string
+	query = `SELECT l.language FROM provider_language pl
+		JOIN language l ON pl.language_id = l.id
+		WHERE pl.provider_id = ?`
+	err = d.db.Select(&languages, query, provider.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get provider languages: %w", err)
+	}
+
+	// Set services and languages
+	provider.Services = services
+	provider.Languages = languages
+
+	// Return the provider
+	return &provider, nil
+}
+
 // GetPassword retrieves a provider's password from the database and returns it.
 func (d *ProviderDatabase) GetPassword(email string) (string, error) {
 	var password string
@@ -82,8 +124,8 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 
 	// Insert provider
 	id := uuid.New().String()
-	query := `INSERT INTO provider (id, name, suffix, bio, email, phone, password) VALUES (?, ?, ?, ?, ?, ?, ?)`
-	_, err = tx.Exec(query, id, provider.Name, provider.Suffix, provider.Bio, provider.Email, provider.Phone, provider.Password)
+	query := `INSERT INTO provider (id, firstname, lastname, suffix, bio, email, phone, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err = tx.Exec(query, id, provider.Firstname, provider.Lastname, provider.Suffix, provider.Bio, provider.Email, provider.Phone, provider.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create provider: %w", err)
 	}
@@ -167,7 +209,8 @@ func (d *ProviderDatabase) CreateProvider(provider *gen.NewProvider) (*gen.Provi
 	// Return the created provider
 	return &gen.Provider{
 		Id:        id,
-		Name:      provider.Name,
+		Firstname: provider.Firstname,
+		Lastname:  provider.Lastname,
 		Suffix:    provider.Suffix,
 		Bio:       provider.Bio,
 		Email:     provider.Email,
@@ -223,7 +266,7 @@ func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Pr
 	var queryParams []interface{}
 	// If no service is provided, alter query to only filter by name
 	if params.Service == nil || len(*params.Service) == 0 {
-		query = `SELECT * FROM provider WHERE name LIKE ?`
+		query = `SELECT * FROM provider WHERE CONCAT(firstname, ' ', lastname) LIKE ?`
 		queryParams = append(queryParams, fmt.Sprintf("%%%s%%", derefString(params.Name)))
 	} else {
 		query = `SELECT p.* FROM provider.provider p
@@ -231,7 +274,7 @@ func (d *ProviderDatabase) GetProviders(params gen.GetProvidersParams) ([]gen.Pr
 			ON p.id = ps.provider_id 
 		JOIN provider.service s 
 			ON ps.service_id = s.id 
-		WHERE s.service LIKE ? AND p.name LIKE ?`
+		WHERE s.service LIKE ? AND CONCAT(p.firstname, ' ', p.lastname) LIKE ?`
 		queryParams = append(queryParams, fmt.Sprintf("%%%s%%", derefString(params.Service)))
 	}
 
@@ -300,9 +343,13 @@ func (d *ProviderDatabase) UpdateProvider(id string, provider *gen.ProviderUpdat
 	query := `UPDATE provider SET `
 	var params []any
 
-	if provider.Name != nil {
-		query += `name = ?, `
-		params = append(params, *provider.Name)
+	if provider.Firstname != nil {
+		query += `firstname = ?, `
+		params = append(params, *provider.Firstname)
+	}
+	if provider.Lastname != nil {
+		query += `lastname = ?, `
+		params = append(params, *provider.Lastname)
 	}
 	if provider.Suffix != nil {
 		query += `suffix = ?, `
