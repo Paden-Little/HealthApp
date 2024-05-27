@@ -97,7 +97,8 @@ CREATE TABLE IF NOT EXISTS `patient`.`prescription` (
     PRIMARY KEY (`patient_id`, `name`, `start`)
 );
 
-INSERT INTO `patient`.`patient` (`id`, `firstname`, `lastname`, `email`, `phone`, `language`, `birth`, `gender`) VALUES ('11111111-1111-1111-1111-111111111111', 'Bob', 'Johnson', 'bob@example.com', '9876543210', 1, '1985-05-15', 'male');
+INSERT INTO `patient`.`patient` (`id`, `firstname`, `lastname`, `email`, `phone`, `language`, `birth`, `gender`, `password`) 
+VALUES ('11111111-1111-1111-1111-111111111111', 'Bob', 'Johnson', 'bob@example.com', '9876543210', 1, '1985-05-15', 'male', 'unhashed');
 
 INSERT INTO `patient`.`allergy` (`patient_id`, `name`, `description`) VALUES ('11111111-1111-1111-1111-111111111111', 'Peanuts', 'Severe allergy to peanuts');
 
