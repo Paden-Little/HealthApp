@@ -1,0 +1,5 @@
+package: appointment
+generate:
+  gin-server: true
+  models: true
+output: gen/appointmentGen.go
