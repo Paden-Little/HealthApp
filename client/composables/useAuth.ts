@@ -18,7 +18,7 @@ export function useAuth() {
 
   const registerProvider = async (provider: any) => {
     provider.password = await hashPassword(provider.password);
-    let {data} = useFetch("/api/provider", {
+    let { data } = useFetch("/api/provider", {
       method: "POST",
       body: JSON.stringify(provider),
     })
@@ -27,7 +27,7 @@ export function useAuth() {
 
   const loginPatient = async (patient: any) => {
     patient.password = await hashPassword(patient.password);
-    let {data} = useFetch("/api/provider", {
+    let { data } = useFetch("/api/provider", {
       method: "POST",
       body: JSON.stringify(patient),
     })
@@ -36,12 +36,30 @@ export function useAuth() {
 
   const loginProvider = async (provider: any) => {
     provider.password = await hashPassword(provider.password);
-    let {data} = useFetch("/api/provider", {
+    let { data } = useFetch("/api/provider", {
       method: "POST",
       body: JSON.stringify(provider),
     })
     return data
   }
-  
-  return { registerPatient, registerProvider, loginPatient, loginProvider };
+
+  const getPatientData = async (token: string, pid: string) => {
+    let { data } = useFetch(`/api/patient/${pid}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return data;
+  }
+
+  const getProviderData = async (token: string, pid: string) => {
+    let { data } = useFetch(`/api/provider/${pid}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return data;
+  }
+
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData};
 }
