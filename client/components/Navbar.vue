@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { initFlowbite } from 'flowbite';
 
 onMounted(() => {
@@ -8,32 +8,25 @@ onMounted(() => {
 
 <template>
   <header>
-    <nav class="bg-white px-4 py-2.5 lg:px-6">
+    <nav class="px-4 py-2.5 shadow lg:px-6">
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
-        <a class="flex items-center">
-          <img class="mr-3 h-6 sm:h-9" />
-          <span
-            class="self-center whitespace-nowrap text-xl font-semibold text-black"
+        <NuxtLink to="/" class="flex items-center">
+          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
+          <span class="self-center whitespace-nowrap text-xl font-semibold"
             >HealthMark</span
           >
-        </a>
+        </NuxtLink>
         <div class="flex items-center lg:order-2">
-          <a
-            href="#"
-            class="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-black hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 lg:px-5 lg:py-2.5"
-            >Log in</a
-          >
-          <a
-            href="#"
-            class="mr-2 rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 lg:px-5 lg:py-2.5"
-            >Book an Appointment</a
+          <a href="#" class="secondary-btn">Log in</a>
+          <NuxtLink to="/find-a-provider" class="cta-btn"
+            >Book an Appointment</NuxtLink
           >
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"
-            class="ml-1 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 lg:hidden"
+            class="ml-1 inline-flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 lg:hidden"
             aria-controls="mobile-menu-2"
             aria-expanded="false"
           >
@@ -69,25 +62,32 @@ onMounted(() => {
           id="mobile-menu-2"
         >
           <ul
-            class="mt-4 flex flex-col font-medium lg:mt-0 lg:flex-row lg:space-x-8"
+            class="mt-4 flex flex-col items-center font-medium lg:mt-0 lg:flex-row lg:space-x-8"
           >
             <li>
-              <NuxtLink to="/" class="navlink" aria-current="page"
-                >Home</NuxtLink
+              <NuxtLink
+                to="/find-a-provider"
+                class="navlink"
+                :class="{ activelink: $route.path === '/find-a-provider' }"
+                aria-current="page"
+                >Find a Provider</NuxtLink
               >
             </li>
             <li>
-              <NuxtLink to="/find-a-doctor" class="navlink" aria-current="page"
-                >Find a Doctor</NuxtLink
-              >
-            </li>
-            <li>
-              <NuxtLink to="/services" class="navlink" aria-current="page"
+              <NuxtLink
+                to="/services"
+                class="navlink"
+                :class="{ activelink: $route.path === '/services' }"
+                aria-current="page"
                 >Services</NuxtLink
               >
             </li>
             <li>
-              <NuxtLink to="/about" class="navlink" aria-current="page"
+              <NuxtLink
+                to="/about"
+                class="navlink"
+                :class="{ activelink: $route.path === '/about' }"
+                aria-current="page"
                 >About</NuxtLink
               >
             </li>
@@ -100,9 +100,9 @@ onMounted(() => {
 
 <style scoped>
 .navlink {
-  @apply block rounded py-2 pl-3 pr-4 text-black lg:bg-transparent lg:p-0;
+  @apply font-bold tracking-tight text-gray-600 transition-all hover:text-blue-800;
 }
 .activelink {
-  @apply block rounded bg-[#243566] py-2 pl-3 pr-4 text-white lg:bg-transparent lg:p-0 lg:text-primary-700;
+  @apply text-blue-800;
 }
 </style>
