@@ -43,7 +43,9 @@ export function useAuth() {
     return data
   }
 
-  const getPatientData = async (token: string, pid: string) => {
+  const getPatientData = async () => {
+    let pid = useCookie("pid");
+    let token = useCookie("token");
     let { data } = useFetch(`/api/patient/${pid}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -52,7 +54,9 @@ export function useAuth() {
     return data;
   }
 
-  const getProviderData = async (token: string, pid: string) => {
+  const getProviderData = async () => {
+    let pid = useCookie("pid");
+    let token = useCookie("token");
     let { data } = useFetch(`/api/provider/${pid}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,5 +65,5 @@ export function useAuth() {
     return data;
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData};
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData };
 }

@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { initFlowbite } from 'flowbite';
-
-onMounted(() => {
-  initFlowbite();  
-});
 
 definePageMeta({
   layout: false,
@@ -11,27 +6,16 @@ definePageMeta({
 
 const email = ref('');
 const password = ref('');
-const jwt = useCookie('jwt');
-const pid = useCookie('proId');
+// set provider ref
+const provider = ref();
 
 function login() {
   if (email.value === '' || password.value === '') {
     alert('Please fill in all fields');
     return;
   }
-  let provider = {
-    email: email.value,
-    password: password.value,
-  };
-  useAuth()
-    .loginProvider(provider)
-    .then(response => {
-      jwt.value = response.data.token;
-      pid.value = response.data.id;
-    })
-    .catch(error => {
-      console.error('Login failed:', error);
-    });
+
+  provider.value = useAuth().getProviderData()
 }
 </script>
 <template>

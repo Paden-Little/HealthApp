@@ -5,27 +5,14 @@ definePageMeta({
 
 const email = ref('');
 const password = ref('');
-const jwt = useCookie('jwt');
-const pid = useCookie('patId');
+const patient = ref();
 
 function login() {
   if (email.value === '' || password.value === '') {
     alert('Please fill in all fields');
     return;
   }
-  let patient = {
-    email: email.value,
-    password: password.value,
-  };
-  useAuth()
-    .loginPatient(patient)
-    .then(response => {
-      jwt.value = response.data.token;
-      pid.value = response.data.id;
-    })
-    .catch(error => {
-      console.error('Login failed:', error);
-    });
+  patient.value = useAuth().getPatientData();
 }
 </script>
 <template>
