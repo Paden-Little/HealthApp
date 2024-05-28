@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const props = defineProps({
-  provider: Object,
+  provider: {
+    type: Object as () => Provider,
+  },
 });
 
 function formatServices(services: string[]): string {
@@ -19,6 +21,7 @@ const formattedPhoneNumber = props.provider!.phone.replace(
   /(\d{3})(\d{3})(\d{4})/,
   '$1-$2-$3',
 );
+
 function getNextTwoWeeks(): Date[] {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 13);
@@ -89,19 +92,19 @@ function formatDate(date: Date): string {
           class="mb-1 me-1 rounded border-[1px] border-gray-300 px-2 py-1 text-sm shadow-lg"
         >
           <p>{{ formatDate(date) }}</p>
-          <p class="mt-2">{{ provider!.available ? 'yes' : 'no' }}</p>
+          <p class="mt-2">no</p>
           <p>appts</p>
         </div>
       </div>
     </div>
     <div class="ms-8 flex flex-col items-end justify-center">
       <NuxtLink
-        :to="'/find-a-provider/' + provider!.name"
+        to="'/find-a-provider/' + provider.firstname + '-' provider.lastname"
         class="secondary-btn w-44"
         >View Profile</NuxtLink
       >
       <NuxtLink
-        :to="'/book-appointment/' + provider!.id"
+        to="'/book-appointment/' + provider.id"
         class="cta-btn mt-2 w-44"
         >Book Appointment</NuxtLink
       >
