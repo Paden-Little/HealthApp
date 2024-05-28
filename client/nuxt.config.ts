@@ -1,6 +1,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-icon'],
+  build: {
+    transpile: ['@vuepic/vue-datepicker'],
+  },
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
   },

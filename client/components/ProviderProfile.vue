@@ -100,7 +100,7 @@ function formatDate(date: Date): string {
         >View Profile</NuxtLink
       >
       <NuxtLink
-        :to="'/book-appointment/' + provider!.name"
+        :to="'/book-appointment/' + provider!.id"
         class="cta-btn mt-2 w-44"
         >Book Appointment</NuxtLink
       >
