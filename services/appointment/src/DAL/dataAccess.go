@@ -47,11 +47,9 @@ func (db *AppointmentDatabase) UpdateAppointmentById(UUID string, App *gen.Appoi
 
 	defer tx.Rollback()
 
-	appointmentUpdate := `UPDATE appointment SET 
-							date_time = ?, provider = ?, patient = ?, service = ?, 
-							description = ? WHERE id = ?`
+	appointmentUpdate := `UPDATE appointment SET date = ?, start_time = ?, end_time = ?, provider = ?, patient = ?, service = ?, description = ? WHERE id = ?`
 
-	_, err = tx.Exec(appointmentUpdate, App.DateTime, App.Provider, App.Patient, App.Service, App.Description, App.Id)
+	_, err = tx.Exec(appointmentUpdate, App.Date, App.StartTime, App.EndTime, App.Provider, App.Patient, App.Service, App.Description, App.Id)
 	if err != nil {
 		return fmt.Errorf("failed to execute UPDATE statement: %w", err)
 	}
@@ -97,7 +95,7 @@ func (db *AppointmentDatabase) SelectAppointmentById(UUID string) (*gen.Appointm
 
 	var appoint gen.Appointment
 
-	appointmentSelect := `SELECT id, date_time, provider, patient, service, description FROM appointment WHERE id =?`
+	appointmentSelect := `SELECT id, date, start_time, end_time, provider, patient, service, description FROM appointment WHERE id =?`
 
 	rows, err := tx.Query(appointmentSelect, UUID)
 	if err != nil {
@@ -109,7 +107,7 @@ func (db *AppointmentDatabase) SelectAppointmentById(UUID string) (*gen.Appointm
 		return nil, nil
 	}
 
-	if err := rows.Scan(&appoint.Id, &appoint.DateTime, &appoint.Provider, &appoint.Patient, &appoint.Service, &appoint.Description); err != nil {
+	if err := rows.Scan(&appoint.Id, &appoint.Date, &appoint.StartTime, &appoint.EndTime, &appoint.Provider, &appoint.Patient, &appoint.Service, &appoint.Description); err != nil {
 		return nil, fmt.Errorf("failed to scan result: %w", err)
 	}
 
@@ -132,10 +130,8 @@ func (db *AppointmentDatabase) InsertAppointment(app *gen.Appointment) (*gen.App
 	var UUID string
 	UUID = uuid.New().String()
 
-	appointmentInsert := `INSERT INTO appointment 
-                          (id, date_time, provider, patient, service, description)
-                          VALUES (?,?,?,?,?,?)`
-	_, err = tx.Exec(appointmentInsert, UUID, app.DateTime, app.Provider, app.Patient, app.Service, app.Description)
+	appointmentInsert := `INSERT INTO appointment (id, date, start_time, end_time, provider, patient, service, description) VALUES (?,?,?,?,?,?,?,?)`
+	_, err = tx.Exec(appointmentInsert, UUID, app.Date, app.StartTime, app.EndTime, app.Provider, app.Patient, app.Service, app.Description)
 	if err != nil {
 		return nil, err
 	}
