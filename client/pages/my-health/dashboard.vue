@@ -1,27 +1,8 @@
 <script setup lang="ts">
-import axios from 'axios';
-const pid = useCookie('patId');
-const jwt = useCookie('jwt');
-const urlRef = ref(`http://localhost/patient/${pid.value}`);
-const patient = ref();
+const patient = ref<Patient>();
 
-const getHeaders = () => ({
-  Authorization: `Bearer ${jwt.value}`,
-});
-
-const getPatient = async () => {
-  try {
-    const response = await axios.get(urlRef.value, {
-      headers: getHeaders(),
-    });
-    console.log(response.data);
-  } catch (error) {
-    console.error('Failed to get patient:', error);
-  }
-};
-
-onMounted(() => {
-  patient.value = getPatient();
+onMounted(async () => {
+  patient.value = await useAuth().getPatientData();
 });
 </script>
 <template>
