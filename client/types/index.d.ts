@@ -1,6 +1,6 @@
 declare global {
   interface Provider {
-    id: number;
+    id: string;
     firstname: string;
     lastname: string;
     suffix: string;
@@ -27,7 +27,7 @@ declare global {
   };
 
   interface Patient {
-    id: number;
+    id: string;
     firstname: string;
     lastname: string;
     email: string;
@@ -36,6 +36,17 @@ declare global {
     gender: 'male' | 'female';
     allergies: Allergy[];
     prescriptions: Prescription[];
+  }
+
+  interface Appointment {
+    id: string;
+    date: Date;
+    startTime: string;
+    endTime: string;
+    provider: string;
+    patient: string;
+    service: int;
+    description: string;
   }
 }
 
