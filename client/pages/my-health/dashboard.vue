@@ -40,7 +40,7 @@ onMounted(() => {
   <p>Email: {{ patient.value.email }}</p>
   <p>Phone: {{ patient.value.phone }}</p>
   <p>Birthdate: {{ patient.value.birth }}</p>
-  <p>Allergies</p>
+  <!-- <p>Allergies</p>
   <ul>
     <li v-if="patient.value.allergies.count == 0">No allergies</li>
     <li v-else v-for="allergy in patient.value.allergies">
@@ -57,5 +57,5 @@ onMounted(() => {
       <p>Dosage: {{ persription.dosage }} {{ persription.freqency }}</p>
       <p>{{ persription.start }} - {{ persription.end }}</p>
     </li>
-  </ul>
+  </ul> -->
 </template>
