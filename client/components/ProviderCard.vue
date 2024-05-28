@@ -99,12 +99,14 @@ function formatDate(date: Date): string {
     </div>
     <div class="ms-8 flex flex-col items-end justify-center">
       <NuxtLink
-        to="'/find-a-provider/' + provider.firstname + '-' provider.lastname"
+        :to="
+          '/find-a-provider/' + provider!.firstname + '-' + provider!.lastname
+        "
         class="secondary-btn w-44"
         >View Profile</NuxtLink
       >
       <NuxtLink
-        to="'/book-appointment/' + provider.id"
+        :to="'/book-appointment/' + provider!.id"
         class="cta-btn mt-2 w-44"
         >Book Appointment</NuxtLink
       >

@@ -12,19 +12,19 @@ declare global {
     services: string[];
   }
 
-  type Allergy = {
+  interface Allergy {
     description: string;
     name: string;
-  };
+  }
 
-  type Prescription = {
+  interface Prescription {
     name: string;
     dosage: string;
     start: Date;
     end: Date;
     frequency: string;
     providerId: string;
-  };
+  }
 
   interface Patient {
     id: string;
@@ -45,8 +45,13 @@ declare global {
     endTime: string;
     provider: string;
     patient: string;
-    service: int;
+    service: number;
     description: string;
+  }
+
+  interface Login {
+    email: string;
+    password: string;
   }
 }
 
