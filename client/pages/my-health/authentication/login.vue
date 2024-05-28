@@ -14,7 +14,11 @@ function getLogin() {
     return;
   }
   // console.log(login);
-  useAuth().loginPatient(login.value);
+  let loginedIn = useAuth().loginPatient(login.value);
+  if (!loginedIn) {
+    alert('Invalid email or password');
+    return;
+  }
   navigateTo('/my-health/dashboard');
 }
 </script>
