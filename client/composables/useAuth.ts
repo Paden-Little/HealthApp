@@ -13,6 +13,7 @@ export function useAuth() {
       method: "POST",
       body: JSON.stringify(patient),
     })
+    
   }
 
   const registerProvider = async (provider: Provider) => {
@@ -21,11 +22,12 @@ export function useAuth() {
       method: "POST",
       body: JSON.stringify(provider),
     })
+    // login user
   }
 
   const loginPatient = async (patient: Login) => {
-    patient.password = await hashPassword(patient.password);
-    let { data } = useFetch("/api/patient", {
+    // patient.password = await hashPassword(patient.password);
+    let { data } = useFetch("/api/patient/login/", {
       method: "POST",
       body: JSON.stringify(patient),
     })
@@ -37,7 +39,7 @@ export function useAuth() {
     let pid = useCookie("pid");
     let token = useCookie("token");
     provider.password = await hashPassword(provider.password);
-    let { data } = useFetch("/api/provider", {
+    let { data } = useFetch("/api/provider/login/", {
       method: "POST",
       body: JSON.stringify(provider),
     })
