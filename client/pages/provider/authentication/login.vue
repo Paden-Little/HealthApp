@@ -1,7 +1,38 @@
 <script setup lang="ts">
+import { initFlowbite } from 'flowbite';
+
+onMounted(() => {
+  initFlowbite();  
+});
+
 definePageMeta({
   layout: false,
 });
+
+const email = ref('');
+const password = ref('');
+const jwt = useCookie('jwt');
+const pid = useCookie('proId');
+
+function login() {
+  if (email.value === '' || password.value === '') {
+    alert('Please fill in all fields');
+    return;
+  }
+  let provider = {
+    email: email.value,
+    password: password.value,
+  };
+  useAuth()
+    .loginProvider(provider)
+    .then(response => {
+      jwt.value = response.data.token;
+      pid.value = response.data.id;
+    })
+    .catch(error => {
+      console.error('Login failed:', error);
+    });
+}
 </script>
 <template>
   <section class="bg-gray-50">
@@ -17,18 +48,16 @@ definePageMeta({
           >
             Sign in to your Health Mark provider account
           </h1>
-          <form class="space-y-4 md:space-y-6" action="#">
+          <div class="space-y-4 md:space-y-6">
             <div>
-              <label
-                for="email"
-                class="mb-2 block text-sm font-medium text-gray-900"
+              <label class="mb-2 block text-sm font-medium text-gray-900"
                 >Email</label
               >
               <input
+                v-model="email"
                 type="email"
                 name="email"
-                id="email"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
+                class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm"
                 required="true"
               />
             </div>
@@ -39,16 +68,18 @@ definePageMeta({
                 >Password</label
               >
               <input
+                v-model="password"
                 type="password"
                 name="password"
-                id="password"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
+                class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm"
                 required="true"
               />
             </div>
+            <!-- Align center -->
             <button
-              type="submit"
-              class="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300"
+              type="button"
+              class="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              @click="login()"
             >
               Sign in
             </button>
@@ -72,7 +103,7 @@ definePageMeta({
                 >Sign In Here</NuxtLink
               >
             </p>
-          </form>
+          </div>
         </div>
       </div>
     </div>
