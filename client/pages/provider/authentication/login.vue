@@ -67,7 +67,7 @@ function login() {
             >
               Sign in
             </button>
-            <p
+            <!-- <p
               class="flex justify-around text-sm font-light text-gray-500"
             >
               Don’t have an account yet?
@@ -76,7 +76,7 @@ function login() {
                 class="font-medium text-primary-600 hover:underline"
                 >Create Provider Account</NuxtLink
               >
-            </p>
+            </p> -->
             <p
               class="flex justify-around text-sm font-light text-gray-500"
             >
