@@ -36,6 +36,13 @@ type Allergy struct {
 // Gender defines model for Gender.
 type Gender string
 
+// JWT defines model for JWT.
+type JWT struct {
+	// Id ID of the patient
+	Id    string `json:"id"`
+	Token string `json:"token"`
+}
+
 // NewPatient defines model for NewPatient.
 type NewPatient struct {
 	Allergies *[]Allergy `json:"allergies,omitempty"`
@@ -335,24 +342,25 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"vW3bvwIAAP//uB8XuuUVAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

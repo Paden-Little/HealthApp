@@ -6,7 +6,7 @@ const searchQuery = ref('');
 // Filtered list of providers
 const filteredProviders = computed(() => {
   return data.value!.filter(provider =>
-    provider.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
+    provider.firstname.toLowerCase().includes(searchQuery.value.toLowerCase()),
   );
 });
 </script>
@@ -51,13 +51,13 @@ const filteredProviders = computed(() => {
         {{ filteredProviders.length }} Resulting Providers
       </p>
       <div v-if="filteredProviders.length != 0" class="w-full">
-        <ProviderProfile
+        <ProviderCard
           v-for="provider in filteredProviders"
           :provider="provider"
         />
       </div>
       <div v-else class="flex h-48 items-center">
-        <p class="text-4xl tracking-tighter">No doctors found</p>
+        <p class="text-4xl tracking-tighter">No providers found...</p>
       </div>
     </div>
   </section>

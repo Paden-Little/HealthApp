@@ -69,7 +69,12 @@ func (h *ProviderHandler) ProviderLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"token": token})
+	response := gen.JWT{
+		Id:    providerId,
+		Token: token,
+	}
+
+	c.JSON(200, response)
 }
 
 // GetProvider calls ProviderDatabase.GetProvider() and returns the result. It expects an id parameter

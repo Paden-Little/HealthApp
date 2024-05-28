@@ -18,12 +18,14 @@ EXECUTE alterIfNotExists;
 -- Do the same for the other db
 SET @dbName = 'provider';
 SET @tableName = 'provider';
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
 -- Add password field
 SET @dbname = 'patient';
 SET @tablename = 'patient';
 SET @columnname = 'password';
-SET @columndefinition = 'VARCHAR(255) NOT NULL';
+SET @columndefinition = 'VARCHAR(255) NOT NULL DEFAULT \'PASSWORD\'';
 SET @preparedStatement = (SELECT IF(
      (
          SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
