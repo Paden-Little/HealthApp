@@ -22,13 +22,20 @@ const getPatient = async () => {
 
 onMounted(() => {
   patient.value = getPatient();
+  patient.value = {
+    firstname: 'John',
+    lastname: 'Doe',
+    email: 'testing email',
+    phone: '123-456-7890',
+    birth: '01/01/2000',
+  }
 });
 </script>
 <template>
   <!-- TEMP TEST -->
   {{ patient }}
 
-  <h2>Patient Information</h2>
+  <h2 class="">Patient Information</h2>
   <p>Fullname: {{ patient.value.firstname + ' ' + patient.value.lastname}}</p>
   <p>Email: {{ patient.value.email }}</p>
   <p>Phone: {{ patient.value.phone }}</p>
