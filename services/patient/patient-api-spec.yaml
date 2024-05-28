@@ -25,10 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
+                $ref: '#/components/schemas/JWT'
   /patient:
     get:
       summary: Get all patients
@@ -145,6 +142,9 @@ components:
           description: ID of the patient
         token:
           type: string
+      required:
+        - id
+        - token
     Gender:
       type: string
       enum:

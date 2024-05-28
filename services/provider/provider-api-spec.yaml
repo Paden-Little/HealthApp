@@ -24,10 +24,7 @@ paths:
               content:
                 application/json:
                   schema:
-                      type: object
-                      properties:
-                        token:
-                            type: string
+                    $ref: '#/components/schemas/JWT'
   /provider:
     get:
       summary: Get all providers
@@ -273,3 +270,14 @@ components:
         image:
           description: URL to the provider's profile image
           type: string
+    JWT:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the provider
+        token:
+          type: string
+      required:
+        - id
+        - token

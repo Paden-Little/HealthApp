@@ -70,7 +70,12 @@ func (h *PatientHandler) PatientLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"token": token})
+	response := gen.JWT{
+		Token: token,
+		Id:    patientID,
+	}
+
+	c.JSON(200, response)
 }
 
 // GetPatient calls PatientDatabase.GetPatient() and returns the result. It expects an id parameter
