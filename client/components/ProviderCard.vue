@@ -56,7 +56,8 @@ function formatDate(date: Date): string {
       <div class="ms-4">
         <div class="flex justify-between">
           <p class="text-lg font-semibold">
-            {{ provider!.name }}, {{ provider!.suffix }}
+            {{ provider!.firstname + ' ' + provider!.lastname }},
+            {{ provider!.suffix }}
           </p>
         </div>
         <p class="text-md text-sm font-semibold text-gray-800">

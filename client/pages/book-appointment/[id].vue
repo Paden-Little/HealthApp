@@ -4,13 +4,13 @@ const { data } = await useFetch('/api/provider/' + router.params.id);
 </script>
 
 <template>
-  <div> </div>
+  <div></div>
   <div class="m-auto mt-28 flex max-w-screen-md">
     <div>
       <img class="w-28 rounded-full" src="/img/skillissue.jpg" alt="" />
     </div>
     <div class="ms-4">
-      <p class="text-lg font-semibold">{{ data.name }}</p>
+      <p class="text-lg font-semibold">{{ data.firstname }}</p>
     </div>
   </div>
   <form class="md mx-auto mt-28 max-w-screen-md">
