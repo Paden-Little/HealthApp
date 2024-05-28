@@ -10,6 +10,7 @@ declare global {
     image: string;
     languages: string[];
     services: string[];
+    password: ?string;
   }
 
   interface Allergy {
@@ -36,6 +37,7 @@ declare global {
     gender: 'male' | 'female';
     allergies: Allergy[];
     prescriptions: Prescription[];
+    password: ?string;
   }
 
   interface Appointment {

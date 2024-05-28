@@ -3,29 +3,23 @@ definePageMeta({
   layout: false,
 });
 
-const email = ref('');
-const password = ref('');
-const jwt = useCookie('jwt');
-const pid = useCookie('patId');
+const login = ref<Login>({
+  email: '',
+  password: '',
+});
 
-function login() {
-  if (email.value === '' || password.value === '') {
+function getLogin() {
+  if (login.value.email == '' || login.value.email == '') {
     alert('Please fill in all fields');
     return;
   }
-  let patient = {
-    email: email.value,
-    password: password.value,
-  };
-  useAuth()
-    .loginPatient(patient)
-    .then(response => {
-      jwt.value = response.data.token;
-      pid.value = response.data.id;
-    })
-    .catch(error => {
-      console.error('Login failed:', error);
-    });
+  // console.log(login);
+  let loginedIn = useAuth().loginPatient(login.value);
+  if (!loginedIn) {
+    alert('Invalid email or password');
+    return;
+  }
+  navigateTo('/my-health/dashboard');
 }
 </script>
 <template>
@@ -46,7 +40,7 @@ function login() {
                 >Email</label
               >
               <input
-                v-model="email"
+                v-model="login.email"
                 type="email"
                 name="email"
                 class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm"
@@ -60,7 +54,7 @@ function login() {
                 >Password</label
               >
               <input
-                v-model="password"
+                v-model="login.password"
                 type="password"
                 name="password"
                 class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 sm:text-sm"
@@ -71,7 +65,7 @@ function login() {
             <button
               type="button"
               class="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
-              @click="login()"
+              @click="getLogin()"
             >
               Sign in
             </button>
