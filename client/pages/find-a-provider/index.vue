@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data } = await useFetch<any[]>('/api/provider');
+const { data } = await useFetch<Provider[]>('/api/provider');
 
 const searchQuery = ref('');
 

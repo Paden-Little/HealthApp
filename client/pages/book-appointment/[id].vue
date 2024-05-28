@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const router = useRoute();
-const { data } = await useFetch('/api/provider/' + router.params.id);
+const { data } = await useFetch<any>('/api/provider/' + router.params.id);
 </script>
 
 <template>
@@ -10,7 +10,7 @@ const { data } = await useFetch('/api/provider/' + router.params.id);
       <img class="w-28 rounded-full" src="/img/skillissue.jpg" alt="" />
     </div>
     <div class="ms-4">
-      <p class="text-lg font-semibold">{{ data.firstname }}</p>
+      <p class="text-lg font-semibold">{{ data!.firstname }}</p>
     </div>
   </div>
   <form class="md mx-auto mt-28 max-w-screen-md">
