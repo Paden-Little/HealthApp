@@ -14,7 +14,6 @@ function getLogin() {
     alert('Please fill in all fields');
     return;
   }
-  // console.log(login);
   let loginedIn = useAuth().loginProvider(login.value);
   if (!loginedIn) {
     alert('Invalid email or password');

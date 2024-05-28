@@ -13,7 +13,6 @@ function getLogin() {
     alert('Please fill in all fields');
     return;
   }
-  // console.log(login);
   let loginedIn = useAuth().loginPatient(login.value);
   if (!loginedIn) {
     alert('Invalid email or password');
@@ -40,6 +39,7 @@ function getLogin() {
                 >Email</label
               >
               <input
+                id="email"
                 v-model="login.email"
                 type="email"
                 name="email"
