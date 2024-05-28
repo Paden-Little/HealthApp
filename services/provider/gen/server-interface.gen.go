@@ -23,26 +23,36 @@ type NewProvider struct {
 	Bio   string `json:"bio"`
 	Email string `json:"email"`
 
+	// Firstname first and middle names of the provider
+	Firstname string `json:"firstname"`
+
 	// Image URL to the provider's profile image
 	Image     *string  `json:"image,omitempty"`
 	Languages []string `json:"languages"`
-	Name      string   `json:"name"`
-	Password  string   `json:"password"`
-	Phone     string   `json:"phone"`
-	Services  []string `json:"services"`
-	Suffix    string   `json:"suffix"`
+
+	// Lastname last name of the provider
+	Lastname string   `json:"lastname"`
+	Password string   `json:"password"`
+	Phone    string   `json:"phone"`
+	Services []string `json:"services"`
+	Suffix   string   `json:"suffix"`
 }
 
 // Provider defines model for Provider.
 type Provider struct {
 	Bio   string `json:"bio"`
 	Email string `json:"email"`
-	Id    string `json:"id"`
+
+	// Firstname first and middle names of the provider
+	Firstname string `json:"firstname"`
+	Id        string `json:"id"`
 
 	// Image URL to the provider's profile image
 	Image     *string  `json:"image,omitempty"`
 	Languages []string `json:"languages"`
-	Name      string   `json:"name"`
+
+	// Lastname last name of the provider
+	Lastname string `json:"lastname"`
 
 	// Password This field is never returned in a response.
 	Password string   `json:"-"`
@@ -62,14 +72,19 @@ type ProviderUpdate struct {
 	Bio   *string `json:"bio,omitempty"`
 	Email *string `json:"email,omitempty"`
 
+	// Firstname first and middle names of the provider
+	Firstname *string `json:"firstname,omitempty"`
+
 	// Image URL to the provider's profile image
 	Image     *string   `json:"image,omitempty"`
 	Languages *[]string `json:"languages,omitempty"`
-	Name      *string   `json:"name,omitempty"`
-	Password  *string   `json:"password,omitempty"`
-	Phone     *string   `json:"phone,omitempty"`
-	Services  *[]string `json:"services,omitempty"`
-	Suffix    *string   `json:"suffix,omitempty"`
+
+	// Lastname last name of the provider
+	Lastname *string   `json:"lastname,omitempty"`
+	Password *string   `json:"password,omitempty"`
+	Phone    *string   `json:"phone,omitempty"`
+	Services *[]string `json:"services,omitempty"`
+	Suffix   *string   `json:"suffix,omitempty"`
 }
 
 // UpdateProvider defines model for UpdateProvider.
@@ -311,21 +326,21 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/+xXUU/jOBD+K5bvpHtJabm7p7xxVMdVx7LVanlCPJhkmhgS29huoUL576uxkzRpXKBL",
-	"tbDSPjWxnflmvvlmPH2iiSyVFCCsofET1XC/BGP/kSkHt3ABD3MtVzwFja+JFBaExUemVMETZrkU41sj",
-	"Ba6ZJIeS4dPvGhY0pr+NN/bHfteMuzarqoocKteQ0tjqJVQRbbbPZcbFwXD7VsPIlyplFg4ecmPQmw9i",
-	"V1FtK8S70lKBtnVSbrjEH7tWQGNqrOYio1VEoWS8CO7wkmWAOymYRHOFIdCYXn45J1YSmwNRNdofBh8X",
-	"vADiP4qG1gomsiXLvDPcQmmCoPUC05qt8V2wEoIHFTPmQeo0vJlLEf7MgF7xZF8vzHKx4I94FB5ZqQrc",
-	"/DSNyDyfRgRsMgy4l6srH0Zrp+NGl5jIJanxvklNJ9TrFkbe3EJiaUf2B8l4+pMLoe/g15wbsuBQpIQb",
-	"ImAFmmiwSy0gJVwQRjQYJYWBo4GjEX0cZXKEFTvimZAafMnV63h4ZO64GkmHxoqRklxYzEPdFT6cBnlK",
-	"o7cI8Tn1tU23L8HdUnumfLfc3qsK6l75q/u9u/K2UoRLXCzkkNGT+YwspCYlEyzjImt5JXhel+7qRAhu",
-	"HXKTanIyn9GIrkAbb+j4aHI0QX+lAsEUpzH9yy0hXTZ3sY5zYIXN8TEDdz+jShzELKUxPc0hufvPn0EZ",
-	"+vbgPv1zMhk6//l/F6xZliXTaxpT/y1J0I7bGqtOgw5inoFtYjLOV81KsPgSX23j/csLC7qlyJCbNalL",
-	"GuuP3i9Br5syj9tqb+eNQZ5eA1CrZgfGZnc3zHWYy1ePSa1WXzMvDSWMeXghb2dgCSuKTeCukKQJaURD",
-	"d9yLOgPwepePvRm5P8wOqDk++AQZYsBHkW7R4FcJa3noa3hctH0+SE3/OvgOZrbG7TfKpn8HWHkHInzf",
-	"BJrVC3pxDhJmdlP1xNPKN4wC/JXU52rq1jsyerbw2643mzZ1iE1tU4budu//PdivIv8edrcLSU5rrvvR",
-	"e987sWObmE0xYS+1uPcPdPJD6ivcYQKEKWaTfEjZ1p/K92Btz9rd8rj6KMR7vwLcV1X1LQAA//+B+ak1",
-	"zBAAAA==",
+	"H4sIAAAAAAAC/+xXQW/rNgz+K4I2YBenydt28u2twbpgXRcM66noQbVpm60tqZKSNij83wdJtmPHSpts",
+	"wVo89BRHtEl+nz6S0gtNRCUFB240jV+ogscVaPOLSBHcwhU8LZVYYwrK/k0EN8CNfWRSlpgwg4JP77Xg",
+	"dk0nBVTMPn2vIKMx/W669T/1Vj3t+6zrOnJRUUFKY6NWUEe0NV+KHPnJ4g69hiNfy5QZODnk1qF3H4xd",
+	"R42vEO9SCQnKNJtyh8L+mI0EGlNtFPKc1hGFimEZtGSotOGsAmtNQScKpYVBY28ijKekwjQtgdjXNBEZ",
+	"MQUQ2SYRjZ1ixfKAw+u/LokRg69/0PYxwxKI/yjgrWQ8X7HcI0QDlQ4iaRaYUmzjP9sHzFocmEOwSKb1",
+	"k1BpMKYsBIegRYNaY3JsznqVZfhsX4VnVsnSGv+YR2RZzCMCJhknOJDLTW87ewR0fntp9WmNnG5aNK1a",
+	"etBvu7Di7h4SQ3uV+HFFGN6yb1WbQzd/F6hJhlCmBDXhsAZFFJiV4pAS5IQRBVoKruFs5Diiz5NcTGwf",
+	"m2DOhQLfiJp1+/JEP6CcCBeNlRMpkBsrhaZXfriywJRGp6yN1wqiG03Dqtiv/lc6zA6MowqzmSifM+Jz",
+	"RoxUYpeQZ2KM++tyQTKhSMU4y5HnHW5i31eVO+PYEGhc5FZt5OtyQSO6BqW9oy9ns7OZzVdI4EwijelP",
+	"bsnSZQqHdVoAK01hH3NwBykrVBdikdKYnheQPPzm37GV4DuW+/TH2Wyc/J+/O7B6VVVMbWhM/bcksX6c",
+	"aSp7YysY8wJMi0m7XBWrwNg/8c1uvF+xNKA6ijS525Cmq9gWQB9XoDY0ol5itG043cFwtE+HBGhUsyfG",
+	"1ro/zG2Yy4PPs51WDznYjiVs9+GNfbsAQ1hZboG7QhI6pBEF/XN51LupbPblOLjMDG8dI2q+nPyoH2LA",
+	"o0h3aPCrhG2bz0DD07IbNUFqhhPpXzCzcy/6j7IZjiEjHoCHR16gWb2hF5cgYXo/VS+Y1r5hlOCn4pCr",
+	"uVvvyejVwu+63mLe1qFtatsydAeO4T3uuIr8edzdrgQ5b7geove597DbNrGY2w17q8W9P9DZ/1Jf4Q4T",
+	"IEwykxRjynZu/+/B2pG1u5Nx/VGI93kFuK/r+p8AAAD//z5DPAV1EgAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
