@@ -37,7 +37,7 @@ services:
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: patient,provider
+      MYSQL_DATABASE: patient
     ports:
       - "3306:3306"
     # Pass init script to create database and tables

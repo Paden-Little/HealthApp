@@ -137,6 +137,14 @@ components:
             $ref: '#/components/schemas/PatientUpdate'
 
   schemas:
+    JWT:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the patient
+        token:
+          type: string
     Gender:
       type: string
       enum:

@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS `provider`.`provider` (
     `bio` TEXT NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(15),
-    `password` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL DEFAULT 'password',
     `image` VARCHAR(255),
     UNIQUE (`email`),
     PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `provider`.`service` (
     `id` INT AUTO_INCREMENT,
@@ -30,20 +30,20 @@ CREATE TABLE IF NOT EXISTS `provider`.`language` (
 );
 
 CREATE TABLE IF NOT EXISTS `provider`.`provider_service` (
-    `provider_id` CHAR(36) NOT NULL,
+    `provider_id` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     `service_id` INT NOT NULL,
     FOREIGN KEY (`provider_id`) REFERENCES `provider`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`service_id`) REFERENCES `service`(`id`),
     PRIMARY KEY (`provider_id`, `service_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `provider`.`provider_language` (
-    `provider_id` CHAR(36) NOT NULL,
+    `provider_id` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     `language_id` INT NOT NULL,
-    FOREIGN KEY (`provider_id`) REFERENCES  `provider`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`language_id`) REFERENCES  `language`(`id`),
+    FOREIGN KEY (`provider_id`) REFERENCES `provider`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`language_id`) REFERENCES `language`(`id`),
     PRIMARY KEY (`provider_id`, `language_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `provider`.`provider` (`id`, `name`, `suffix`, `bio`, `email`, `phone`) VALUES
     ('00000000-0000-0000-0000-000000000000', 'Dr. John', 'MD', 'Dr. John is a great doctor', 'drjohn@gmail.com', '8011234567');
@@ -73,19 +73,19 @@ CREATE TABLE IF NOT EXISTS `patient`.`patient` (
     FOREIGN KEY (`language`) REFERENCES `provider`.`language`(`id`),
     UNIQUE (`email`),
     PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `patient`.`allergy` (
-    `patient_id` CHAR(36) NOT NULL,
+    `patient_id` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255),
     FOREIGN KEY (`patient_id`) REFERENCES `patient`(`id`) ON DELETE CASCADE,
     PRIMARY KEY (`patient_id`, `name`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `patient`.`prescription` (
-    `provider_id` CHAR(36),
-    `patient_id` CHAR(36) NOT NULL,
+    `provider_id` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    `patient_id` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `dosage` VARCHAR(255) NOT NULL,
     `frequency` VARCHAR(255) NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `patient`.`prescription` (
     PRIMARY KEY (`patient_id`, `name`, `start`)
 );
 
-INSERT INTO `patient`.`patient` (`id`, `firstname`, `lastname`, `email`, `phone`, `language`, `birth`, `gender`) VALUES ('11111111-1111-1111-1111-111111111111', 'Bob', 'Johnson', 'bob@example.com', '9876543210', 1, '1985-05-15', 'male');
+INSERT INTO `patient`.`patient` (`id`, `firstname`, `lastname`, `email`, `phone`, `language`, `birth`, `gender`, `password`) VALUES ('11111111-1111-1111-1111-111111111111', 'Bob', 'Johnson', 'bob@example.com', '9876543210', 1, '1985-05-15', 'male', 'asdf');
 
 INSERT INTO `patient`.`allergy` (`patient_id`, `name`, `description`) VALUES ('11111111-1111-1111-1111-111111111111', 'Peanuts', 'Severe allergy to peanuts');
 
@@ -111,8 +111,8 @@ USE `appointment`;
 CREATE TABLE IF NOT EXISTS `appointment`.`appointment`(
     `id` CHAR(36) NOT NULL,
     `date_time` DATETIME NOT NULL,
-    `provider` CHAR(36) NOT NULL,
-    `patient` CHAR(36) NOT NULL,
+    `provider` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    `patient` CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     `service` INT NOT NULL,
     `description` TEXT NOT NULL,
     FOREIGN KEY (`provider`) REFERENCES `provider`.`provider`(`id`),
