@@ -103,7 +103,9 @@ USE `appointment`;
 
 CREATE TABLE IF NOT EXISTS `appointment`.`appointment`(
     `id` CHAR(36) NOT NULL,
-    `date_time` DATETIME NOT NULL,
+    `date` DATE NOT NULL,
+    `start_time` TIME NOT NULL,
+    `end_time` TIME NOT NULL,
     `provider` CHAR(36) NOT NULL,
     `patient` CHAR(36) NOT NULL,
     `service` INT NOT NULL,
