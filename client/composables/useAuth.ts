@@ -7,16 +7,16 @@ const hashPassword = async (password: string) => {
 
 
 export function useAuth() {
-  const registerPatient = async (patient: any) => {
+  const registerPatient = async (patient: Patient) => {
     patient.password = await hashPassword(patient.password);
     let { data } = useFetch("/api/patient", {
       method: "POST",
       body: JSON.stringify(patient),
     })
-    return data;
+    return data.value;
   }
 
-  const registerProvider = async (provider: any) => {
+  const registerProvider = async (provider: Provider) => {
     provider.password = await hashPassword(provider.password);
     let { data } = useFetch("/api/provider", {
       method: "POST",
@@ -25,7 +25,7 @@ export function useAuth() {
     return data
   }
 
-  const loginPatient = async (patient: any) => {
+  const loginPatient = async (patient: Patient) => {
     patient.password = await hashPassword(patient.password);
     let { data } = useFetch("/api/provider", {
       method: "POST",
@@ -34,7 +34,7 @@ export function useAuth() {
     return data
   }
 
-  const loginProvider = async (provider: any) => {
+  const loginProvider = async (provider: Provider) => {
     provider.password = await hashPassword(provider.password);
     let { data } = useFetch("/api/provider", {
       method: "POST",
@@ -65,5 +65,5 @@ export function useAuth() {
     return data;
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData };
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData};
 }
