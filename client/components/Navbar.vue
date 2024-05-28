@@ -20,7 +20,9 @@ onMounted(() => {
           >
         </NuxtLink>
         <div class="flex items-center lg:order-2">
-          <a href="#" class="secondary-btn">Log in</a>
+          <!-- <a href="#" class="secondary-btn">Log in</a> -->
+          <NuxtLink to="/my-health/authentication/login" class="secondary-btn"
+            >Log in</NuxtLink>
           <NuxtLink to="/find-a-provider" class="cta-btn"
             >Book an Appointment</NuxtLink
           >
