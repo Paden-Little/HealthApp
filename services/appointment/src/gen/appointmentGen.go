@@ -13,12 +13,14 @@ import (
 
 // Appointment defines model for Appointment.
 type Appointment struct {
-	DateTime    *string `json:"date_time,omitempty"`
+	Date        *string `json:"date,omitempty"`
 	Description *string `json:"description,omitempty"`
+	EndTime     *string `json:"end_time,omitempty"`
 	Id          *string `json:"id,omitempty"`
 	Patient     *string `json:"patient,omitempty"`
 	Provider    *string `json:"provider,omitempty"`
 	Service     *int    `json:"service,omitempty"`
+	StartTime   *string `json:"start_time,omitempty"`
 }
 
 // AppointmentResponse defines model for AppointmentResponse.

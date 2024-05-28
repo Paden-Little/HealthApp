@@ -68,8 +68,14 @@ func (s *Server) PatchAppointmentAppointmentId(c *gin.Context, AppointmentId str
 		return
 	}
 
-	if AppUpdate.DateTime == nil {
-		AppUpdate.DateTime = AppPreUpdate.DateTime
+	if AppUpdate.Date == nil {
+		AppUpdate.Date = AppPreUpdate.Date
+	}
+	if AppUpdate.StartTime == nil {
+		AppUpdate.StartTime = AppPreUpdate.StartTime
+	}
+	if AppUpdate.EndTime == nil {
+		AppUpdate.EndTime = AppPreUpdate.EndTime
 	}
 	if AppUpdate.Provider == nil {
 		AppUpdate.Provider = AppPreUpdate.Provider

@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  @apply bg-white;
+}
+
+.base-btn {
+  @apply rounded-lg px-2 py-2.5 text-center text-sm font-medium tracking-tight shadow transition-all;
+}
+
+.cta-btn {
+  @apply base-btn bg-blue-800 text-white hover:bg-blue-900;
+}
+
+.secondary-btn {
+  @apply base-btn border-[1px] border-gray-300 text-black;
+}

@@ -123,7 +123,11 @@ components:
           type: string
         provider:
           type: string
-        date_time:
+        date:
+          type: string
+        start_time:
+          type: string
+        end_time:
           type: string
         service:
           type: integer
