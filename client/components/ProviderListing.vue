@@ -5,23 +5,6 @@ const props = defineProps({
   },
 });
 
-function formatServices(services: string[]): string {
-  if (services.length > 1) {
-    return (
-      services.slice(0, -1).join(', ') +
-      ', and ' +
-      services[services.length - 1]
-    );
-  } else {
-    return services[0];
-  }
-}
-
-const formattedPhoneNumber = props.provider!.phone.replace(
-  /(\d{3})(\d{3})(\d{4})/,
-  '$1-$2-$3',
-);
-
 function getNextTwoWeeks(): Date[] {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 13);
@@ -42,11 +25,28 @@ function formatDate(date: Date): string {
   };
   return new Date(date).toLocaleDateString(undefined, options);
 }
+
+function formatServices(services: string[]): string {
+  if (services.length > 1) {
+    return (
+      services.slice(0, -1).join(', ') +
+      ', and ' +
+      services[services.length - 1]
+    );
+  } else {
+    return services[0];
+  }
+}
+
+const formattedPhoneNumber = props.provider!.phone.replace(
+  /(\d{3})(\d{3})(\d{4})/,
+  '$1-$2-$3',
+);
 </script>
 
 <template>
   <div
-    class="flex w-full justify-between border-b-[1px] border-gray-300 pb-6 pt-3"
+    class="flex w-full justify-between border-b-[1px] border-gray-300 px-12 pb-6 pt-3"
   >
     <div class="flex">
       <div>
@@ -97,7 +97,7 @@ function formatDate(date: Date): string {
         </div>
       </div>
     </div>
-    <div class="ms-8 flex flex-col items-end justify-center">
+    <div class="ms-8 mt-8 flex flex-col items-end justify-start">
       <NuxtLink
         :to="
           '/find-a-provider/' + provider!.firstname + '-' + provider!.lastname
@@ -105,11 +105,15 @@ function formatDate(date: Date): string {
         class="secondary-btn w-44"
         >View Profile</NuxtLink
       >
-      <NuxtLink
-        :to="'/book-appointment/' + provider!.id"
+      <button
+        :data-modal-target="'apptModal' + provider?.email"
+        :data-modal-toggle="'apptModal' + provider?.email"
         class="cta-btn mt-2 w-44"
-        >Book Appointment</NuxtLink
+        type="button"
       >
+        Book Appointment
+      </button>
     </div>
+    <ApptModal :provider="provider" />
   </div>
 </template>

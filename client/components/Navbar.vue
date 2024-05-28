@@ -14,7 +14,8 @@ onMounted(() => {
       >
         <NuxtLink to="/" class="flex items-center">
           <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
-          <span class="self-center whitespace-nowrap text-xl font-semibold"
+          <span
+            class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
             >HealthMark</span
           >
         </NuxtLink>

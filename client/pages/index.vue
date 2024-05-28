@@ -7,7 +7,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="bg-gradient-to-r from-blue-950 to-blue-400 text-white">
+  <section class="bg-blue-900 text-white">
     <div
       class="mx-auto grid max-w-screen-xl px-4 pb-8 pt-8 lg:grid-cols-12 lg:gap-8 lg:pb-0 lg:pt-16 xl:gap-0"
     >
@@ -32,6 +32,9 @@ onMounted(() => {
         <img src="/img/doctor.png" alt="mockup" />
       </div>
     </div>
+  </section>
+  <section class="h-8 bg-indigo-950">
+    <div></div>
   </section>
   <section class="bg-white">
     <div class="mx-auto max-w-screen-xl px-4 py-8 sm:py-16 lg:px-6">

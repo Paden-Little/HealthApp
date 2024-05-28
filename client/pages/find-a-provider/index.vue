@@ -51,7 +51,7 @@ const filteredProviders = computed(() => {
         {{ filteredProviders.length }} Resulting Providers
       </p>
       <div v-if="filteredProviders.length != 0" class="w-full">
-        <ProviderCard
+        <ProviderListing
           v-for="provider in filteredProviders"
           :provider="provider"
         />
