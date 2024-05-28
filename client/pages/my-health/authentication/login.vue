@@ -15,6 +15,7 @@ function getLogin() {
   }
   // console.log(login);
   useAuth().loginPatient(login.value);
+  navigateTo('/my-health/dashboard');
 }
 </script>
 <template>

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   // Hey Ethan jsyk removing this will break the entire app
   routeRules: {
     '/api/**': {
-      proxy: 'http://localhost/**',
+      proxy: 'http://localhost:80/**',
     },
   },
 });

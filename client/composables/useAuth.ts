@@ -1,71 +1,81 @@
 import bcrypt from "bcryptjs";
 const fixedSalt = "$2a$10$1234567890123456789012";
 
+interface LoginResponse {
+  id: string;
+  token: string;
+}
+
+const pid = useCookie("pid");
+const token = useCookie("token");
+
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
 }
 
-
 export function useAuth() {
   const registerPatient = async (patient: Patient) => {
-    patient.password = await hashPassword(patient.password || '');
-    let { data } = useFetch("/api/patient", {
-      method: "POST",
-      body: JSON.stringify(patient),
-    })
-    
+    // patient.password = await hashPassword(patient.password || '');
+    // let { data } = useFetch("/api/patient", {
+    //   method: "POST",
+    //   body: JSON.stringify(patient),
+    // })
   }
 
   const registerProvider = async (provider: Provider) => {
-    provider.password = await hashPassword(provider.password || '');
-    let { data } = useFetch("/api/provider", {
-      method: "POST",
-      body: JSON.stringify(provider),
-    })
-    // login user
+    // provider.password = await hashPassword(provider.password || '');
+    // let { data } = useFetch("/api/provider", {
+    //   method: "POST",
+    //   body: JSON.stringify(provider),
+    // })
   }
 
   const loginPatient = async (patient: Login) => {
-    // patient.password = await hashPassword(patient.password);
-    let { data } = useFetch("/api/patient/login/", {
+    $fetch("/api/patient/login", {
       method: "POST",
       body: JSON.stringify(patient),
+    }).then((res) => {
+      const loginResponse: LoginResponse = res as LoginResponse;
+      pid.value = loginResponse.id;
+      token.value = loginResponse.token;
+      return true;
     })
-    // Set cookies
-    console.log(data)
-  }
+    return false;
+  };
 
   const loginProvider = async (provider: Login) => {
-    let pid = useCookie("pid");
-    let token = useCookie("token");
-    provider.password = await hashPassword(provider.password);
-    let { data } = useFetch("/api/provider/login/", {
+    $fetch("/api/provider/login", {
       method: "POST",
       body: JSON.stringify(provider),
+    }).then((res) => {
+      const loginResponse: LoginResponse = res as LoginResponse;
+      pid.value = loginResponse.id;
+      token.value = loginResponse.token;
+      return true;
     })
-    console.log(data)
+    return false;
   }
 
   const getPatientData = async () => {
-    let pid = useCookie("pid");
-    let token = useCookie("token");
-    let { data } = useFetch(`/api/patient/${pid.value}`, {
+    $fetch(`/api/patient/${pid.value}`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
+    }).then((res) => {
+      return res as Patient;
     })
-    return data;
+    return null;
   }
 
   const getProviderData = async () => {
-    let pid = useCookie("pid");
-    let token = useCookie("token");
-    let { data } = useFetch(`/api/provider/${pid.value}`, {
+    $fetch(`/api/patient/${pid.value}`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
+    }).then((res) => {
+      return res as Patient;
     })
-    return data;
+    return null;
   }
 
   return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData };
