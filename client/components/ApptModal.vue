@@ -3,18 +3,28 @@ import { initFlowbite } from 'flowbite';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
+const pid = useCookie('pid');
+
 const props = defineProps({
   provider: {
     type: Object as () => Provider,
   },
 });
 
+const format = (date: any) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `Selected date is ${day}/${month}/${year}`;
+};
+
 const apptBody = reactive({
-  date: '',
+  date: Date.now(),
   start_time: '12:30:00',
   end_time: '1:30:00',
   provider: props.provider?.id,
-  patient: '11111111-1111-1111-1111-111111111111',
+  patient: pid.value,
   service: 1,
   description: '',
 });
