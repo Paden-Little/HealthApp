@@ -120,5 +120,18 @@ export function useAuth() {
     user.value = undefined;
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, user };
+  async function getUserAppointment() {
+    return $fetch(`/api/appointment/${pid.value}`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    }).then((res) => {
+      return res as Appointment[];
+    }).catch((err) => {
+      console.log(err);
+      return [];
+    })
+  }
+
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, getUserAppointment, user };
 }
