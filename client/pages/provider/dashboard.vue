@@ -25,6 +25,8 @@ const loadProviderData = async () => {
   }
 };
 
+// insert get appointment function here for provider
+
 onMounted(() => {
   loadProviderData();
 });
