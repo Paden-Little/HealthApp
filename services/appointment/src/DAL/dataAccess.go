@@ -85,6 +85,45 @@ func (db *AppointmentDatabase) DeleteAppointmentById(UUID string) error {
 	return nil
 }
 
+func (db *AppointmentDatabase) SelectAppointmentsByProviderOrPatient(UUID string) ([]*gen.Appointment, error) {
+	tx, err := db.db.Begin()
+	if err != nil {
+		return nil, fmt.Errorf("failed to begin transaction: %w", err)
+	}
+
+	defer tx.Rollback()
+
+	var appoints []*gen.Appointment
+
+	// Adjusted SQL query to select appointments where the provider or patient matches the given UUID
+	appointmentSelect := `SELECT id, date, start_time, end_time, provider, patient, service, description FROM appointment WHERE provider =? OR patient =?`
+
+	rows, err := tx.Query(appointmentSelect, UUID, UUID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute SELECT statement: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var appoint gen.Appointment
+		if err := rows.Scan(&appoint.Id, &appoint.Date, &appoint.StartTime, &appoint.EndTime, &appoint.Provider, &appoint.Patient, &appoint.Service, &appoint.Description); err != nil {
+			return nil, fmt.Errorf("failed to scan result: %w", err)
+		}
+		appoints = append(appoints, &appoint)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating over rows: %w", err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return nil, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return appoints, nil
+}
+
 func (db *AppointmentDatabase) SelectAppointmentById(UUID string) (*gen.Appointment, error) {
 	tx, err := db.db.Begin()
 	if err != nil {
