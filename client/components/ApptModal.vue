@@ -22,6 +22,13 @@ const apptBody = reactive({
 });
 
 async function createAppointment() {
+  const formattedDate = new Date(apptBody.date).toISOString().split('T')[0];
+
+  // Update the apptBody.date with the formatted date
+  apptBody.date = formattedDate;
+
+  console.log(apptBody);
+
   const resp = await $fetch('/api/appointment', {
     method: 'POST',
     body: apptBody,
@@ -71,7 +78,7 @@ onMounted(() => {
           <div>{{ apptBody }}</div>
           <div class="flex">
             <VueDatePicker
-              v-model="formattedDate"
+              v-model="apptBody.date"
               :min-date="new Date()"
               :enable-time-picker="false"
             />
