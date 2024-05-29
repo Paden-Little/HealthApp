@@ -30,8 +30,9 @@ const getAppointments = async () => {
   try {
     const appointments = useAuth().getUserAppointment();
     if (appointments) {
-      appointments.then(data => {
+      appointments.then(async data => {
         appointmentsArray.value = data;
+        await getProviderNames();
       });
     }
   } catch (error) {
@@ -40,7 +41,21 @@ const getAppointments = async () => {
   }
 };
 
-onMounted(() => {
+async function getProviderNames() {
+  if (appointmentsArray.value) {
+    for (let index = 0; index < appointmentsArray.value.length; index++) {
+      const element = appointmentsArray.value[index];
+      let temp = useAuth().getProviderName(element.provider);
+      if (temp) {
+        temp.then(data => {
+          element.provider = data;
+        });
+      }
+    }
+  }
+}
+
+onMounted(async () => {
   loadPatientData();
   getAppointments();
 });
@@ -75,10 +90,8 @@ onMounted(() => {
     <h2>Appointments</h2>
     <ul>
       <li v-for="appointment in appointmentsArray">
-        <p>
-          {{ appointment.date }} {{ appointment.startTime }} -
-          {{ appointment.endTime }}
-        </p>
+        <p>{{ appointment.date }}</p>
+        <p>{{ appointment.end_time }} - {{ appointment.end_time }}</p>
         <p>{{ appointment.provider }}</p>
         <p>{{ appointment.service }}</p>
         <p>{{ appointment.description }}</p>

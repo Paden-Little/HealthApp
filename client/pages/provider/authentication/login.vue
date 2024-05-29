@@ -82,7 +82,7 @@ async function getLogin() {
             >
               Sign in
             </button>
-            <!-- <p
+            <p
               class="flex justify-around text-sm font-light text-gray-500"
             >
               Don’t have an account yet?
@@ -91,7 +91,7 @@ async function getLogin() {
                 class="font-medium text-primary-600 hover:underline"
                 >Create Provider Account</NuxtLink
               >
-            </p> -->
+            </p>
             <p
               class="flex justify-around text-sm font-light text-gray-500"
             >

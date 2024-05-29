@@ -43,8 +43,8 @@ declare global {
   interface Appointment {
     id: string;
     date: Date;
-    startTime: string;
-    endTime: string;
+    start_time: string;
+    end_time: string;
     provider: string;
     patient: string;
     service: number;
