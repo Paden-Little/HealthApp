@@ -4,8 +4,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 const pid = useCookie('pid');
-
-const patient = ref();
+const patient = ref<Patient | null>();
 
 const props = defineProps({
   provider: {
@@ -14,24 +13,13 @@ const props = defineProps({
   services: String,
 });
 
-const loadPatientData = async () => {
-  try {
-    const user = useAuth().getPatientData();
-    if (user) {
-      user.then(data => {
-        patient.value = data;
-      });
-    }
-  } catch (error) {}
-};
-
 const newPatientBody = reactive({
   firstname: '',
   lastname: '',
   email: '',
   phone: '',
   language: 'english',
-  gender: '',
+  gender: 'male',
   birth: '',
   allergies: [],
   prescriptions: [],
@@ -48,18 +36,29 @@ const apptBody = reactive({
   description: '',
 });
 
-async function createNewPatient() {
-  const resp = await $fetch('/api/patient', {
-    method: 'POST',
-    body: newPatientBody,
-  });
-  console.log(resp);
+const loadPatientData = async () => {
+  try {
+    const user = useAuth().getPatientData();
+    if (user) {
+      user.then(data => {
+        patient.value = data;
+      });
+    }
+  } catch (error) {
+    console.error('Failed to load patient data:', error);
+    alert('Failed to load patient data');
+    navigateTo('/my-health/authentication/login');
+  }
+};
+
+function formatDate(dtf: any) {
+  const date = new Date(dtf);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
 async function createAppointment() {
   // Format date
-  const date = new Date(apptBody.date);
-  apptBody.date = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  apptBody.date = formatDate(apptBody.date);
 
   // Calculate end_time
   const [hours, minutes, seconds] = apptBody.start_time.split(':');
@@ -72,6 +71,14 @@ async function createAppointment() {
 
   console.log(apptBody);
 
+  if (pid.value == null) {
+    const resp = await $fetch('/api/patient', {
+      method: 'POST',
+      body: newPatientBody,
+    });
+    console.log(resp);
+  }
+
   const resp = await $fetch('/api/appointment', {
     method: 'POST',
     body: apptBody,
@@ -81,6 +88,12 @@ async function createAppointment() {
 
 onMounted(() => {
   initFlowbite();
+  loadPatientData();
+  if (pid.value == null) {
+    console.log(false);
+  } else {
+    console.log(true);
+  }
 });
 </script>
 
@@ -236,36 +249,44 @@ onMounted(() => {
                   >Phone number (123-456-7890)</label
                 >
               </div>
+
               <div class="group relative z-0 mb-5 w-full">
                 <input
-                  type="tel"
-                  pattern="[0-9]{10}"
-                  name="floating_phone"
-                  id="floating_phone"
+                  type="text"
+                  name="floating_password"
+                  id="floating_password"
                   class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                   placeholder=" "
                   required
-                  v-model="newPatientBody.phone"
+                  v-model="newPatientBody.password"
                 />
                 <label
-                  for="floating_phone"
-                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
-                  >Phone number (123-456-7890)</label
+                  for="floating_password"
+                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+                  >Password</label
                 >
               </div>
+              <div>
+                <label class="mb-2 block text-sm font-medium text-gray-500"
+                  >Date of Birth</label
+                >
+                <VueDatePicker
+                  v-model="apptBody.date"
+                  :enable-time-picker="false"
+                />
+              </div>
             </div>
-            <div v-else>user: {{ patient.email }}</div>
             <div class="group relative z-0 mb-5 w-full">
               <label
                 for="large-input"
-                class="mb-2 mt-8 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 mt-4 block text-sm font-medium text-gray-500 dark:text-white"
                 >Reason</label
               >
               <input
                 type="text"
                 id="large-input"
                 v-model="apptBody.description"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 text-base text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                class="block w-full rounded-lg border border-gray-300 p-4 text-base text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
           </form>
