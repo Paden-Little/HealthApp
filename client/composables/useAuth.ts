@@ -133,6 +133,42 @@ export function useAuth() {
       });
   }
 
+  async function getProviderName(id: string) {
+    return $fetch(`/api/provider/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    })
+      .then(res => {
+        return res as Provider;
+      })
+      .then((data) => {
+        return `${data.suffix} ${data.firstname} ${data.lastname}`;
+      })
+      .catch(err => {
+        console.log(err);
+        return '';
+      });
+  }
+
+  async function getPatientName(id: string){
+    return $fetch(`/api/patient/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    })
+      .then(res => {
+        return res as Patient;
+      })
+      .then((data) => {
+        return `${data.firstname} ${data.lastname}`;
+      })
+      .catch(err => {
+        console.log(err);
+        return '';
+      });
+  }
+
   async function logoutUser() {
     type.value = undefined;
     pid.value = undefined;
@@ -153,5 +189,5 @@ export function useAuth() {
     })
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, getUserAppointment, getCurrentUser };
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, getUserAppointment, getCurrentUser, getProviderName, getPatientName };
 }

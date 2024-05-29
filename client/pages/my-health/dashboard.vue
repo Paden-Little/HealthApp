@@ -30,8 +30,9 @@ const getAppointments = async () => {
   try {
     const appointments = useAuth().getUserAppointment();
     if (appointments) {
-      appointments.then(data => {
+      appointments.then(async data => {
         appointmentsArray.value = data;
+        await getProviderNames();
       });
     }
   } catch (error) {
@@ -40,7 +41,21 @@ const getAppointments = async () => {
   }
 };
 
-onMounted(() => {
+async function getProviderNames() {
+  if (appointmentsArray.value) {
+    for (let index = 0; index < appointmentsArray.value.length; index++) {
+      const element = appointmentsArray.value[index];
+      let temp = useAuth().getProviderName(element.provider);
+      if (temp) {
+        temp.then(data => {
+          element.provider = data;
+        });
+      }
+    }
+  }
+}
+
+onMounted(async () => {
   loadPatientData();
   getAppointments();
 });
