@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const provider = ref<Provider | null>();
+const appointmentsArray = ref<Appointment[]>();
 
 const logout = async () => {
   try {
@@ -26,6 +27,19 @@ const loadProviderData = async () => {
 };
 
 // insert get appointment function here for provider
+const getAppointments = async () => {
+  try {
+    const appointments = useAuth().getUserAppointment();
+    if (appointments) {
+      appointments.then(data => {
+        appointmentsArray.value = data;
+      });
+    }
+  } catch (error) {
+    console.error('Failed to load appointments:', error);
+    alert('Failed to load appointments');
+  }
+};
 
 onMounted(() => {
   loadProviderData();
@@ -63,6 +77,20 @@ onMounted(() => {
   </div>
   <div v-else>
     <p class="">Something went wrong - No provider found.</p>
+  </div>
+  <div>
+    <h2>Appointments</h2>
+    <ul>
+      <li v-for="appointment in appointmentsArray">
+        <p>
+          {{ appointment.date }} {{ appointment.startTime }} -
+          {{ appointment.endTime }}
+        </p>
+        <p>{{ appointment.patient }}</p>
+        <p>{{ appointment.service }}</p>
+        <p>{{ appointment.description }}</p>
+      </li>
+    </ul>
   </div>
   <button @click="logout()" class="cta-btn">logout</button>
 </template>

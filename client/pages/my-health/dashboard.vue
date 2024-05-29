@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const patient = ref<Patient | null>();
+const appointmentsArray = ref<Appointment[]>();
 
 const logout = async () => {
   try {
@@ -26,11 +27,13 @@ const loadPatientData = async () => {
 };
 
 const getAppointments = async () => {
-  let appointments = ref<Appointment[]>();
   try {
-    await useFetch("/api/appointment/" + useAuth().user.value?.id).then((data) => {
-      appointments.value = data as unknown as Appointment[];
-    });
+    const appointments = useAuth().getUserAppointment();
+    if (appointments) {
+      appointments.then(data => {
+        appointmentsArray.value = data;
+      });
+    }
   } catch (error) {
     console.error('Failed to load appointments:', error);
     alert('Failed to load appointments');
@@ -39,6 +42,7 @@ const getAppointments = async () => {
 
 onMounted(() => {
   loadPatientData();
+  getAppointments();
 });
 </script>
 <template>
@@ -49,9 +53,7 @@ onMounted(() => {
     <p>Birthdate: {{ patient.birth }}</p>
     <p>Allergies</p>
     <ul>
-      <li
-        v-for="allergy in patient.allergies"
-      >
+      <li v-for="allergy in patient.allergies">
         <p>{{ allergy.name }}</p>
         <br />
         <p>{{ allergy.description }}</p>
@@ -59,9 +61,7 @@ onMounted(() => {
     </ul>
     <p>Perscriptions</p>
     <ul>
-      <li
-        v-for="perscription in patient.prescriptions"
-      >
+      <li v-for="perscription in patient.prescriptions">
         <p>{{ perscription.name }}</p>
         <p>Dosage: {{ perscription.dosage }} {{ perscription.frequency }}</p>
         <p>{{ perscription.start }} - {{ perscription.end }}</p>
@@ -70,6 +70,20 @@ onMounted(() => {
   </div>
   <div v-else>
     <p>something went wrong - No user...</p>
+  </div>
+  <div>
+    <h2>Appointments</h2>
+    <ul>
+      <li v-for="appointment in appointmentsArray">
+        <p>
+          {{ appointment.date }} {{ appointment.startTime }} -
+          {{ appointment.endTime }}
+        </p>
+        <p>{{ appointment.provider }}</p>
+        <p>{{ appointment.service }}</p>
+        <p>{{ appointment.description }}</p>
+      </li>
+    </ul>
   </div>
   <button @click="logout()" class="cta-btn">logout</button>
 </template>
