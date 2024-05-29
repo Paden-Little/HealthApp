@@ -9,6 +9,7 @@ const props = defineProps({
   provider: {
     type: Object as () => Provider,
   },
+  services: String,
 });
 
 const apptBody = reactive({
@@ -23,10 +24,7 @@ const apptBody = reactive({
 
 async function createAppointment() {
   const formattedDate = new Date(apptBody.date).toISOString().split('T')[0];
-
-  // Update the apptBody.date with the formatted date
   apptBody.date = formattedDate;
-
   console.log(apptBody);
 
   const resp = await $fetch('/api/appointment', {
@@ -59,10 +57,15 @@ onMounted(() => {
               src="/img/skillissue.jpg"
               alt=""
             />
-            <p class="text-lg font-semibold">
-              Book with {{ provider?.firstname }} {{ provider?.lastname }},
-              {{ provider?.suffix }}
-            </p>
+            <div class="ms-4 flex flex-col">
+              <p class="text-lg font-semibold">
+                {{ provider?.firstname }} {{ provider?.lastname }},
+                {{ provider?.suffix }}
+              </p>
+              <p class="font-semibold">
+                {{ services }}
+              </p>
+            </div>
           </div>
           <button
             type="button"
@@ -74,8 +77,8 @@ onMounted(() => {
           </button>
         </div>
         <!-- Modal body -->
-        <div class="space-y-4 p-4 md:p-5">
-          <div>{{ apptBody }}</div>
+        <div class="mx-32 space-y-4 p-4 md:p-5">
+          <p>Select a date:</p>
           <div class="flex">
             <VueDatePicker
               v-model="apptBody.date"
