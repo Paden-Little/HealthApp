@@ -24,16 +24,16 @@ onMounted(() => {
       <div class="relative rounded-lg bg-white shadow">
         <!-- Modal header -->
         <div class="flex justify-between rounded-t border-b p-4 md:p-5">
-          <div class="flex flex-col">
-            <p class="text-lg font-semibold">
-              Book with {{ provider?.firstname }} {{ provider?.lastname }},
-              {{ provider?.suffix }}
-            </p>
+          <div class="flex">
             <img
               class="mt-2 w-20 rounded-full"
               src="/img/skillissue.jpg"
               alt=""
             />
+            <p class="text-lg font-semibold">
+              Book with {{ provider?.firstname }} {{ provider?.lastname }},
+              {{ provider?.suffix }}
+            </p>
           </div>
           <button
             type="button"
