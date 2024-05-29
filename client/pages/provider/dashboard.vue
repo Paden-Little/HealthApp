@@ -21,7 +21,7 @@ const loadProviderData = async () => {
   } catch (error) {
     console.error('Failed to load provider data:', error);
     alert('Failed to load provider data');
-    navigateTo('/my-health/authentication/login');
+    navigateTo('/provider/authentication/login');
   }
 };
 
@@ -32,6 +32,6 @@ onMounted(() => {
 });
 </script>
 <template>
-  
+
   <button @click="logout()" class="cta-btn">logout</button>
 </template>
