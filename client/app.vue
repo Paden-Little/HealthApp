@@ -4,9 +4,11 @@ let token = useCookie("token");
 let type = useCookie("type");
 
 onMounted(() => {
-  pid.value = '';
-  token.value = '';
-  type.value = '';
+  if (pid.value === undefined && token.value === undefined && type.value === undefined) {
+    pid.value = '';
+    token.value = '';
+    type.value = '';
+  }
 });
 </script>
 <template>
