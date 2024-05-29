@@ -5,10 +5,13 @@ interface LoginResponse {
   token: string;
 }
 
-const pid = useCookie('pid');
-const token = useCookie('token');
-const type = useCookie('type');
-const user = useState('user');
+// cookies
+const pid = useCookie("pid");
+const token = useCookie("token");
+const type = useCookie("type");
+
+// state
+const user = useState<Patient | Provider | undefined>("user");
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
@@ -53,38 +56,38 @@ export function useAuth() {
     return $fetch('/api/patient/login', {
       method: 'POST',
       body: JSON.stringify(patient),
-    })
-      .then(res => {
-        const loginResponse: LoginResponse = res as LoginResponse;
-        pid.value = loginResponse.id;
-        token.value = loginResponse.token;
-        type.value = 'patient';
-        user.value = getPatientData();
-        return true;
+    }).then((res) => {
+      const loginResponse: LoginResponse = res as LoginResponse;
+      pid.value = loginResponse.id;
+      token.value = loginResponse.token;
+      type.value = "patient";
+      getPatientData().then((data) => {
+        user.value = data as Patient;
       })
-      .catch(err => {
-        console.log(err);
-        return false;
-      });
+      return true;
+    }).catch((err) => {
+      console.log(err);
+      return false;
+    });
   }
 
   async function loginProvider(provider: Login): Promise<boolean | undefined> {
     return $fetch('/api/provider/login', {
       method: 'POST',
       body: JSON.stringify(provider),
-    })
-      .then(res => {
-        const loginResponse: LoginResponse = res as LoginResponse;
-        pid.value = loginResponse.id;
-        token.value = loginResponse.token;
-        type.value = 'provider';
-        user.value = getProviderData();
-        return true;
+    }).then((res) => {
+      const loginResponse: LoginResponse = res as LoginResponse;
+      pid.value = loginResponse.id;
+      token.value = loginResponse.token;
+      type.value = "provider";
+      getProviderData().then((data) => {
+        user.value = data as Provider;
       })
-      .catch(err => {
-        console.log(err);
-        return false;
-      });
+      return true;
+    }).catch((err) => {
+      console.log(err);
+      return false;
+    });
   }
 
   async function getPatientData(): Promise<Patient | null> {
