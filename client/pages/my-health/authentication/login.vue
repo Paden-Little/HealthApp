@@ -17,7 +17,6 @@ async function getLogin() {
   }
   try {
     const res = await useAuth().loginPatient(login.value);
-    console.log('Login response:', res); // Debugging log
     if (res && res === true) {
       navigateTo('/my-health/dashboard');
     } else {
@@ -25,7 +24,7 @@ async function getLogin() {
       alert('Invalid email or password');
     }
   } catch (error) {
-    console.error('Login error:', error); // Catch and log errors
+    console.error('Login error:', error);
     hasError.value = true;
     alert('An error occurred during login.');
   }

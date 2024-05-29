@@ -13,20 +13,36 @@ const hashPassword = async (password: string) => {
 }
 
 export function useAuth() {
-  const registerPatient = async (patient: Patient) => {
-    // patient.password = await hashPassword(patient.password || '');
-    // let { data } = useFetch("/api/patient", {
-    //   method: "POST",
-    //   body: JSON.stringify(patient),
-    // })
+  const isLoggedIn = ref(false);
+
+  async function registerPatient(patient: Patient): Promise<boolean> {
+    patient.password = await hashPassword(patient.password || '');
+    return $fetch("/api/patient", {
+      method: "POST",
+      body: JSON.stringify(patient),
+    }).then((res) => {
+      isLoggedIn.value = true;
+      return true;
+    }).catch((err) => {
+      console.log(err);
+      isLoggedIn.value = false;
+      return false;
+    });
   }
 
-  const registerProvider = async (provider: Provider) => {
-    // provider.password = await hashPassword(provider.password || '');
-    // let { data } = useFetch("/api/provider", {
-    //   method: "POST",
-    //   body: JSON.stringify(provider),
-    // })
+  async function registerProvider(provider: Provider): Promise<boolean> {
+    provider.password = await hashPassword(provider.password || '');
+    return $fetch("/api/provider", {
+      method: "POST",
+      body: JSON.stringify(provider),
+    }).then((res) => {
+      isLoggedIn.value = true;
+      return true;
+    }).catch((err) => {
+      console.log(err);
+      isLoggedIn.value = false;
+      return false;
+    });
   }
 
   async function loginPatient(patient: Login): Promise<boolean | undefined> {
@@ -37,9 +53,11 @@ export function useAuth() {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
-      return true; 
+      isLoggedIn.value = true;
+      return true;
     }).catch((err) => {
       console.log(err);
+      isLoggedIn.value = false;
       return false;
     });
   }
@@ -52,10 +70,12 @@ export function useAuth() {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
-      return true; 
+      isLoggedIn.value = true;
+      return true;
     }).catch((err) => {
       console.log(err);
-      return false; 
+      isLoggedIn.value = false;
+      return false;
     });
   }
 
@@ -86,9 +106,10 @@ export function useAuth() {
   }
 
   async function logoutUser() {
+    isLoggedIn.value = false;
     pid.value = "";
     token.value = "";
   }
-  
+
   return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser };
 }
