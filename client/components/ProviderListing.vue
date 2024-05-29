@@ -114,6 +114,9 @@ const formattedPhoneNumber = props.provider!.phone.replace(
         Book Appointment
       </button>
     </div>
-    <ApptModal :provider="provider" />
+    <ApptModal
+      :provider="provider"
+      :services="formatServices(provider!.services)"
+    />
   </div>
 </template>

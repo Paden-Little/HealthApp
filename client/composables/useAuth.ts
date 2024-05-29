@@ -1,5 +1,5 @@
-import bcrypt from "bcryptjs";
-const fixedSalt = "$2a$10$1234567890123456789012";
+import bcrypt from 'bcryptjs';
+const fixedSalt = '$2a$10$1234567890123456789012';
 interface LoginResponse {
   id: string;
   token: string;
@@ -15,43 +15,46 @@ const user = useState<Patient | Provider | undefined>();
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
-}
+};
 
 export function useAuth() {
-
   async function registerPatient(patient: Patient): Promise<boolean> {
     patient.password = await hashPassword(patient.password || '');
-    return $fetch("/api/patient", {
-      method: "POST",
+    return $fetch('/api/patient', {
+      method: 'POST',
       body: JSON.stringify(patient),
-    }).then((res) => {
-      type.value = "patient";
-      // set cookies to store the user's id and token
-      return true;
-    }).catch((err) => {
-      console.log(err);
-      return false;
-    });
+    })
+      .then(res => {
+        type.value = 'patient';
+        // set cookies to store the user's id and token
+        return true;
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
   }
 
   async function registerProvider(provider: Provider): Promise<boolean> {
     provider.password = await hashPassword(provider.password || '');
-    return $fetch("/api/provider", {
-      method: "POST",
+    return $fetch('/api/provider', {
+      method: 'POST',
       body: JSON.stringify(provider),
-    }).then((res) => {
-      type.value = "provider";
-      // set cookies to store the user's id and token
-      return true;
-    }).catch((err) => {
-      console.log(err);
-      return false;
-    });
+    })
+      .then(res => {
+        type.value = 'provider';
+        // set cookies to store the user's id and token
+        return true;
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
   }
 
   async function loginPatient(patient: Login): Promise<boolean | undefined> {
-    return $fetch("/api/patient/login", {
-      method: "POST",
+    return $fetch('/api/patient/login', {
+      method: 'POST',
       body: JSON.stringify(patient),
     }).then((res) => {
       const loginResponse: LoginResponse = res as LoginResponse;
@@ -69,8 +72,8 @@ export function useAuth() {
   }
 
   async function loginProvider(provider: Login): Promise<boolean | undefined> {
-    return $fetch("/api/provider/login", {
-      method: "POST",
+    return $fetch('/api/provider/login', {
+      method: 'POST',
       body: JSON.stringify(provider),
     }).then((res) => {
       const loginResponse: LoginResponse = res as LoginResponse;
@@ -92,12 +95,14 @@ export function useAuth() {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
-    }).then((res) => {
-      return res as Patient;
-    }).catch((err) => {
-      console.log(err);
-      return null;
     })
+      .then(res => {
+        return res as Patient;
+      })
+      .catch(err => {
+        console.log(err);
+        return null;
+      });
   }
 
   async function getProviderData(): Promise<Provider | null> {
@@ -105,12 +110,14 @@ export function useAuth() {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
-    }).then((res) => {
-      return res as Provider;
-    }).catch((err) => {
-      console.log(err);
-      return null;
     })
+      .then(res => {
+        return res as Provider;
+      })
+      .catch(err => {
+        console.log(err);
+        return null;
+      });
   }
 
   async function logoutUser() {
