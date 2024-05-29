@@ -21,7 +21,7 @@ type Server struct {
 }
 
 func (s *Server) GetAppointmentAppointmentId(c *gin.Context, AppointmentId string) {
-	appointment, err := s.db.SelectAppointmentById(AppointmentId)
+	appointment, err := s.db.SelectAppointmentsByProviderOrPatient(AppointmentId)
 	if err != nil {
 		switch {
 		case err == sql.ErrNoRows:
