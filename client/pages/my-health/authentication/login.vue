@@ -3,22 +3,32 @@ definePageMeta({
   layout: false,
 });
 
+const hasError = ref(false);
+
 const login = ref<Login>({
   email: '',
   password: '',
 });
 
-function getLogin() {
-  if (login.value.email == '' || login.value.email == '') {
+async function getLogin() {
+  if (!login.value.email || !login.value.password) {
     alert('Please fill in all fields');
     return;
   }
-  let loginedIn = useAuth().loginPatient(login.value);
-  if (!loginedIn) {
-    alert('Invalid email or password');
-    return;
+  try {
+    const res = await useAuth().loginPatient(login.value);
+    console.log('Login response:', res); // Debugging log
+    if (res && res === true) {
+      navigateTo('/my-health/dashboard');
+    } else {
+      hasError.value = true;
+      alert('Invalid email or password');
+    }
+  } catch (error) {
+    console.error('Login error:', error); // Catch and log errors
+    hasError.value = true;
+    alert('An error occurred during login.');
   }
-  navigateTo('/my-health/dashboard');
 }
 </script>
 <template>
@@ -39,6 +49,7 @@ function getLogin() {
                 >Email</label
               >
               <input
+                :class="hasError ? 'border-red-500' : ''"
                 id="email"
                 v-model="login.email"
                 type="email"
@@ -54,6 +65,7 @@ function getLogin() {
                 >Password</label
               >
               <input
+                :class="hasError ? 'border-red-500' : ''"
                 v-model="login.password"
                 type="password"
                 name="password"

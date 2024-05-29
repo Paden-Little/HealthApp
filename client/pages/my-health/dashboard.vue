@@ -1,13 +1,17 @@
 <script setup lang="ts">
-const patient = ref<Patient>();
+const patient = ref<Patient | null>();
 
-onBeforeMount(() => {
-  useAuth()
-    .getPatientData()
-    .then(data => {
-      patient.value = data.value as Patient;
-    });
-});
+const loadPatientData = async () => {
+  try {
+    const data = await useAuth().getPatientData();
+    patient.value = data;
+  } catch (error) {
+    console.error('Failed to load patient data:', error);
+    navigateTo('/my-health/authentication/login');
+  }
+};
+
+onMounted(loadPatientData);
 </script>
 <template>
   <div v-if="patient">

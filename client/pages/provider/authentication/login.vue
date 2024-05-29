@@ -4,19 +4,23 @@ definePageMeta({
   layout: false,
 });
 
+const hasError = ref(false);
+
 const login = ref<Login>({
   email: '',
   password: '',
 });
 
-function getLogin() {
-  if (login.value.email == '' || login.value.email == '') {
+async function getLogin() {
+  hasError.value = false;
+  if (login.value.email === '' || login.value.email === '') {
     alert('Please fill in all fields');
     return;
   }
-  let loginedIn = useAuth().loginProvider(login.value);
+  let loginedIn = await useAuth().loginProvider(login.value);
   if (!loginedIn) {
     alert('Invalid email or password');
+    hasError.value = true;
     return;
   }
   navigateTo('/provider/dashboard');
@@ -42,6 +46,7 @@ function getLogin() {
                 >Email</label
               >
               <input
+                :class="hasError ? 'border-red-500' : ''"
                 v-model="login.email"
                 type="email"
                 name="email"
@@ -56,6 +61,7 @@ function getLogin() {
                 >Password</label
               >
               <input
+                :class="hasError ? 'border-red-500' : ''"
                 v-model="login.password"
                 type="password"
                 name="password"

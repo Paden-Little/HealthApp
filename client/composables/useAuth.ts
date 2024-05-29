@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 const fixedSalt = "$2a$10$1234567890123456789012";
-
 interface LoginResponse {
   id: string;
   token: string;
@@ -30,53 +29,66 @@ export function useAuth() {
     // })
   }
 
-  const loginPatient = async (patient: Login) => {
-    $fetch("/api/patient/login", {
+  async function loginPatient(patient: Login): Promise<boolean | undefined> {
+    return $fetch("/api/patient/login", {
       method: "POST",
       body: JSON.stringify(patient),
     }).then((res) => {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
-      return true;
-    })
-    return false;
-  };
+      return true; 
+    }).catch((err) => {
+      console.log(err);
+      return false;
+    });
+  }
 
-  const loginProvider = async (provider: Login) => {
-    $fetch("/api/provider/login", {
+  async function loginProvider(provider: Login): Promise<boolean | undefined> {
+    return $fetch("/api/provider/login", {
       method: "POST",
       body: JSON.stringify(provider),
     }).then((res) => {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
-      return true;
-    })
-    return false;
+      return true; 
+    }).catch((err) => {
+      console.log(err);
+      return false; 
+    });
   }
 
-  const getPatientData = async () => {
-    $fetch(`/api/patient/${pid.value}`, {
+  async function getPatientData(): Promise<Patient | null> {
+    return $fetch(`/api/patient/${pid.value}`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     }).then((res) => {
       return res as Patient;
+    }).catch((err) => {
+      console.log(err);
+      return null;
     })
-    return null;
   }
 
-  const getProviderData = async () => {
-    $fetch(`/api/patient/${pid.value}`, {
+  async function getProviderData(): Promise<Provider | null> {
+    return $fetch(`/api/provider/${pid.value}`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     }).then((res) => {
-      return res as Patient;
+      return res as Provider;
+    }).catch((err) => {
+      console.log(err);
+      return null;
     })
-    return null;
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData };
+  async function logoutUser() {
+    pid.value = "";
+    token.value = "";
+  }
+  
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser };
 }
