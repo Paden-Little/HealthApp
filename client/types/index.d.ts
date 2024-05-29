@@ -35,6 +35,7 @@ declare global {
     language: string;
     birth: Date;
     gender: 'male' | 'female';
+    phone: number;
     allergies: Allergy[];
     prescriptions: Prescription[];
     password: ?string;

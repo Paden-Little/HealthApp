@@ -61,50 +61,50 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div v-if="provider">
-    <div>
-      <img :src="provider.image" />
-    </div>
-    <aside>
-      <h2 class="text-lg font-bold">Provider Information</h2>
-      <p>
-        Full Name:
-        {{
-          provider.firstname + ' ' + provider.lastname + ' ' + provider.suffix
-        }}
-      </p>
-      <p>Email: {{ provider.email }}</p>
-      <p>Phone: {{ provider.phone }}</p>
-      <p>Bio: {{ provider.bio }}</p>
-      <p>Services:</p>
-      <ul class="">
-        <li v-for="service in provider.services">
-          {{ service }}
-        </li>
-      </ul>
-      <p>Languages:</p>
-      <ul>
-        <li v-for="language in provider.languages">
-          {{ language }}
-        </li>
-      </ul>
-    </aside>
-  </div>
-  <div v-else>
-    <p class="">Something went wrong - No provider found.</p>
-  </div>
-  <div>
-    <h2>Appointments</h2>
-    <ul>
-      <li v-for="appointment in appointmentsArray">
-        <p>
-          {{ appointment.date }} {{ appointment.start_time }} -
-          {{ appointment.end_time }}
+  <div
+    v-if="provider"
+    class="m-auto mt-4 max-w-screen-lg rounded-lg border-[1px] border-gray-400 p-4 shadow"
+  >
+    <div class="flex">
+      <div class="flex-1">
+        <p class="text-xl font-bold text-gray-800">Your Information</p>
+        <p class="mb-2 text-lg">
+          {{ provider.firstname }} {{ provider.lastname }}
         </p>
-        <p>{{ appointment.patient }}</p>
-        <p>{{ appointment.description }}</p>
-      </li>
-    </ul>
+        <div class="flex">
+          <p class="font-semibold">Email:</p>
+          <p class="ms-2">{{ provider.email }}</p>
+        </div>
+        <div class="flex">
+          <p class="font-semibold">phone:</p>
+          <p class="ms-2">{{ provider.phone }}</p>
+        </div>
+        <div class="flex">
+          <p class="me-2 font-semibold">Languages:</p>
+          <div v-for="language in provider.languages">
+            {{ language }}
+          </div>
+        </div>
+      </div>
+      <div class="flex-1">
+        <p class="text-lg font-bold text-gray-800">Appointments</p>
+        <div
+          v-for="appt in appointmentsArray"
+          class="mt-2 rounded-lg border-[1px] border-gray-400 p-2"
+        >
+          <div class="flex">
+            <p class="font-semibold">Date:</p>
+            <p class="ms-2">
+              {{ appt.date }} {{ appt.start_time }} - {{ appt.end_time }}
+            </p>
+          </div>
+          <div>
+            <p class="font-semibold">Reason:</p>
+            <p class="ms-2">{{ appt.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button @click="logout()" class="cta-btn mt-4">logout</button>
   </div>
-  <button @click="logout()" class="cta-btn">logout</button>
 </template>
