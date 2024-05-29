@@ -1,11 +1,31 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
-defineProps({
+const props = defineProps({
   provider: {
     type: Object as () => Provider,
   },
 });
+
+const apptBody = reactive({
+  date: '',
+  start_time: '12:30:00',
+  end_time: '1:30:00',
+  provider: props.provider?.id,
+  patient: '11111111-1111-1111-1111-111111111111',
+  service: 1,
+  description: '',
+});
+
+async function createAppointment() {
+  const resp = await $fetch('/api/appointment', {
+    method: 'POST',
+    body: apptBody,
+  });
+  console.log(resp);
+}
 
 onMounted(() => {
   initFlowbite();
@@ -46,22 +66,107 @@ onMounted(() => {
         </div>
         <!-- Modal body -->
         <div class="space-y-4 p-4 md:p-5">
-          <div>
-            <label for="email"></label>
-            <input type="text" name="" id="" />
+          <div>{{ apptBody }}</div>
+          <div class="flex">
+            <VueDatePicker
+              v-model="apptBody.date"
+              :min-date="new Date()"
+              :enable-time-picker="false"
+            />
           </div>
         </div>
         <!-- Modal footer -->
         <div
-          class="flex items-center rounded-b border-t border-gray-200 p-4 md:p-5"
+          class="flex flex-col items-center rounded-b border-t border-gray-200 p-4 md:p-5"
         >
-          <button
-            :data-modal-hide="'apptModal' + provider?.email"
-            type="button"
-            class="cta-btn"
-          >
-            Book Appointment
-          </button>
+          <form class="mx-auto max-w-md">
+            <div class="mt-4 grid md:grid-cols-2 md:gap-6">
+              <div class="group relative z-0 mb-5 w-full">
+                <input
+                  type="text"
+                  name="floating_first_name"
+                  id="floating_first_name"
+                  class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="floating_first_name"
+                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
+                  >First name</label
+                >
+              </div>
+              <div class="group relative z-0 mb-5 w-full">
+                <input
+                  type="text"
+                  name="floating_last_name"
+                  id="floating_last_name"
+                  class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="floating_last_name"
+                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
+                  >Last name</label
+                >
+              </div>
+            </div>
+            <div class="group relative z-0 mb-5 w-full">
+              <input
+                type="email"
+                name="floating_email"
+                id="floating_email"
+                class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                placeholder=" "
+                required
+              />
+              <label
+                for="floating_email"
+                class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+                >Email address</label
+              >
+            </div>
+            <div class="group relative z-0 mb-5 w-full">
+              <input
+                type="tel"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                name="floating_phone"
+                id="floating_phone"
+                class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                placeholder=" "
+                required
+              />
+              <label
+                for="floating_phone"
+                class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
+                >Phone number (123-456-7890)</label
+              >
+            </div>
+            <div class="group relative z-0 mb-5 w-full">
+              <label
+                for="large-input"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Reason</label
+              >
+              <input
+                type="text"
+                id="large-input"
+                v-model="apptBody.description"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 text-base text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              />
+            </div>
+          </form>
+          <div class="flex justify-start">
+            <button
+              :data-modal-hide="'apptModal' + provider?.email"
+              type="button"
+              class="cta-btn"
+              @click="createAppointment()"
+            >
+              Book Appointment
+            </button>
+          </div>
         </div>
       </div>
     </div>
