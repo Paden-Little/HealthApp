@@ -7,25 +7,25 @@ interface LoginResponse {
 
 const pid = useCookie("pid");
 const token = useCookie("token");
+const type = useCookie("type");
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
 }
 
-export function useAuth() {
-  const isLoggedIn = ref(false);
 
+export function useAuth() {
   async function registerPatient(patient: Patient): Promise<boolean> {
     patient.password = await hashPassword(patient.password || '');
     return $fetch("/api/patient", {
       method: "POST",
       body: JSON.stringify(patient),
     }).then((res) => {
-      isLoggedIn.value = true;
+      type.value = "patient";
+      // set cookies to store the user's id and token
       return true;
     }).catch((err) => {
       console.log(err);
-      isLoggedIn.value = false;
       return false;
     });
   }
@@ -36,11 +36,11 @@ export function useAuth() {
       method: "POST",
       body: JSON.stringify(provider),
     }).then((res) => {
-      isLoggedIn.value = true;
+      type.value = "provider";
+      // set cookies to store the user's id and token
       return true;
     }).catch((err) => {
       console.log(err);
-      isLoggedIn.value = false;
       return false;
     });
   }
@@ -53,11 +53,10 @@ export function useAuth() {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
-      isLoggedIn.value = true;
+      type.value = "patient";
       return true;
     }).catch((err) => {
       console.log(err);
-      isLoggedIn.value = false;
       return false;
     });
   }
@@ -70,11 +69,10 @@ export function useAuth() {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
-      isLoggedIn.value = true;
+      type.value = "provider";
       return true;
     }).catch((err) => {
       console.log(err);
-      isLoggedIn.value = false;
       return false;
     });
   }
@@ -106,7 +104,7 @@ export function useAuth() {
   }
 
   async function logoutUser() {
-    isLoggedIn.value = false;
+    type.value = "";
     pid.value = "";
     token.value = "";
   }
