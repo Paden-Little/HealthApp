@@ -8,13 +8,14 @@ interface LoginResponse {
 const pid = useCookie("pid");
 const token = useCookie("token");
 const type = useCookie("type");
+const user = useState("user")
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
 }
 
-
 export function useAuth() {
+
   async function registerPatient(patient: Patient): Promise<boolean> {
     patient.password = await hashPassword(patient.password || '');
     return $fetch("/api/patient", {
@@ -54,6 +55,7 @@ export function useAuth() {
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
       type.value = "patient";
+      user.value = getPatientData()
       return true;
     }).catch((err) => {
       console.log(err);
@@ -70,6 +72,7 @@ export function useAuth() {
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
       type.value = "provider";
+      user.value = getProviderData()
       return true;
     }).catch((err) => {
       console.log(err);
@@ -104,10 +107,11 @@ export function useAuth() {
   }
 
   async function logoutUser() {
-    type.value = "";
-    pid.value = "";
-    token.value = "";
+    type.value = undefined;
+    pid.value = undefined;
+    token.value = undefined;
+    user.value = undefined;
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser };
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, user };
 }

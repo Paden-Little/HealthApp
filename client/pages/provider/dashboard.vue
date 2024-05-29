@@ -26,14 +26,12 @@ const loadProviderData = async () => {
 };
 
 onMounted(() => {
-  let pid = useCookie('pid');
-  console.log(pid.value);
   loadProviderData();
 });
 </script>
 <template>
   <div v-if="provider">
-    <div class="img">
+    <div>
       <img :src="provider.image" />
     </div>
     <aside>
@@ -48,7 +46,7 @@ onMounted(() => {
       <p>Phone: {{ provider.phone }}</p>
       <p>Bio: {{ provider.bio }}</p>
       <p>Services:</p>
-      <ul>
+      <ul class="">
         <li v-for="service in provider.services">
           {{ service }}
         </li>
