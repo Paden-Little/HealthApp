@@ -5,10 +5,13 @@ interface LoginResponse {
   token: string;
 }
 
+// cookies
 const pid = useCookie("pid");
 const token = useCookie("token");
 const type = useCookie("type");
-const user = useState("user")
+
+// state
+const user = useState("user");
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
