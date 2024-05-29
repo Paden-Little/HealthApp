@@ -12,18 +12,23 @@ const login = ref<Login>({
 });
 
 async function getLogin() {
-  hasError.value = false;
-  if (login.value.email === '' || login.value.email === '') {
+  if (!login.value.email || !login.value.password) {
     alert('Please fill in all fields');
     return;
   }
-  let loginedIn = await useAuth().loginProvider(login.value);
-  if (!loginedIn) {
-    alert('Invalid email or password');
+  try {
+    const res = await useAuth().loginProvider(login.value);
+    if (res && res === true) {
+      navigateTo('/provider/dashboard');
+    } else {
+      hasError.value = true;
+      alert('Invalid email or password');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
     hasError.value = true;
-    return;
+    alert('An error occurred during login.');
   }
-  navigateTo('/provider/dashboard');
 }
 </script>
 <template>

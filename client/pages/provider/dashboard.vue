@@ -14,9 +14,9 @@ const loadProviderData = async () => {
   try {
     const user = useAuth().getProviderData();
     if (user) {
-      user.then((data) => {
+      user.then(data => {
         provider.value = data;
-      })
+      });
     }
   } catch (error) {
     console.error('Failed to load provider data:', error);
@@ -26,12 +26,39 @@ const loadProviderData = async () => {
 };
 
 onMounted(() => {
-  let pid = useCookie("pid");
-  console.log(pid.value)
+  let pid = useCookie('pid');
+  console.log(pid.value);
   loadProviderData();
 });
 </script>
 <template>
-
+  <div v-if="provider">
+    <h2 class="text-lg font-bold">Provider Information</h2>
+    <p>
+      Full Name:
+      {{ provider.firstname + ' ' + provider.lastname + ' ' + provider.suffix }}
+    </p>
+    <p>Email: {{ provider.email }}</p>
+    <p>Phone: {{ provider.phone }}</p>
+    <p>Bio: {{ provider.bio }}</p>
+    <p>Services:</p>
+    <ul>
+      <li v-if="provider.services.length > 0" v-for="service in provider.services">
+        {{ service }}
+      </li>
+      <li v-else>No services</li>
+    </ul>
+    <p>Languages:</p>
+    <ul>
+      <li v-if="provider.languages.length > 0" v-for="language in provider.languages">
+        {{ language }}
+      </li>
+      <li v-else>No languages</li>
+    </ul>
+    <img :src="provider.image" alt="Provider Image" />
+  </div>
+  <div v-else>
+    <p>Something went wrong - No provider found.</p>
+  </div>
   <button @click="logout()" class="cta-btn">logout</button>
 </template>
