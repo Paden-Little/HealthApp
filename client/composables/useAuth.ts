@@ -104,9 +104,9 @@ export function useAuth() {
   }
 
   async function logoutUser() {
-    type.value = "";
-    pid.value = "";
-    token.value = "";
+    type.value = undefined;
+    pid.value = undefined;
+    token.value = undefined;
   }
 
   return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser };

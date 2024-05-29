@@ -26,8 +26,6 @@ const loadPatientData = async () => {
 };
 
 onMounted(() => {
-  let pid = useCookie('pid');
-  console.log(pid.value);
   loadPatientData();
 });
 </script>

@@ -5,7 +5,7 @@ const type = useCookie('type');
 const pid = useCookie('pid');
 
 function isLoggedIn() {
-  if (pid.value !== '' && type.value !== '') {
+  if (pid.value !== undefined && pid.value !== undefined) {
     return true;
   } else {
     return false;
