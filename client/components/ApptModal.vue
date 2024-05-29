@@ -78,14 +78,43 @@ onMounted(() => {
         </div>
         <!-- Modal body -->
         <div class="mx-32 space-y-4 p-4 md:p-5">
-          <p>Select a date:</p>
-          <div class="flex">
-            <VueDatePicker
-              v-model="apptBody.date"
-              :min-date="new Date()"
-              :enable-time-picker="false"
-            />
-          </div>
+          <form class="mx-auto">
+            <div class="mt-4 grid md:grid-cols-2 md:gap-6">
+              <div>
+                <label class="mb-2 block text-sm font-medium text-gray-900"
+                  >Select date:</label
+                >
+                <VueDatePicker
+                  v-model="apptBody.date"
+                  :min-date="new Date()"
+                  :enable-time-picker="false"
+                />
+              </div>
+              <div>
+                <label
+                  for="time"
+                  class="mb-2 block text-sm font-medium text-gray-900"
+                  >Select time:</label
+                >
+                <div class="relative">
+                  <div
+                    class="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5"
+                  >
+                    <Icon class="text-gray-400" name="mdi:clock" />
+                  </div>
+                  <input
+                    type="time"
+                    id="time"
+                    class="block w-full rounded-lg border border-gray-300 p-2.5 text-sm leading-none text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    min="09:00"
+                    max="18:00"
+                    value="00:00"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
         <!-- Modal footer -->
         <div
