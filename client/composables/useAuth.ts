@@ -18,6 +18,13 @@ const hashPassword = async (password: string) => {
 };
 
 export function useAuth() {
+  async function getCurrentUser(): Promise<Patient | Provider | undefined>{
+    if (user.value !== undefined) {
+      return user.value;
+    }
+    return undefined;
+  }
+
   async function registerPatient(patient: Patient) {
     patient.password = await hashPassword(patient.password || '');
     await $fetch('/api/patient', {
@@ -146,5 +153,5 @@ export function useAuth() {
     })
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, getUserAppointment, user };
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser, getUserAppointment, getCurrentUser };
 }
