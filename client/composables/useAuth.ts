@@ -11,7 +11,7 @@ const token = useCookie("token");
 const type = useCookie("type");
 
 // state
-const user = useState<Patient | Provider | undefined>("user");
+const user = useState<Patient | Provider | undefined>();
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);

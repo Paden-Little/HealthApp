@@ -26,9 +26,14 @@ const loadPatientData = async () => {
 };
 
 const getAppointments = async () => {
+  let appointments = ref<Appointment[]>();
   try {
-    const { data } = await useFetch("/api/appointment/" + );
+    await useFetch("/api/appointment/" + useAuth().user.value?.id).then((data) => {
+      appointments.value = data as unknown as Appointment[];
+    });
   } catch (error) {
+    console.error('Failed to load appointments:', error);
+    alert('Failed to load appointments');
   }
 };
 
