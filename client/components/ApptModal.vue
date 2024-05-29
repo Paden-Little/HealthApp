@@ -5,11 +5,37 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 const pid = useCookie('pid');
 
+const patient = ref();
+
 const props = defineProps({
   provider: {
     type: Object as () => Provider,
   },
   services: String,
+});
+
+const loadPatientData = async () => {
+  try {
+    const user = useAuth().getPatientData();
+    if (user) {
+      user.then(data => {
+        patient.value = data;
+      });
+    }
+  } catch (error) {}
+};
+
+const newPatientBody = reactive({
+  firstname: '',
+  lastname: '',
+  email: '',
+  phone: '',
+  language: 'english',
+  gender: '',
+  birth: '',
+  allergies: [],
+  prescriptions: [],
+  password: '',
 });
 
 const apptBody = reactive({
@@ -21,6 +47,14 @@ const apptBody = reactive({
   service: 1,
   description: '',
 });
+
+async function createNewPatient() {
+  const resp = await $fetch('/api/patient', {
+    method: 'POST',
+    body: newPatientBody,
+  });
+  console.log(resp);
+}
 
 async function createAppointment() {
   // Format date
@@ -89,8 +123,8 @@ onMounted(() => {
         </div>
         <!-- Modal body -->
         <div class="mx-32 space-y-4 p-4 md:p-5">
+          <p class="font-bold">Appointment Date</p>
           <form class="mx-auto">
-            <div>{{ apptBody }}</div>
             <div class="mt-4 grid md:grid-cols-2 md:gap-6">
               <div>
                 <label class="mb-2 block text-sm font-medium text-gray-900"
@@ -120,7 +154,6 @@ onMounted(() => {
                     class="block w-full rounded-lg border border-gray-300 p-2.5 text-sm leading-none text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     min="09:00"
                     max="18:00"
-                    value="00:00"
                     required
                     v-model="apptBody.start_time"
                   />
@@ -134,73 +167,98 @@ onMounted(() => {
           class="flex flex-col items-center rounded-b border-t border-gray-200 p-4 md:p-5"
         >
           <form class="mx-auto max-w-md">
-            <div class="mt-4 grid md:grid-cols-2 md:gap-6">
+            <p class="font-bold">User Info</p>
+            <div v-if="pid == null">
+              <div class="mt-4 grid md:grid-cols-2 md:gap-6">
+                <div class="group relative z-0 mb-5 w-full">
+                  <input
+                    type="text"
+                    name="floating_first_name"
+                    id="floating_first_name"
+                    class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                    placeholder=" "
+                    required
+                    v-model="newPatientBody.firstname"
+                  />
+                  <label
+                    for="floating_first_name"
+                    class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
+                    >First name</label
+                  >
+                </div>
+                <div class="group relative z-0 mb-5 w-full">
+                  <input
+                    type="text"
+                    name="floating_last_name"
+                    id="floating_last_name"
+                    class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                    placeholder=" "
+                    required
+                    v-model="newPatientBody.lastname"
+                  />
+                  <label
+                    for="floating_last_name"
+                    class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
+                    >Last name</label
+                  >
+                </div>
+              </div>
               <div class="group relative z-0 mb-5 w-full">
                 <input
-                  type="text"
-                  name="floating_first_name"
-                  id="floating_first_name"
+                  type="email"
+                  name="floating_email"
+                  id="floating_email"
                   class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                   placeholder=" "
                   required
+                  v-model="newPatientBody.email"
                 />
                 <label
-                  for="floating_first_name"
-                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
-                  >First name</label
+                  for="floating_email"
+                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+                  >Email address</label
                 >
               </div>
               <div class="group relative z-0 mb-5 w-full">
                 <input
-                  type="text"
-                  name="floating_last_name"
-                  id="floating_last_name"
+                  type="tel"
+                  pattern="[0-9]{10}"
+                  name="floating_phone"
+                  id="floating_phone"
                   class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
                   placeholder=" "
                   required
+                  v-model="newPatientBody.phone"
                 />
                 <label
-                  for="floating_last_name"
+                  for="floating_phone"
                   class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
-                  >Last name</label
+                  >Phone number (123-456-7890)</label
+                >
+              </div>
+              <div class="group relative z-0 mb-5 w-full">
+                <input
+                  type="tel"
+                  pattern="[0-9]{10}"
+                  name="floating_phone"
+                  id="floating_phone"
+                  class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+                  placeholder=" "
+                  required
+                  v-model="newPatientBody.phone"
+                />
+                <label
+                  for="floating_phone"
+                  class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
+                  >Phone number (123-456-7890)</label
                 >
               </div>
             </div>
-            <div class="group relative z-0 mb-5 w-full">
-              <input
-                type="email"
-                name="floating_email"
-                id="floating_email"
-                class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                placeholder=" "
-                required
-              />
-              <label
-                for="floating_email"
-                class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
-                >Email address</label
-              >
-            </div>
-            <div class="group relative z-0 mb-5 w-full">
-              <input
-                type="tel"
-                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                name="floating_phone"
-                id="floating_phone"
-                class="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
-                placeholder=" "
-                required
-              />
-              <label
-                for="floating_phone"
-                class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:font-medium peer-focus:text-blue-600 dark:text-gray-400 peer-focus:dark:text-blue-500 rtl:peer-focus:translate-x-1/4"
-                >Phone number (123-456-7890)</label
-              >
-            </div>
+            <div v-else>user: {{ patient.email }}</div>
             <div class="group relative z-0 mb-5 w-full">
               <label
                 for="large-input"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 mt-8 block text-sm font-medium text-gray-900 dark:text-white"
                 >Reason</label
               >
               <input
