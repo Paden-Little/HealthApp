@@ -3,8 +3,8 @@ const patient = ref<Patient | null>();
 
 const logout = async () => {
   try {
-    useAuth().logoutUser();
     navigateTo('/my-health/authentication/login');
+    useAuth().logoutUser();
   } catch (error) {
     console.error('Failed to logout:', error);
   }
@@ -14,9 +14,9 @@ const loadPatientData = async () => {
   try {
     const user = useAuth().getPatientData();
     if (user) {
-      user.then((data) => {
+      user.then(data => {
         patient.value = data;
-      })
+      });
     }
   } catch (error) {
     console.error('Failed to load patient data:', error);
@@ -26,8 +26,8 @@ const loadPatientData = async () => {
 };
 
 onMounted(() => {
-  let pid = useCookie("pid");
-  console.log(pid.value)
+  let pid = useCookie('pid');
+  console.log(pid.value);
   loadPatientData();
 });
 </script>
@@ -39,21 +39,23 @@ onMounted(() => {
     <p>Birthdate: {{ patient.birth }}</p>
     <p>Allergies</p>
     <ul>
-      <!-- <li v-if="patient.allergies.length = 0">No allergies</li>
-      <li v-else v-for="allergy in patient.allergies">
+      <li
+        v-for="allergy in patient.allergies"
+      >
         <p>{{ allergy.name }}</p>
         <br />
         <p>{{ allergy.description }}</p>
-      </li> -->
+      </li>
     </ul>
     <p>Perscriptions</p>
     <ul>
-      <!-- <li v-if="patient.prescriptions.length = 0">No perscriptions</li>
-      <li v-else v-for="perscription in patient.prescriptions">
+      <li
+        v-for="perscription in patient.prescriptions"
+      >
         <p>{{ perscription.name }}</p>
         <p>Dosage: {{ perscription.dosage }} {{ perscription.frequency }}</p>
         <p>{{ perscription.start }} - {{ perscription.end }}</p>
-      </li> -->
+      </li>
     </ul>
   </div>
   <div v-else>

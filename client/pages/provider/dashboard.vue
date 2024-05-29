@@ -3,8 +3,8 @@ const provider = ref<Provider | null>();
 
 const logout = async () => {
   try {
-    useAuth().logoutUser();
     navigateTo('/provider/authentication/login');
+    useAuth().logoutUser();
   } catch (error) {
     console.error('Failed to logout:', error);
   }
@@ -33,32 +33,36 @@ onMounted(() => {
 </script>
 <template>
   <div v-if="provider">
-    <h2 class="text-lg font-bold">Provider Information</h2>
-    <p>
-      Full Name:
-      {{ provider.firstname + ' ' + provider.lastname + ' ' + provider.suffix }}
-    </p>
-    <p>Email: {{ provider.email }}</p>
-    <p>Phone: {{ provider.phone }}</p>
-    <p>Bio: {{ provider.bio }}</p>
-    <p>Services:</p>
-    <ul>
-      <li v-if="provider.services.length > 0" v-for="service in provider.services">
-        {{ service }}
-      </li>
-      <li v-else>No services</li>
-    </ul>
-    <p>Languages:</p>
-    <ul>
-      <li v-if="provider.languages.length > 0" v-for="language in provider.languages">
-        {{ language }}
-      </li>
-      <li v-else>No languages</li>
-    </ul>
-    <img :src="provider.image" alt="Provider Image" />
+    <div class="img">
+      <img :src="provider.image" />
+    </div>
+    <aside>
+      <h2 class="text-lg font-bold">Provider Information</h2>
+      <p>
+        Full Name:
+        {{
+          provider.firstname + ' ' + provider.lastname + ' ' + provider.suffix
+        }}
+      </p>
+      <p>Email: {{ provider.email }}</p>
+      <p>Phone: {{ provider.phone }}</p>
+      <p>Bio: {{ provider.bio }}</p>
+      <p>Services:</p>
+      <ul>
+        <li v-for="service in provider.services">
+          {{ service }}
+        </li>
+      </ul>
+      <p>Languages:</p>
+      <ul>
+        <li v-for="language in provider.languages">
+          {{ language }}
+        </li>
+      </ul>
+    </aside>
   </div>
   <div v-else>
-    <p>Something went wrong - No provider found.</p>
+    <p class="">Something went wrong - No provider found.</p>
   </div>
   <button @click="logout()" class="cta-btn">logout</button>
 </template>
