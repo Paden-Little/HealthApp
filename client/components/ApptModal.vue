@@ -29,7 +29,7 @@ const newPatientBody = reactive({
 const apptBody = reactive({
   date: '',
   start_time: '09:00:00',
-  end_time: '1:30',
+  end_time: '',
   provider: props.provider?.id,
   patient: pid.value,
   service: 1,
@@ -72,11 +72,13 @@ async function createAppointment() {
   console.log(apptBody);
 
   if (pid.value == null) {
-    const resp = await $fetch('/api/patient', {
+    newPatientBody.birth = formatDate(newPatientBody.birth);
+    const resp = await $fetch<Patient>('/api/patient', {
       method: 'POST',
       body: newPatientBody,
     });
     console.log(resp);
+    apptBody.patient = resp.id;
   }
 
   const resp = await $fetch('/api/appointment', {
@@ -89,11 +91,6 @@ async function createAppointment() {
 onMounted(() => {
   initFlowbite();
   loadPatientData();
-  if (pid.value == null) {
-    console.log(false);
-  } else {
-    console.log(true);
-  }
 });
 </script>
 
@@ -271,10 +268,15 @@ onMounted(() => {
                   >Date of Birth</label
                 >
                 <VueDatePicker
-                  v-model="apptBody.date"
+                  v-model="newPatientBody.birth"
                   :enable-time-picker="false"
                 />
               </div>
+            </div>
+            <div v-else>
+              <p>
+                Logged in as: {{ patient?.firstname }} {{ patient?.lastname }}
+              </p>
             </div>
             <div class="group relative z-0 mb-5 w-full">
               <label
