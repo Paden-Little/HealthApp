@@ -107,7 +107,7 @@ INSERT INTO `patient`.`prescription` (`provider_id`, `patient_id`, `name`, `dosa
     ('00000000-0000-0000-0000-000000000000', '11111111-1111-1111-1111-111111111111', 'Ibuprofen', '200mg', 'As needed', '2023-02-01', NULL);
 
 -- -- -- Appointment Schema -- -- --
-CREATE DATABASE IF NOT EXISTS 'appointment' DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `appointment` DEFAULT CHARACTER SET utf8;
 USE `appointment`;
 
 CREATE TABLE IF NOT EXISTS `appointment`.`appointment`(
@@ -122,3 +122,4 @@ CREATE TABLE IF NOT EXISTS `appointment`.`appointment`(
     FOREIGN KEY (`provider`) REFERENCES `provider`.`provider`(`id`),
     FOREIGN KEY (`patient`) REFERENCES `patient`.`patient`(`id`),
     FOREIGN KEY (`service`) REFERENCES `provider`.`service`(`id`)
+)

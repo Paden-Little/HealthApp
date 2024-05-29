@@ -3,16 +3,16 @@ services:
     image: traefik:v2.5
     container_name: traefik
     command:
-      - "--api.insecure=true"
-      - "--providers.consulcatalog=true"
-      - "--providers.consulcatalog.prefix=traefik"
-      - "--providers.consulcatalog.endpoint.address=consul:8500"
-      - "--serversTransport.insecureSkipVerify=true"
-      - "--entryPoints.web.address=:80"
-      - "--log.level=DEBUG"
+      - '--api.insecure=true'
+      - '--providers.consulcatalog=true'
+      - '--providers.consulcatalog.prefix=traefik'
+      - '--providers.consulcatalog.endpoint.address=consul:8500'
+      - '--serversTransport.insecureSkipVerify=true'
+      - '--entryPoints.web.address=:80'
+      - '--log.level=DEBUG'
     ports:
-      - "80:80"
-      - "8080:8080"
+      - '80:80'
+      - '8080:8080'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
@@ -23,11 +23,11 @@ services:
     image: hashicorp/consul:1.18
     container_name: consul
     labels:
-      - "traefik.enable=true"
-      - "traefik.consulcatalog.connect=true"
+      - 'traefik.enable=true'
+      - 'traefik.consulcatalog.connect=true'
     command: agent -server -bootstrap -ui -client=0.0.0.0
     ports:
-      - "8500:8500"
+      - '8500:8500'
     networks:
       - healthnet
 
@@ -38,7 +38,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: patient
     ports:
-      - "3306:3306"
+      - '3306:3306'
     # Pass init script to create database and tables
     volumes:
       - ./schemas/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -71,8 +71,6 @@ services:
     environment:
       DB_HOST: mysql
       CONSUL_ADDRESS: consul:8500
-    ports:
-      - "3003:3000"
     restart: unless-stopped
     networks:
       - healthnet
