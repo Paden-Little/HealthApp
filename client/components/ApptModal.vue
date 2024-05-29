@@ -11,16 +11,8 @@ const props = defineProps({
   },
 });
 
-const format = (date: any) => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  return `Selected date is ${day}/${month}/${year}`;
-};
-
 const apptBody = reactive({
-  date: Date.now(),
+  date: '',
   start_time: '12:30:00',
   end_time: '1:30:00',
   provider: props.provider?.id,
@@ -79,7 +71,7 @@ onMounted(() => {
           <div>{{ apptBody }}</div>
           <div class="flex">
             <VueDatePicker
-              v-model="apptBody.date"
+              v-model="formattedDate"
               :min-date="new Date()"
               :enable-time-picker="false"
             />
