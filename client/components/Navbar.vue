@@ -7,8 +7,7 @@ const pid = useCookie('pid');
 function isLoggedIn() {
   if (pid.value !== '' && type.value !== '') {
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -24,26 +23,7 @@ onMounted(() => {
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
-      <!-- FIX: Doesnt switch to dashboards fix this -->
-        <NuxtLink to="/provider/dashboard" v-if="isLoggedIn() && type === 'provider'"">
-          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
-          <span
-            class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
-            >Dashboard</span
-          >
-        </NuxtLink>
-        <NuxtLink
-          v-else-if="isLoggedIn() && type === 'patient'"
-          to="/my-health/dashboard"
-          class="flex items-center"
-        >
-          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
-          <span
-            class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
-            >Dashboard</span
-          >
-        </NuxtLink>
-        <NuxtLink to="/" class="flex items-center" v-else>
+        <NuxtLink to="/" class="flex items-center">
           <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
           <span
             class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
@@ -51,7 +31,24 @@ onMounted(() => {
           >
         </NuxtLink>
         <div class="flex items-center lg:order-2">
-          <NuxtLink to="/my-health/authentication/login" class="secondary-btn"
+          <NuxtLink
+            to="/provider/dashboard"
+            v-if="isLoggedIn() && type === 'provider'"
+            class="secondary-btn"
+          >
+            Dashboard
+          </NuxtLink>
+          <NuxtLink
+            v-else-if="isLoggedIn() && type === 'patient'"
+            to="/my-health/dashboard"
+            class="secondary-btn"
+          >
+            Dashboard
+          </NuxtLink>
+          <NuxtLink
+            to="/my-health/authentication/login"
+            class="secondary-btn"
+            v-else
             >Log in</NuxtLink
           >
           <NuxtLink to="/find-a-provider" class="cta-btn"
