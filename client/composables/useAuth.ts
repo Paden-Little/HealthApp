@@ -11,7 +11,7 @@ const token = useCookie("token");
 const type = useCookie("type");
 
 // state
-const user = useState("user");
+const user = useState<Patient | Provider | undefined>("user");
 
 const hashPassword = async (password: string) => {
   return await bcrypt.hash(password, fixedSalt);
@@ -58,7 +58,9 @@ export function useAuth() {
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
       type.value = "patient";
-      user.value = getPatientData()
+      getPatientData().then((data) => {
+        user.value = data as Patient;
+      })
       return true;
     }).catch((err) => {
       console.log(err);
@@ -75,7 +77,9 @@ export function useAuth() {
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
       type.value = "provider";
-      user.value = getProviderData()
+      getProviderData().then((data) => {
+        user.value = data as Provider;
+      })
       return true;
     }).catch((err) => {
       console.log(err);

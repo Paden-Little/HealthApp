@@ -25,6 +25,13 @@ const loadPatientData = async () => {
   }
 };
 
+const getAppointments = async () => {
+  try {
+    const { data } = await useFetch("/api/appointment/" + );
+  } catch (error) {
+  }
+};
+
 onMounted(() => {
   loadPatientData();
 });
