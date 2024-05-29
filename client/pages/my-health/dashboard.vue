@@ -46,44 +46,60 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div v-if="patient">
-    <h2 class="text-lg font-bold">Patient Information</h2>
-    <p>Fullname: {{ patient.firstname + ' ' + patient.lastname }}</p>
-    <p>Email: {{ patient.email }}</p>
-    <p>Birthdate: {{ patient.birth }}</p>
-    <p>Allergies</p>
-    <ul>
-      <li v-for="allergy in patient.allergies">
-        <p>{{ allergy.name }}</p>
-        <br />
-        <p>{{ allergy.description }}</p>
-      </li>
-    </ul>
-    <p>Perscriptions</p>
-    <ul>
-      <li v-for="perscription in patient.prescriptions">
-        <p>{{ perscription.name }}</p>
-        <p>Dosage: {{ perscription.dosage }} {{ perscription.frequency }}</p>
-        <p>{{ perscription.start }} - {{ perscription.end }}</p>
-      </li>
-    </ul>
-  </div>
-  <div v-else>
-    <p>something went wrong - No user...</p>
-  </div>
-  <div>
-    <h2>Appointments</h2>
-    <ul>
-      <li v-for="appointment in appointmentsArray">
-        <p>
-          {{ appointment.date }} {{ appointment.startTime }} -
-          {{ appointment.endTime }}
+  <div
+    v-if="patient"
+    class="m-auto mt-4 max-w-screen-lg rounded-lg border-[1px] border-gray-400 p-4 shadow"
+  >
+    <div class="flex">
+      <div class="flex-1">
+        <p class="text-xl font-bold text-gray-800">Your Information</p>
+        <p class="mb-2 text-lg">
+          {{ patient.firstname }} {{ patient.lastname }}
         </p>
-        <p>{{ appointment.provider }}</p>
-        <p>{{ appointment.service }}</p>
-        <p>{{ appointment.description }}</p>
-      </li>
-    </ul>
+        <div class="flex">
+          <p class="font-semibold">Sex:</p>
+          <p class="ms-2">{{ patient.gender }}</p>
+        </div>
+        <div class="flex">
+          <p class="font-semibold">Email:</p>
+          <p class="ms-2">{{ patient.email }}</p>
+        </div>
+        <div class="flex">
+          <p class="font-semibold">phone:</p>
+          <p class="ms-2">{{ patient.phone }}</p>
+        </div>
+        <div class="flex">
+          <p class="font-semibold">Allergies:</p>
+          <div v-for="allergy in patient.allergies">
+            {{ allergy }}
+          </div>
+        </div>
+        <div class="flex">
+          <p class="me-2 font-semibold">Languages:</p>
+          <div v-for="language in patient.language">
+            {{ language }}
+          </div>
+        </div>
+      </div>
+      <div class="flex-1">
+        <p class="text-lg font-bold text-gray-800">Appointments</p>
+        <div
+          v-for="appt in appointmentsArray"
+          class="mt-2 rounded-lg border-[1px] border-gray-400 p-2"
+        >
+          <div class="flex">
+            <p class="font-semibold">Date:</p>
+            <p class="ms-2">
+              {{ appt.date }} {{ appt.start_time }} - {{ appt.end_time }}
+            </p>
+          </div>
+          <div>
+            <p class="font-semibold">Reason:</p>
+            <p class="ms-2">{{ appt.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button @click="logout()" class="cta-btn mt-4">logout</button>
   </div>
-  <button @click="logout()" class="cta-btn">logout</button>
 </template>
