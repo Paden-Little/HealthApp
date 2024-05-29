@@ -32,7 +32,7 @@ const getAppointments = async () => {
     if (appointments) {
       appointments.then(async data => {
         appointmentsArray.value = data;
-        await getProviderNames();
+        await getPatientData();
       });
     }
   } catch (error) {
@@ -41,14 +41,14 @@ const getAppointments = async () => {
   }
 };
 
-async function getProviderNames() {
+async function getPatientData() {
   if (appointmentsArray.value) {
     for (let index = 0; index < appointmentsArray.value.length; index++) {
       const element = appointmentsArray.value[index];
-      let temp = useAuth().getProviderName(element.provider);
+      let temp = useAuth().getPatientName(element.patient);
       if (temp) {
         temp.then(data => {
-          element.provider = data;
+          element.patient = data;
         });
       }
     }
