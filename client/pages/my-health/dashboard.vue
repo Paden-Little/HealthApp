@@ -109,6 +109,10 @@ onMounted(async () => {
             </p>
           </div>
           <div>
+            <p class="font-semibold">Provider:</p>
+            <p class="ms-2">{{ appt.provider }}</p>
+          </div>
+          <div>
             <p class="font-semibold">Reason:</p>
             <p class="ms-2">{{ appt.description }}</p>
           </div>

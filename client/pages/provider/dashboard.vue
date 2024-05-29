@@ -99,6 +99,10 @@ onMounted(() => {
             </p>
           </div>
           <div>
+            <p class="font-semibold">Patient:</p>
+            <p class="ms-2">{{ appt.patient }}</p>
+          </div>
+          <div>
             <p class="font-semibold">Reason:</p>
             <p class="ms-2">{{ appt.description }}</p>
           </div>
