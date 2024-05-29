@@ -14,8 +14,8 @@ const props = defineProps({
 
 const apptBody = reactive({
   date: '',
-  start_time: '12:30:00',
-  end_time: '1:30:00',
+  start_time: '09:00:00',
+  end_time: '1:30',
   provider: props.provider?.id,
   patient: pid.value,
   service: 1,
@@ -23,8 +23,19 @@ const apptBody = reactive({
 });
 
 async function createAppointment() {
-  const formattedDate = new Date(apptBody.date).toISOString().split('T')[0];
-  apptBody.date = formattedDate;
+  // Format date
+  const date = new Date(apptBody.date);
+  apptBody.date = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+  // Calculate end_time
+  const [hours, minutes, seconds] = apptBody.start_time.split(':');
+  let endTime = new Date();
+  endTime.setHours(Number(hours), Number(minutes), Number(seconds));
+
+  endTime.setHours(endTime.getHours() + 1);
+
+  apptBody.end_time = `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}:${endTime.getSeconds().toString().padStart(2, '0')}`;
+
   console.log(apptBody);
 
   const resp = await $fetch('/api/appointment', {
@@ -79,6 +90,7 @@ onMounted(() => {
         <!-- Modal body -->
         <div class="mx-32 space-y-4 p-4 md:p-5">
           <form class="mx-auto">
+            <div>{{ apptBody }}</div>
             <div class="mt-4 grid md:grid-cols-2 md:gap-6">
               <div>
                 <label class="mb-2 block text-sm font-medium text-gray-900"
@@ -110,6 +122,7 @@ onMounted(() => {
                     max="18:00"
                     value="00:00"
                     required
+                    v-model="apptBody.start_time"
                   />
                 </div>
               </div>
