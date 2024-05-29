@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
 
+const type = useCookie('type');
+const pid = useCookie('pid');
+
 function isLoggedIn() {
-  return useAuth().isLoggedIn.value;
+  if (pid.value !== '' && type.value !== '') {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 onMounted(() => {
@@ -16,23 +24,36 @@ onMounted(() => {
       <div
         class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between"
       >
-        <NuxtLink v-if="!isLoggedIn" to="/" class="flex items-center">
+      <!-- FIX: Doesnt switch to dashboards fix this -->
+        <NuxtLink to="/provider/dashboard" v-if="isLoggedIn() && type === 'provider'"">
+          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
+          <span
+            class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
+            >Dashboard</span
+          >
+        </NuxtLink>
+        <NuxtLink
+          v-else-if="isLoggedIn() && type === 'patient'"
+          to="/my-health/dashboard"
+          class="flex items-center"
+        >
+          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
+          <span
+            class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
+            >Dashboard</span
+          >
+        </NuxtLink>
+        <NuxtLink to="/" class="flex items-center" v-else>
           <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
           <span
             class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
             >HealthMark</span
           >
         </NuxtLink>
-        <NuxtLink v-else to="/my-health/dashboard" class="flex items-center">
-          <img class="mr-3 h-6 sm:h-9" src="/img/heart.png" />
-          <span
-            class="self-center whitespace-nowrap text-xl font-semibold text-blue-900"
-            >Profile</span
-          >
-        </NuxtLink>
         <div class="flex items-center lg:order-2">
           <NuxtLink to="/my-health/authentication/login" class="secondary-btn"
-            >Log in</NuxtLink>
+            >Log in</NuxtLink
+          >
           <NuxtLink to="/find-a-provider" class="cta-btn"
             >Book an Appointment</NuxtLink
           >
