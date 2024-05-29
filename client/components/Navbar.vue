@@ -34,20 +34,20 @@ onMounted(() => {
           <NuxtLink
             to="/provider/dashboard"
             v-if="isLoggedIn() && type === 'provider'"
-            class="secondary-btn"
+            class="secondary-btn mr-3"
           >
             Dashboard
           </NuxtLink>
           <NuxtLink
             v-else-if="isLoggedIn() && type === 'patient'"
             to="/my-health/dashboard"
-            class="secondary-btn"
+            class="secondary-btn mr-3"
           >
             Dashboard
           </NuxtLink>
           <NuxtLink
             to="/my-health/authentication/login"
-            class="secondary-btn"
+            class="secondary-btn mr-3"
             v-else
             >Log in</NuxtLink
           >
