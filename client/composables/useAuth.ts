@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 const fixedSalt = "$2a$10$1234567890123456789012";
-
 interface LoginResponse {
   id: string;
   token: string;
@@ -14,69 +13,103 @@ const hashPassword = async (password: string) => {
 }
 
 export function useAuth() {
-  const registerPatient = async (patient: Patient) => {
-    // patient.password = await hashPassword(patient.password || '');
-    // let { data } = useFetch("/api/patient", {
-    //   method: "POST",
-    //   body: JSON.stringify(patient),
-    // })
+  const isLoggedIn = ref(false);
+
+  async function registerPatient(patient: Patient): Promise<boolean> {
+    patient.password = await hashPassword(patient.password || '');
+    return $fetch("/api/patient", {
+      method: "POST",
+      body: JSON.stringify(patient),
+    }).then((res) => {
+      isLoggedIn.value = true;
+      return true;
+    }).catch((err) => {
+      console.log(err);
+      isLoggedIn.value = false;
+      return false;
+    });
   }
 
-  const registerProvider = async (provider: Provider) => {
-    // provider.password = await hashPassword(provider.password || '');
-    // let { data } = useFetch("/api/provider", {
-    //   method: "POST",
-    //   body: JSON.stringify(provider),
-    // })
+  async function registerProvider(provider: Provider): Promise<boolean> {
+    provider.password = await hashPassword(provider.password || '');
+    return $fetch("/api/provider", {
+      method: "POST",
+      body: JSON.stringify(provider),
+    }).then((res) => {
+      isLoggedIn.value = true;
+      return true;
+    }).catch((err) => {
+      console.log(err);
+      isLoggedIn.value = false;
+      return false;
+    });
   }
 
-  const loginPatient = async (patient: Login) => {
-    $fetch("/api/patient/login", {
+  async function loginPatient(patient: Login): Promise<boolean | undefined> {
+    return $fetch("/api/patient/login", {
       method: "POST",
       body: JSON.stringify(patient),
     }).then((res) => {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
+      isLoggedIn.value = true;
       return true;
-    })
-    return false;
-  };
+    }).catch((err) => {
+      console.log(err);
+      isLoggedIn.value = false;
+      return false;
+    });
+  }
 
-  const loginProvider = async (provider: Login) => {
-    $fetch("/api/provider/login", {
+  async function loginProvider(provider: Login): Promise<boolean | undefined> {
+    return $fetch("/api/provider/login", {
       method: "POST",
       body: JSON.stringify(provider),
     }).then((res) => {
       const loginResponse: LoginResponse = res as LoginResponse;
       pid.value = loginResponse.id;
       token.value = loginResponse.token;
+      isLoggedIn.value = true;
       return true;
-    })
-    return false;
+    }).catch((err) => {
+      console.log(err);
+      isLoggedIn.value = false;
+      return false;
+    });
   }
 
-  const getPatientData = async () => {
-    $fetch(`/api/patient/${pid.value}`, {
+  async function getPatientData(): Promise<Patient | null> {
+    return $fetch(`/api/patient/${pid.value}`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     }).then((res) => {
       return res as Patient;
+    }).catch((err) => {
+      console.log(err);
+      return null;
     })
-    return null;
   }
 
-  const getProviderData = async () => {
-    $fetch(`/api/patient/${pid.value}`, {
+  async function getProviderData(): Promise<Provider | null> {
+    return $fetch(`/api/provider/${pid.value}`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     }).then((res) => {
-      return res as Patient;
+      return res as Provider;
+    }).catch((err) => {
+      console.log(err);
+      return null;
     })
-    return null;
   }
 
-  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData };
+  async function logoutUser() {
+    isLoggedIn.value = false;
+    pid.value = "";
+    token.value = "";
+  }
+
+  return { registerPatient, registerProvider, loginPatient, loginProvider, getPatientData, getProviderData, logoutUser };
 }
